@@ -8,6 +8,9 @@ import { invoicesRouter } from "@/server/trpc/routers/invoices";
 import { ticketsRouter } from "@/server/trpc/routers/tickets";
 import { schedulingRouter } from "@/server/trpc/routers/scheduling";
 import { settingsRouter } from "@/server/trpc/routers/settings";
+import { ordersRouter } from "@/server/trpc/routers/orders";
+import { inventoryRouter } from "@/server/trpc/routers/inventory";
+import { timeTrackingRouter } from "@/server/trpc/routers/timeTracking";
 
 export const appRouter = createTRPCRouter({
   audit: auditRouter,
@@ -18,6 +21,9 @@ export const appRouter = createTRPCRouter({
   tickets: ticketsRouter,
   scheduling: schedulingRouter,
   settings: settingsRouter,
+  orders: ordersRouter,
+  inventory: inventoryRouter,
+  time: timeTrackingRouter,
 });
 
 export type AppRouter = typeof appRouter;
