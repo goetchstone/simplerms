@@ -1,0 +1,30 @@
+// components/layout/nav-items.ts
+import {
+  LayoutDashboard,
+  Users,
+  FileText,
+  ShoppingCart,
+  Ticket,
+  CalendarDays,
+  Package,
+  Warehouse,
+  Clock,
+  BarChart2,
+  Settings,
+  ScrollText,
+} from "lucide-react";
+
+export const navItems = [
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { label: "CRM", href: "/dashboard/crm/clients", icon: Users },
+  { label: "Invoices", href: "/dashboard/invoices", icon: FileText },
+  { label: "Orders", href: "/dashboard/orders", icon: ShoppingCart },
+  { label: "Tickets", href: "/dashboard/tickets", icon: Ticket },
+  { label: "Scheduling", href: "/dashboard/scheduling", icon: CalendarDays },
+  { label: "Catalog", href: "/dashboard/catalog", icon: Package },
+  { label: "Inventory", href: "/dashboard/inventory", icon: Warehouse },
+  { label: "Time", href: "/dashboard/time-tracking", icon: Clock },
+  { label: "Reports", href: "/dashboard/reports", icon: BarChart2 },
+  { label: "Audit Log", href: "/dashboard/audit-log", icon: ScrollText, adminOnly: true },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+] as const;
