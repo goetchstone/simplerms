@@ -1,0 +1,92 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint, type-check, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: simplerms
+          POSTGRES_PASSWORD: simplerms_ci
+          POSTGRES_DB: simplerms_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://simplerms:simplerms_ci@localhost:5432/simplerms_test
+      AUTH_SECRET: ci-secret-not-used-in-tests
+      APP_ENCRYPTION_KEY: 0000000000000000000000000000000000000000000000000000000000000000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run migrations
+        run: npx prisma migrate deploy
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Unit tests
+        run: npx vitest run --coverage
+
+      - name: Build
+        run: npm run build
+        env:
+          # Build needs a valid-looking key even if Stripe isn't called.
+          STRIPE_SECRET_KEY: sk_test_placeholder
+
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            cd /opt/simplerms
+            git pull origin main
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml build app
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d app
+            docker compose exec -T app npx prisma migrate deploy
