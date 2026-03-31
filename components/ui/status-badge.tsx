@@ -16,6 +16,15 @@ const variants: Record<string, string> = {
   WAITING_ON_CLIENT: "bg-purple-50 text-purple-700",
   RESOLVED: "bg-green-50 text-green-700",
   CLOSED: "bg-gray-100 text-gray-500",
+  // Appointment statuses
+  PENDING: "bg-yellow-50 text-yellow-700",
+  CONFIRMED: "bg-green-50 text-green-700",
+  CANCELLED: "bg-gray-100 text-gray-500",
+  NO_SHOW: "bg-red-50 text-red-600",
+  COMPLETED: "bg-blue-50 text-blue-700",
+  // Client statuses
+  ACTIVE: "bg-green-50 text-green-700",
+  INACTIVE: "bg-gray-100 text-gray-500",
   // Priority
   LOW: "bg-gray-100 text-gray-600",
   MEDIUM: "bg-amber-50 text-amber-700",

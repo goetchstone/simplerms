@@ -1,0 +1,14 @@
+// app/api/health/route.ts
+import { db } from "@/server/db";
+import { NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+
+export async function GET() {
+  try {
+    await db.$queryRaw`SELECT 1`;
+    return NextResponse.json({ status: "ok", db: "ok" });
+  } catch {
+    return NextResponse.json({ status: "error", db: "unreachable" }, { status: 503 });
+  }
+}

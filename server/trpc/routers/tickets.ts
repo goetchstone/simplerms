@@ -1,0 +1,181 @@
+// server/trpc/routers/tickets.ts
+import "server-only";
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/trpc/trpc";
+import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+
+const createTicketSchema = z.object({
+  submitterName: z.string().min(1).max(255),
+  submitterEmail: z.string().email(),
+  subject: z.string().min(1).max(500),
+  body: z.string().min(1).max(10000),
+  clientId: z.string().cuid().optional(),
+});
+
+const ticketStatusEnum = z.enum(["OPEN", "IN_PROGRESS", "WAITING_ON_CLIENT", "RESOLVED", "CLOSED"]);
+const priorityEnum = z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]);
+
+export const ticketsRouter = createTRPCRouter({
+  // Public — no auth. Used by the /support intake form.
+  submit: publicProcedure
+    .input(createTicketSchema)
+    .mutation(async ({ ctx, input }) => {
+      const count = await ctx.db.ticket.count();
+      const ticketNumber = `TKT-${String(count + 1).padStart(5, "0")}`;
+
+      const ticket = await ctx.db.ticket.create({
+        data: {
+          ticketNumber,
+          submitterName: input.submitterName,
+          submitterEmail: input.submitterEmail,
+          subject: input.subject,
+          clientId: input.clientId ?? null,
+          messages: {
+            create: {
+              senderName: input.submitterName,
+              body: input.body,
+              isInternal: false,
+            },
+          },
+        },
+      });
+
+      return { ticketNumber: ticket.ticketNumber, publicToken: ticket.publicToken };
+    }),
+
+  // Public — track ticket status by token (sent in confirmation email).
+  byPublicToken: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const ticket = await ctx.db.ticket.findUnique({
+        where: { publicToken: input },
+        include: {
+          messages: {
+            where: { isInternal: false },
+            orderBy: { createdAt: "asc" },
+          },
+        },
+      });
+      if (!ticket) throw new TRPCError({ code: "NOT_FOUND" });
+      return ticket;
+    }),
+
+  list: protectedProcedure
+    .input(
+      z.object({
+        status: ticketStatusEnum.optional(),
+        priority: priorityEnum.optional(),
+        assignedToId: z.string().cuid().optional(),
+        clientId: z.string().cuid().optional(),
+        page: z.number().int().min(1).default(1),
+        limit: z.number().int().min(1).max(100).default(50),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { status, priority, assignedToId, clientId, page, limit } = input;
+      const where = {
+        ...(status && { status }),
+        ...(priority && { priority }),
+        ...(assignedToId && { assignedToId }),
+        ...(clientId && { clientId }),
+      };
+
+      const [items, total] = await Promise.all([
+        ctx.db.ticket.findMany({
+          where,
+          orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+          skip: (page - 1) * limit,
+          take: limit,
+          include: {
+            client: { select: { id: true, name: true } },
+            assignedTo: { select: { id: true, name: true } },
+            _count: { select: { messages: true } },
+          },
+        }),
+        ctx.db.ticket.count({ where }),
+      ]);
+
+      return { items, total, pages: Math.ceil(total / limit) };
+    }),
+
+  byId: protectedProcedure
+    .input(z.string().cuid())
+    .query(({ ctx, input }) =>
+      ctx.db.ticket.findUniqueOrThrow({
+        where: { id: input },
+        include: {
+          client: true,
+          assignedTo: { select: { id: true, name: true, email: true } },
+          messages: {
+            orderBy: { createdAt: "asc" },
+            include: { files: true },
+          },
+          files: true,
+        },
+      })
+    ),
+
+  assign: protectedProcedure
+    .input(z.object({ ticketId: z.string().cuid(), userId: z.string().cuid().nullable() }))
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.ticket.update({
+        where: { id: input.ticketId },
+        data: {
+          assignedToId: input.userId,
+          status: input.userId ? "IN_PROGRESS" : "OPEN",
+        },
+      });
+      return {
+        ...ticket,
+        _audit: { action: "ticket.assign", entityType: "Ticket", entityId: ticket.id },
+      };
+    }),
+
+  updateStatus: protectedProcedure
+    .input(z.object({ ticketId: z.string().cuid(), status: ticketStatusEnum, priority: priorityEnum.optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const ticket = await ctx.db.ticket.update({
+        where: { id: input.ticketId },
+        data: {
+          status: input.status,
+          ...(input.priority && { priority: input.priority }),
+          ...(["RESOLVED", "CLOSED"].includes(input.status) && { resolvedAt: new Date() }),
+        },
+      });
+      return {
+        ...ticket,
+        _audit: { action: "ticket.status", entityType: "Ticket", entityId: ticket.id },
+      };
+    }),
+
+  reply: protectedProcedure
+    .input(
+      z.object({
+        ticketId: z.string().cuid(),
+        body: z.string().min(1).max(10000),
+        isInternal: z.boolean().default(false),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const message = await ctx.db.ticketMessage.create({
+        data: {
+          ticketId: input.ticketId,
+          senderId: ctx.session.user.id,
+          senderName: ctx.session.user.name,
+          body: input.body,
+          isInternal: input.isInternal,
+        },
+      });
+
+      // Move back to open if staff replies to a waiting ticket.
+      if (!input.isInternal) {
+        await ctx.db.ticket.update({
+          where: { id: input.ticketId, status: "WAITING_ON_CLIENT" },
+          data: { status: "IN_PROGRESS" },
+        });
+      }
+
+      return message;
+    }),
+});
