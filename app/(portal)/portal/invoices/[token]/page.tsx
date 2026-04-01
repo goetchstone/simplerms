@@ -1,4 +1,6 @@
 // app/(portal)/portal/invoices/[token]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { db } from "@/server/db";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -40,7 +42,7 @@ export default async function PublicInvoicePage({
 
   const companyName = (
     await db.setting.findUnique({ where: { key: "company_name" } })
-  )?.value ?? "SimpleRMS";
+  )?.value ?? "Akritos";
 
   const address =
     typeof invoice.client.address === "object" && invoice.client.address !== null

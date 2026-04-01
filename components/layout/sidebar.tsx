@@ -16,7 +16,7 @@ export function Sidebar({ role }: SidebarProps) {
   return (
     <aside className="flex h-full w-56 flex-col border-r bg-background">
       <div className="flex h-14 items-center border-b px-4">
-        <span className="text-sm font-semibold tracking-tight">SimpleRMS</span>
+        <span className="text-sm font-semibold tracking-tight">Akritos</span>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-3">

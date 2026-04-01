@@ -1,4 +1,6 @@
 // app/blog/page.tsx
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -17,7 +19,7 @@ async function getData() {
       select: { slug: true, title: true, excerpt: true, coverImage: true, publishedAt: true },
     }),
   ]);
-  return { companyName: setting?.value ?? "SimpleRMS", posts };
+  return { companyName: setting?.value ?? "Akritos", posts };
 }
 
 export default async function BlogPage() {

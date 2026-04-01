@@ -1,7 +1,7 @@
 // components/site/site-footer.tsx
 import Link from "next/link";
 
-export function SiteFooter({ companyName = "SimpleRMS" }: { companyName?: string }) {
+export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }) {
   return (
     <footer className="border-t border-zinc-200 bg-zinc-50">
       <div className="mx-auto max-w-6xl px-6 py-12">

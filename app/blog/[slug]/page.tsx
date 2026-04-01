@@ -1,4 +1,6 @@
 // app/blog/[slug]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -17,7 +19,7 @@ async function getData(slug: string) {
     db.setting.findUnique({ where: { key: "company_name" } }),
     db.cmsPost.findUnique({ where: { slug, status: "PUBLISHED" } }),
   ]);
-  return { companyName: setting?.value ?? "SimpleRMS", post };
+  return { companyName: setting?.value ?? "Akritos", post };
 }
 
 export async function generateMetadata({ params }: Props) {

@@ -82,7 +82,7 @@ echo "    nginx configured"
 
 echo ""
 echo "============================================"
-echo " SimpleRMS is running"
+echo " Akritos is running"
 echo " http://$(curl -sf ifconfig.me 2>/dev/null || echo 'YOUR_IP')"
 echo ""
 echo " Admin login: admin@example.com"

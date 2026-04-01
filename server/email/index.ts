@@ -29,7 +29,7 @@ export interface EmailPayload {
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
   await transport.sendMail({
-    from: process.env.EMAIL_FROM ?? "SimpleRMS <noreply@example.com>",
+    from: process.env.EMAIL_FROM ?? "Akritos <noreply@example.com>",
     ...payload,
   });
 }

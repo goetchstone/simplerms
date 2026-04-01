@@ -266,7 +266,7 @@ export const invoicesRouter = createTRPCRouter({
         ctx.db.setting.findUnique({ where: { key: "company_name" } }),
       ]);
 
-      const companyName = companySetting?.value ?? "SimpleRMS";
+      const companyName = companySetting?.value ?? "Akritos";
       const portalUrl = `${process.env.NEXT_PUBLIC_APP_URL}/portal/invoices/${invoice.publicToken}`;
 
       const emailData = {

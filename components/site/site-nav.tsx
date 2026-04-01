@@ -10,7 +10,7 @@ const links = [
   { href: "/blog", label: "Blog" },
 ];
 
-export function SiteNav({ companyName = "SimpleRMS" }: { companyName?: string }) {
+export function SiteNav({ companyName = "Akritos" }: { companyName?: string }) {
   const pathname = usePathname();
 
   return (

@@ -1,4 +1,6 @@
 // app/page.tsx
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -8,9 +10,9 @@ import { ArrowRight, CalendarDays, MessageSquare, FileText, ShieldCheck } from "
 async function getCompanyName() {
   try {
     const setting = await db.setting.findUnique({ where: { key: "company_name" } });
-    return setting?.value ?? "SimpleRMS";
+    return setting?.value ?? "Akritos";
   } catch {
-    return "SimpleRMS";
+    return "Akritos";
   }
 }
 

@@ -1,20 +1,22 @@
 // app/support/page.tsx
+export const dynamic = "force-dynamic";
+
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SupportForm } from "@/components/site/support-form";
 import { db } from "@/server/db";
 
 export const metadata = {
-  title: "Support | SimpleRMS",
+  title: "Support | Akritos",
   description: "Submit a support ticket. No account needed.",
 };
 
 async function getCompanyName() {
   try {
     const s = await db.setting.findUnique({ where: { key: "company_name" } });
-    return s?.value ?? "SimpleRMS";
+    return s?.value ?? "Akritos";
   } catch {
-    return "SimpleRMS";
+    return "Akritos";
   }
 }
 

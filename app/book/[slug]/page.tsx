@@ -1,4 +1,6 @@
 // app/book/[slug]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -18,7 +20,7 @@ async function getData(slug: string) {
       where: { slug, isActive: true, isPublic: true },
     }),
   ]);
-  return { companyName: setting?.value ?? "SimpleRMS", service };
+  return { companyName: setting?.value ?? "Akritos", service };
 }
 
 export async function generateMetadata({ params }: Props) {

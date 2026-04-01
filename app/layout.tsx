@@ -7,7 +7,7 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export const metadata: Metadata = {
-  title: "SimpleRMS",
+  title: "Akritos",
   description: "Business management for consultancies.",
 };
 

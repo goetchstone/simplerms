@@ -1,4 +1,6 @@
 // app/book/page.tsx
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -7,7 +9,7 @@ import { ArrowRight, Clock } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 export const metadata = {
-  title: "Book a session | SimpleRMS",
+  title: "Book a session | Akritos",
   description: "Choose a service and pick a time that works for you.",
 };
 
@@ -19,7 +21,7 @@ async function getData() {
       orderBy: { name: "asc" },
     }),
   ]);
-  return { companyName: setting?.value ?? "SimpleRMS", services };
+  return { companyName: setting?.value ?? "Akritos", services };
 }
 
 export default async function BookPage() {
