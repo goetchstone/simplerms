@@ -39,6 +39,22 @@ services:
       db:
         condition: service_healthy
 
+  # One-shot container for migrations and seeds — has full node_modules
+  migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+    env_file:
+      - .env.local
+    environment:
+      DATABASE_URL: postgresql://simplerms:simplerms_dev@db:5432/simplerms
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles:
+      - tools
+
   mailpit:
     image: axllent/mailpit:latest
     restart: unless-stopped
