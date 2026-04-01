@@ -8,6 +8,9 @@ services:
     environment:
       NODE_ENV: production
     restart: always
+    # Strip the dev bind-mounts so the built image files aren't overwritten.
+    volumes:
+      - uploads_data:/app/uploads
 
   db:
     restart: always

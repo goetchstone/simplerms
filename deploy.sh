@@ -25,22 +25,19 @@ echo "==> Starting containers"
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 echo "==> Waiting for database to be ready..."
-until docker compose exec -T db pg_isready -U postgres > /dev/null 2>&1; do
+until docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T db pg_isready -U simplerms > /dev/null 2>&1; do
   sleep 2
 done
 echo "    Database ready"
 
-echo "==> Generating Prisma client"
-docker compose exec -T app npx prisma generate
-
 echo "==> Running migrations"
-docker compose exec -T app npx prisma migrate deploy
+docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npx prisma migrate deploy
 
 echo "==> Checking if seed is needed"
-USER_COUNT=$(docker compose exec -T app npx prisma db execute --stdin <<< "SELECT COUNT(*) FROM \"User\";" 2>/dev/null | grep -o '[0-9]*' | tail -1 || echo "0")
+USER_COUNT=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npx prisma db execute --stdin <<< "SELECT COUNT(*) FROM \"User\";" 2>/dev/null | grep -o '[0-9]*' | tail -1 || echo "0")
 if [ "$USER_COUNT" = "0" ]; then
   echo "==> Seeding database"
-  docker compose exec -T app npm run db:seed
+  docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npm run db:seed
 else
   echo "    Database already seeded, skipping"
 fi
