@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/book", label: "Book a session" },
   { href: "/support", label: "Support" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function SiteNav({ companyName = "SimpleRMS" }: { companyName?: string }) {

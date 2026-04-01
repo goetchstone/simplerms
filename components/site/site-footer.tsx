@@ -18,6 +18,7 @@ export function SiteFooter({ companyName = "SimpleRMS" }: { companyName?: string
             <ul className="space-y-2 text-sm text-zinc-500">
               <li><Link href="/book" className="hover:text-zinc-900">Book a session</Link></li>
               <li><Link href="/support" className="hover:text-zinc-900">Get support</Link></li>
+              <li><Link href="/blog" className="hover:text-zinc-900">Blog</Link></li>
               <li><Link href="/portal" className="hover:text-zinc-900">Client portal</Link></li>
             </ul>
           </div>

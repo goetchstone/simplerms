@@ -11,6 +11,9 @@ import { settingsRouter } from "@/server/trpc/routers/settings";
 import { ordersRouter } from "@/server/trpc/routers/orders";
 import { inventoryRouter } from "@/server/trpc/routers/inventory";
 import { timeTrackingRouter } from "@/server/trpc/routers/timeTracking";
+import { usersRouter } from "@/server/trpc/routers/users";
+import { cmsRouter } from "@/server/trpc/routers/cms";
+import { reportsRouter } from "@/server/trpc/routers/reports";
 
 export const appRouter = createTRPCRouter({
   audit: auditRouter,
@@ -24,6 +27,9 @@ export const appRouter = createTRPCRouter({
   orders: ordersRouter,
   inventory: inventoryRouter,
   time: timeTrackingRouter,
+  users: usersRouter,
+  cms: cmsRouter,
+  reports: reportsRouter,
 });
 
 export type AppRouter = typeof appRouter;
