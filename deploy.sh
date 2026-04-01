@@ -10,10 +10,18 @@ cd "$REPO_DIR"
 
 echo "==> Ensuring .env.local exists"
 if [ ! -f .env.local ]; then
-  cp .env .env.local
-  echo "    Created .env.local from .env"
-else
-  echo "    .env.local already exists"
+  cp .env.example .env.local
+  echo "    Created .env.local from .env.example"
+fi
+
+if ! grep -q "^AUTH_SECRET=" .env.local 2>/dev/null; then
+  echo "AUTH_SECRET=$(openssl rand -base64 32)" >> .env.local
+  echo "    Generated AUTH_SECRET"
+fi
+
+if ! grep -q "^APP_ENCRYPTION_KEY=" .env.local 2>/dev/null || grep -q "replace-with" .env.local 2>/dev/null; then
+  sed -i "s|APP_ENCRYPTION_KEY=.*|APP_ENCRYPTION_KEY=$(openssl rand -hex 32)|" .env.local
+  echo "    Generated APP_ENCRYPTION_KEY"
 fi
 
 echo "==> Stopping existing containers"
@@ -60,10 +68,11 @@ done
 echo "    App is up"
 
 echo "==> Configuring nginx"
+NGINX_DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/dev/null || echo "_")
 sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
 server {
     listen 80;
-    server_name _;
+    server_name DOMAIN_PLACEHOLDER;
 
     client_max_body_size 20M;
 
@@ -82,10 +91,28 @@ server {
 }
 NGINX
 
+sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/" /etc/nginx/sites-available/simplerms
 sudo ln -sf /etc/nginx/sites-available/simplerms /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 echo "    nginx configured"
+
+echo "==> Checking HTTPS"
+DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/dev/null || echo "")
+if [ -n "$DOMAIN" ] && [ "$DOMAIN" != "localhost" ]; then
+  if ! command -v certbot &> /dev/null; then
+    echo "    Installing certbot"
+    sudo apt-get update -qq && sudo apt-get install -y -qq certbot python3-certbot-nginx > /dev/null
+  fi
+  if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
+    echo "    Requesting certificate for $DOMAIN"
+    sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email
+  else
+    echo "    Certificate exists for $DOMAIN"
+  fi
+else
+  echo "    Skipping HTTPS (set NEXT_PUBLIC_APP_URL to enable)"
+fi
 
 echo ""
 echo "============================================"
