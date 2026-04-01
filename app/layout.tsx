@@ -8,7 +8,7 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export const metadata: Metadata = {
   title: "Akritos",
-  description: "Business management for consultancies.",
+  description: "Technology partners for small business.",
 };
 
 export default function RootLayout({
