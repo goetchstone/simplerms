@@ -1,4 +1,4 @@
-# docker-compose.yml
+# docker-compose.yml — shared base, no dev bind mounts
 
 services:
   db:
@@ -22,7 +22,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: development
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -30,16 +29,10 @@ services:
       - .env.local
     environment:
       DATABASE_URL: postgresql://simplerms:simplerms_dev@db:5432/simplerms
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
-      - uploads_data:/app/uploads
     depends_on:
       db:
         condition: service_healthy
 
-  # One-shot container for migrations and seeds — has full node_modules
   migrator:
     build:
       context: .
