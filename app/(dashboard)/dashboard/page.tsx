@@ -61,9 +61,10 @@ async function getStats() {
       orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
       take: 5,
     }),
-    db.inventoryItem.count({
-      where: { reorderPoint: { not: null }, qtyOnHand: { lte: db.inventoryItem.fields.reorderPoint } },
-    }).catch(() => 0),
+    db.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(*)::int FROM "InventoryItem"
+      WHERE "reorderPoint" IS NOT NULL AND "qtyOnHand" <= "reorderPoint"
+    `.then((r) => Number(r[0].count)).catch(() => 0),
     db.timeEntry.aggregate({
       where: { isBillable: true, invoiceId: null },
       _sum: { minutes: true },
