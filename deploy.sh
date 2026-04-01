@@ -28,9 +28,16 @@ echo "==> Waiting for app to migrate and start..."
 # Migrations run inside the container entrypoint before the server starts.
 # Wait for the health endpoint to confirm everything is up.
 
-echo "==> Waiting for app to be ready..."
+echo "==> Waiting for app to be ready (max 120s)..."
+WAIT=0
 until curl -sf http://localhost:3000/api/health > /dev/null 2>&1; do
   sleep 3
+  WAIT=$((WAIT + 3))
+  if [ $WAIT -ge 120 ]; then
+    echo "ERROR: app did not become healthy after 120s"
+    docker compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50 app
+    exit 1
+  fi
 done
 echo "    App is up"
 
