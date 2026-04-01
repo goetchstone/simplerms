@@ -13,6 +13,7 @@ FROM base AS builder
 RUN npm ci
 COPY . .
 RUN DATABASE_URL="postgresql://build:build@localhost/build" npx prisma generate
+ENV NODE_OPTIONS="--max-old-space-size=1536"
 RUN npm run build
 
 # Full node_modules for running migrations and seeds

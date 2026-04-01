@@ -29,6 +29,21 @@ if ! grep -q "^AUTH_TRUST_HOST=" .env.local 2>/dev/null; then
   echo "    Set AUTH_TRUST_HOST=true (required behind reverse proxy)"
 fi
 
+echo "==> Ensuring swap space (prevents OOM during build)"
+if [ ! -f /swapfile ]; then
+  sudo fallocate -l 2G /swapfile
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+  echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab > /dev/null
+  echo "    Created 2GB swap"
+elif ! swapon --show | grep -q /swapfile; then
+  sudo swapon /swapfile
+  echo "    Enabled existing swap"
+else
+  echo "    Swap already active"
+fi
+
 echo "==> Stopping existing containers"
 $COMPOSE down --remove-orphans
 
