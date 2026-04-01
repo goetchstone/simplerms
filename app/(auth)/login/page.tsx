@@ -1,4 +1,6 @@
 // app/(auth)/login/page.tsx
+export const dynamic = "force-dynamic";
+
 import { LoginForm } from "@/components/auth/login-form";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";

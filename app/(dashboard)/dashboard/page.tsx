@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/page.tsx
+export const dynamic = "force-dynamic";
+
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { formatCurrency, formatDate } from "@/lib/utils";

@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/settings/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { SettingsForm } from "@/components/settings/settings-form";
 import { db } from "@/server/db";

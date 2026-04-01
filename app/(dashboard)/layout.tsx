@@ -1,4 +1,6 @@
 // app/(dashboard)/layout.tsx
+export const dynamic = "force-dynamic";
+
 import { Sidebar } from "@/components/layout/sidebar";
 import { Topbar } from "@/components/layout/topbar";
 import { auth } from "@/server/auth";
