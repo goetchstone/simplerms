@@ -12,7 +12,7 @@ CMD ["npm", "run", "dev"]
 FROM base AS builder
 RUN npm ci
 COPY . .
-RUN npx prisma generate
+RUN DATABASE_URL="postgresql://build:build@localhost/build" npx prisma generate
 RUN npm run build
 
 FROM node:20-alpine AS production

@@ -1,0 +1,14 @@
+# .dockerignore
+.git
+.next
+node_modules
+npm-debug.log*
+.env
+.env.local
+.env*.local
+*.pem
+coverage
+__tests__
+.github
+DREAMHOST.md
+README.md
