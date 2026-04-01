@@ -24,6 +24,11 @@ if ! grep -q "^APP_ENCRYPTION_KEY=" .env.local 2>/dev/null || grep -q "replace-w
   echo "    Generated APP_ENCRYPTION_KEY"
 fi
 
+if ! grep -q "^AUTH_TRUST_HOST=" .env.local 2>/dev/null; then
+  echo "AUTH_TRUST_HOST=true" >> .env.local
+  echo "    Set AUTH_TRUST_HOST=true (required behind reverse proxy)"
+fi
+
 echo "==> Stopping existing containers"
 $COMPOSE down --remove-orphans
 
