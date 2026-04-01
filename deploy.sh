@@ -31,6 +31,21 @@ done
 echo "    Database ready"
 
 echo "==> Running migrations"
+# If tables exist but _prisma_migrations doesn't, baseline the init migration.
+HAS_MIGRATION_TABLE=$($COMPOSE exec -T db \
+  psql -U simplerms -d simplerms -tAc \
+  "SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name='_prisma_migrations');" \
+  2>/dev/null || echo "f")
+if [ "${HAS_MIGRATION_TABLE// /}" = "f" ]; then
+  HAS_USER_TABLE=$($COMPOSE exec -T db \
+    psql -U simplerms -d simplerms -tAc \
+    "SELECT EXISTS(SELECT 1 FROM information_schema.tables WHERE table_name='User');" \
+    2>/dev/null || echo "f")
+  if [ "${HAS_USER_TABLE// /}" = "t" ]; then
+    echo "    Baselining existing database"
+    $COMPOSE run --rm migrator npx prisma migrate resolve --applied 20260401000000_init
+  fi
+fi
 $COMPOSE run --rm migrator npx prisma migrate deploy
 
 echo "==> Checking if seed is needed"
