@@ -24,29 +24,25 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache
 echo "==> Starting containers"
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
-echo "==> Waiting for database to be ready..."
-until docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T db pg_isready -U simplerms > /dev/null 2>&1; do
-  sleep 2
-done
-echo "    Database ready"
-
-echo "==> Running migrations"
-docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npx prisma migrate deploy
-
-echo "==> Checking if seed is needed"
-USER_COUNT=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npx prisma db execute --stdin <<< "SELECT COUNT(*) FROM \"User\";" 2>/dev/null | grep -o '[0-9]*' | tail -1 || echo "0")
-if [ "$USER_COUNT" = "0" ]; then
-  echo "==> Seeding database"
-  docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npm run db:seed
-else
-  echo "    Database already seeded, skipping"
-fi
+echo "==> Waiting for app to migrate and start..."
+# Migrations run inside the container entrypoint before the server starts.
+# Wait for the health endpoint to confirm everything is up.
 
 echo "==> Waiting for app to be ready..."
 until curl -sf http://localhost:3000/api/health > /dev/null 2>&1; do
   sleep 3
 done
 echo "    App is up"
+
+echo "==> Checking if seed is needed"
+USER_COUNT=$(docker compose -f docker-compose.yml -f docker-compose.prod.yml exec -T db \
+  psql -U simplerms -d simplerms -tAc "SELECT COUNT(*) FROM \"User\";" 2>/dev/null || echo "0")
+if [ "${USER_COUNT// /}" = "0" ]; then
+  echo "==> Seeding database"
+  docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm app npm run db:seed
+else
+  echo "    Database already seeded (${USER_COUNT// /} users), skipping"
+fi
 
 echo "==> Configuring nginx"
 sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
