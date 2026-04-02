@@ -43,7 +43,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-bone/80">Email</Label>
         <Input
           id="email"
           type="email"
@@ -51,11 +51,12 @@ export function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="border-bone/20 bg-bone/5 text-bone placeholder:text-bone/30 focus:border-conviction"
         />
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password" className="text-bone/80">Password</Label>
         <Input
           id="password"
           type="password"
@@ -63,14 +64,15 @@ export function LoginForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="border-bone/20 bg-bone/5 text-bone placeholder:text-bone/30 focus:border-conviction"
         />
       </div>
 
       {error && (
-        <p className="text-sm text-destructive">{error}</p>
+        <p className="text-sm text-alert">{error}</p>
       )}
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type="submit" className="w-full bg-conviction text-midnight hover:bg-conviction/90" disabled={loading}>
         {loading ? "Signing in…" : "Sign in"}
       </Button>
     </form>
