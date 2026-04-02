@@ -44,13 +44,7 @@ else
   echo "    Swap already active"
 fi
 
-echo "==> Stopping existing containers"
-$COMPOSE down --remove-orphans
-
-echo "==> Building images"
-$COMPOSE build --no-cache
-
-echo "==> Starting database"
+echo "==> Ensuring database is running"
 $COMPOSE up -d db
 echo "    Waiting for database..."
 until $COMPOSE exec -T db pg_isready -U simplerms > /dev/null 2>&1; do
@@ -58,21 +52,26 @@ until $COMPOSE exec -T db pg_isready -U simplerms > /dev/null 2>&1; do
 done
 echo "    Database ready"
 
+echo "==> Building new image (old app keeps serving traffic)"
+$COMPOSE build --no-cache
+
 echo "==> Pushing schema to database"
 $COMPOSE run --rm migrator npx prisma db push --skip-generate
 
 echo "==> Checking if seed is needed"
 USER_COUNT=$($COMPOSE exec -T db \
   psql -U simplerms -d simplerms -tAc "SELECT COUNT(*) FROM \"User\";" 2>/dev/null || echo "0")
-if [ "${USER_COUNT// /}" = "0" ]; then
-  echo "==> Seeding database"
+SERVICE_COUNT=$($COMPOSE exec -T db \
+  psql -U simplerms -d simplerms -tAc "SELECT COUNT(*) FROM \"Service\";" 2>/dev/null || echo "0")
+if [ "${USER_COUNT// /}" = "0" ] || [ "${SERVICE_COUNT// /}" = "0" ]; then
+  echo "==> Seeding database (users: ${USER_COUNT// /}, services: ${SERVICE_COUNT// /})"
   $COMPOSE run --rm migrator npx prisma db seed
 else
-  echo "    Database already seeded (${USER_COUNT// /} users), skipping"
+  echo "    Database already seeded (${USER_COUNT// /} users, ${SERVICE_COUNT// /} services)"
 fi
 
-echo "==> Starting app"
-$COMPOSE up -d app
+echo "==> Swapping to new container"
+$COMPOSE up -d --no-deps --remove-orphans app
 
 echo "==> Waiting for app to be ready (max 120s)..."
 WAIT=0
@@ -86,6 +85,9 @@ until curl -sf http://localhost:3000/api/health > /dev/null 2>&1; do
   fi
 done
 echo "    App is up"
+
+echo "==> Cleaning up old images"
+docker image prune -f > /dev/null 2>&1
 
 echo "==> Configuring nginx"
 # Extract domain — use sed instead of grep -oP for portability.
