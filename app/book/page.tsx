@@ -28,45 +28,48 @@ export default async function BookPage() {
   const { companyName, services } = await getData();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-midnight">
       <SiteNav companyName={companyName} />
 
       <main className="flex flex-1 flex-col items-center px-6 py-20">
         <div className="w-full max-w-3xl">
-          <h1 className="mb-2 text-3xl font-semibold tracking-tight text-zinc-900">Book a session</h1>
-          <p className="mb-10 text-zinc-500">
-            Choose a service below. No account needed — we'll send confirmation to your email.
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Booking
+          </p>
+          <h1 className="mb-2 text-3xl font-medium tracking-tight text-bone">Book a session</h1>
+          <p className="mb-10 text-bone/50">
+            Choose a service below. No account needed — we&apos;ll send confirmation to your email.
           </p>
 
           {services.length === 0 ? (
-            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-12 text-center text-zinc-500">
+            <div className="border border-bone/10 bg-slate-brand/20 p-12 text-center text-bone/50" style={{ borderRadius: "2px" }}>
               No services available for booking right now. Check back soon.
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-px bg-bone/5 sm:grid-cols-2">
               {services.map((s) => (
                 <Link
                   key={s.id}
                   href={`/book/${s.slug}`}
-                  className="group flex flex-col rounded-xl border border-zinc-200 bg-white p-6 transition-all hover:border-zinc-400 hover:shadow-sm"
+                  className="group flex flex-col bg-midnight p-6 transition-colors hover:bg-slate-brand/20"
                 >
                   <div className="mb-4 flex items-start justify-between">
-                    <h2 className="font-semibold text-zinc-900">{s.name}</h2>
+                    <h2 className="font-medium text-bone">{s.name}</h2>
                     {s.price !== null && (
-                      <span className="ml-3 shrink-0 text-sm font-medium text-zinc-500">
+                      <span className="ml-3 shrink-0 text-sm text-conviction">
                         {formatCurrency(Number(s.price), "CAD")}
                       </span>
                     )}
                   </div>
                   {s.description && (
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-zinc-500">{s.description}</p>
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-bone/50">{s.description}</p>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-xs text-zinc-400">
+                    <span className="flex items-center gap-1.5 text-xs text-bone/30">
                       <Clock className="h-3.5 w-3.5" />
                       {s.duration} min
                     </span>
-                    <span className="flex items-center gap-1 text-sm font-medium text-zinc-900 group-hover:underline">
+                    <span className="flex items-center gap-1 text-sm font-medium text-conviction group-hover:underline">
                       Book <ArrowRight className="h-3.5 w-3.5" />
                     </span>
                   </div>

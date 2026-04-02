@@ -24,15 +24,18 @@ export default async function SupportPage() {
   const companyName = await getCompanyName();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-midnight">
       <SiteNav companyName={companyName} />
 
       <main className="flex flex-1 flex-col items-center px-6 py-20">
         <div className="w-full max-w-xl">
-          <h1 className="mb-2 text-3xl font-semibold tracking-tight text-zinc-900">Get support</h1>
-          <p className="mb-8 text-zinc-500">
-            Fill out the form below and we'll get back to you as soon as possible.
-            You'll receive a ticket number by email so you can track your request — no account needed.
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Support
+          </p>
+          <h1 className="mb-2 text-3xl font-medium tracking-tight text-bone">Get support</h1>
+          <p className="mb-8 text-bone/50">
+            Fill out the form below and we&apos;ll get back to you as soon as possible.
+            You&apos;ll receive a ticket number by email — no account needed.
           </p>
 
           <SupportForm />
