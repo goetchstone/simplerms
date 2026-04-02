@@ -58,6 +58,19 @@ const serviceCategories = [
           "Documentation so your team can maintain it",
         ],
       },
+      {
+        icon: Wrench,
+        title: "Legacy App Modernization",
+        description: "FileMaker, Access, ancient Excel workbooks running your business — we've seen it all. We extract your data, understand your workflows, and build you a modern web application that does what the old one did, better. Hosted on a simple VPS for as little as $12/month. You own every line of code.",
+        details: [
+          "FileMaker, Access, and legacy database migration",
+          "Custom web application development",
+          "Data extraction, cleanup, and validation",
+          "Workflow analysis — we build what you actually need, not a bloated replacement",
+          "Self-hosted on affordable infrastructure you control",
+          "Full source code ownership — no vendor lock-in, ever",
+        ],
+      },
     ],
   },
   {

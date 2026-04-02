@@ -75,6 +75,11 @@ const services = [
     title: "Data Migration & Integration",
     body: "Trapped in a system that doesn't work? We build the bridges to get your data out — API integrations, migrations, format conversions. We get you on your feet and moving.",
   },
+  {
+    icon: Globe,
+    title: "Legacy App Modernization",
+    body: "Still running FileMaker, Access, or a spreadsheet held together with duct tape? We migrate your data and build you a modern web app — hosted for as little as $12/month. You own the code.",
+  },
 ];
 
 const values = [
