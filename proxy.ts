@@ -9,6 +9,7 @@ const PUBLIC_PATHS = [
   "/support",
   "/pricing",
   "/services",
+  "/about",
   "/blog",
   "/api/auth",
   "/api/trpc",

@@ -8,11 +8,11 @@ import { LogoMark } from "@/components/brand/logo-mark";
 import { Menu, X } from "lucide-react";
 
 const links = [
+  { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/pricing", label: "Pricing" },
   { href: "/book", label: "Book a session" },
   { href: "/support", label: "Support" },
-  { href: "/blog", label: "Blog" },
 ];
 
 export function SiteNav({ companyName = "Akritos" }: { companyName?: string }) {
