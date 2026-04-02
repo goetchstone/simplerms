@@ -7,8 +7,10 @@ import { SupportForm } from "@/components/site/support-form";
 import { db } from "@/server/db";
 
 export const metadata = {
-  title: "Support | Akritos",
-  description: "Submit a support ticket. No account needed.",
+  title: "Support",
+  description:
+    "Submit a support ticket — no account needed. We respond same business day for retainer clients.",
+  alternates: { canonical: "https://akritos.com/support" },
 };
 
 async function getCompanyName() {

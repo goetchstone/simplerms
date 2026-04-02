@@ -1,11 +1,20 @@
 // app/pricing/page.tsx
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
+import { JsonLd, faqSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "Published rates, no surprises. $175/hr on-demand, $150/hr retainer. Vendor costs pass through at cost — zero markup, ever. No contracts required.",
+  alternates: { canonical: "https://akritos.com/pricing" },
+};
 
 async function getCompanyName() {
   try {
@@ -108,6 +117,7 @@ export default async function PricingPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
+      <JsonLd data={faqSchema(faqs)} />
       <SiteNav companyName={companyName} />
 
       {/* Header */}
@@ -246,6 +256,87 @@ export default async function PricingPage() {
                 {item}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Competitor Comparison */}
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
+        <div className="mx-auto max-w-[900px]">
+          <div className="mb-12 text-center">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+              The Difference
+            </p>
+            <h2 className="text-[28px] font-medium text-bone">
+              Typical MSP vs. Akritos
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+              Most managed service providers profit from your dependency. We
+              profit from your independence. Here&apos;s what that looks like.
+            </p>
+          </div>
+          <div className="grid gap-px bg-bone/5 md:grid-cols-3">
+            {/* Header row */}
+            <div className="bg-midnight p-5" />
+            <div className="bg-midnight p-5 text-center">
+              <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">
+                Typical MSP
+              </p>
+            </div>
+            <div className="bg-slate-brand/30 p-5 text-center ring-1 ring-conviction/20">
+              <p className="text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+                Akritos
+              </p>
+            </div>
+            {/* Rows */}
+            {[
+              {
+                label: "Pricing model",
+                them: "Bundled per-user fee",
+                us: "Hourly + vendor pass-through at cost",
+              },
+              {
+                label: "Vendor markup",
+                them: "20-40% hidden markup",
+                us: "Zero. You see the vendor invoice.",
+              },
+              {
+                label: "Contracts",
+                them: "12-36 month lock-in",
+                us: "Month-to-month after onboarding",
+              },
+              {
+                label: "Vendor kickbacks",
+                them: "Partnership revenue, referral fees",
+                us: "None. Recommendations based on fit.",
+              },
+              {
+                label: "Data ownership",
+                them: "Held in their systems",
+                us: "You own everything. Always.",
+              },
+              {
+                label: "Exit process",
+                them: "Fees, penalties, delayed handoff",
+                us: "Walk away anytime. We help transition.",
+              },
+            ].flatMap((row) => [
+              <div key={`${row.label}-label`} className="flex items-center bg-midnight p-5">
+                <p className="text-sm font-medium text-bone">{row.label}</p>
+              </div>,
+              <div key={`${row.label}-them`} className="flex items-center bg-midnight p-5">
+                <p className="flex items-start gap-2 text-sm text-bone/40">
+                  <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-alert/60" />
+                  {row.them}
+                </p>
+              </div>,
+              <div key={`${row.label}-us`} className="flex items-center bg-slate-brand/30 p-5 ring-1 ring-conviction/20">
+                <p className="flex items-start gap-2 text-sm text-bone/70">
+                  <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-conviction" />
+                  {row.us}
+                </p>
+              </div>,
+            ])}
           </div>
         </div>
       </section>

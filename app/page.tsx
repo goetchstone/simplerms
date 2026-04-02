@@ -1,11 +1,13 @@
 // app/page.tsx
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { LogoMark } from "@/components/brand/logo-mark";
+import { JsonLd, localBusinessSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
 import {
   ArrowRight,
@@ -18,7 +20,15 @@ import {
   Handshake,
   Lock,
   ArrowRightLeft,
+  CheckCircle,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Akritos — Technology Partners for Small Business",
+  description:
+    "Technology consulting that leaves you independent. Apple Business, MDM, PCI compliance, e-commerce, infrastructure. Published rates, zero vendor markup, no lock-in. Free consultation.",
+  alternates: { canonical: "https://akritos.com" },
+};
 
 async function getCompanyName() {
   try {
@@ -116,6 +126,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
+      <JsonLd data={localBusinessSchema()} />
       <SiteNav companyName={companyName} />
 
       {/* Hero */}
@@ -150,6 +161,21 @@ export default async function HomePage() {
           >
             View services
           </Link>
+        </div>
+
+        {/* Trust bar */}
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-bone/40">
+          {[
+            "Published rates — no hidden fees",
+            "Zero vendor markup",
+            "No contracts required",
+            "Free initial consultation",
+          ].map((t) => (
+            <span key={t} className="flex items-center gap-1.5">
+              <CheckCircle className="h-3 w-3 text-conviction/60" />
+              {t}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -260,6 +286,57 @@ export default async function HomePage() {
               <div key={v.heading} className="space-y-3 border-l-2 border-conviction/30 pl-6">
                 <h3 className="text-base font-medium text-bone">{v.heading}</h3>
                 <p className="text-sm leading-relaxed text-bone/50">{v.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What You Get */}
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <div className="mb-16 text-center">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+              Day One
+            </p>
+            <h2 className="text-[28px] font-medium text-bone">
+              What you get before you pay a dime
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+              Your first consultation is free. Here&apos;s what you walk away with —
+              even if you never hire us.
+            </p>
+          </div>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: "Honest assessment",
+                body: "What's working, what's broken, and what's costing you money. No sugarcoating.",
+              },
+              {
+                title: "Clear plan with real numbers",
+                body: "Exactly what needs to happen, in what order, and what it costs. Our rate and vendor costs, separated.",
+              },
+              {
+                title: "Vendor audit",
+                body: "Are you overpaying? Are you locked in? We'll tell you what your current vendors are actually charging vs. market rate.",
+              },
+              {
+                title: "Risk snapshot",
+                body: "Security gaps, compliance issues, single points of failure. The things that keep you up at night — or should.",
+              },
+              {
+                title: "No obligation",
+                body: "Take the plan and do it yourself, hire someone else, or hire us. No guilt, no pressure, no follow-up sales calls.",
+              },
+              {
+                title: "Written summary",
+                body: "Everything we discussed, documented and emailed to you. Not a sales deck — a working document you can act on.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="space-y-2">
+                <h3 className="text-sm font-medium text-bone">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-bone/50">{item.body}</p>
               </div>
             ))}
           </div>

@@ -1,11 +1,20 @@
 // app/services/page.tsx
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
+import { JsonLd, serviceSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
+
+export const metadata: Metadata = {
+  title: "Services",
+  description:
+    "Apple Business, MDM, PCI compliance, e-commerce, VoIP, data migration, legacy app modernization, white glove executive IT. Every service leaves you more independent.",
+  alternates: { canonical: "https://akritos.com/services" },
+};
 import {
   ArrowRight,
   MonitorSmartphone,
@@ -327,6 +336,14 @@ export default async function ServicesPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
+      {serviceCategories.flatMap((cat) =>
+        cat.services.map((s) => (
+          <JsonLd
+            key={s.title}
+            data={serviceSchema({ name: s.title, description: s.description })}
+          />
+        ))
+      )}
       <SiteNav companyName={companyName} />
 
       {/* Header */}
@@ -405,12 +422,25 @@ export default async function ServicesPage() {
         </div>
       </section>
 
+      {/* Limited capacity */}
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-16">
+        <div className="mx-auto max-w-[720px] text-center">
+          <p className="text-sm leading-relaxed text-bone/50">
+            We intentionally limit the number of clients we work with. Every
+            business we partner with gets direct access to senior-level
+            expertise — not a help desk. If we&apos;re at capacity,
+            we&apos;ll tell you and refer you to someone we trust.
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="px-6 py-24 text-center">
         <h2 className="text-2xl font-medium text-bone">Not sure where to start?</h2>
         <p className="mx-auto mt-4 max-w-lg text-bone/50">
           Book a free consultation. We&apos;ll look at what you have, tell you
-          what needs fixing, and give you a clear plan with real numbers.
+          what needs fixing, and give you a clear plan with real numbers. No
+          sales pitch — if we&apos;re not the right fit, we&apos;ll say so.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link

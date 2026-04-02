@@ -9,8 +9,10 @@ import { ArrowRight, Clock } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 
 export const metadata = {
-  title: "Book a session | Akritos",
-  description: "Choose a service and pick a time that works for you.",
+  title: "Book a Free Consultation",
+  description:
+    "Schedule a free, no-obligation consultation. We'll assess your technology, tell you what needs fixing, and give you a clear plan with real numbers.",
+  alternates: { canonical: "https://akritos.com/book" },
 };
 
 async function getData() {
