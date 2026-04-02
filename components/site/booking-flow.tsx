@@ -3,10 +3,6 @@
 
 import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -27,18 +23,18 @@ function SlotButton({ slot, selected, onSelect }: SlotButtonProps) {
     <button
       type="button"
       onClick={onSelect}
-      className={`rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
+      className={`border px-4 py-2.5 text-sm font-medium transition-colors ${
         selected
-          ? "border-zinc-900 bg-zinc-900 text-white"
-          : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400"
+          ? "border-conviction bg-conviction text-midnight"
+          : "border-bone/20 bg-bone/5 text-bone/70 hover:border-conviction/50"
       }`}
+      style={{ borderRadius: "2px" }}
     >
       {time}
     </button>
   );
 }
 
-// Produce a list of dates to browse (next 14 days from today).
 function getDateRange(): Date[] {
   return Array.from({ length: 14 }, (_, i) => {
     const d = new Date();
@@ -91,26 +87,28 @@ export function BookingFlow({ serviceId, serviceName }: { serviceId: string; ser
   if (book.isSuccess) {
     const appt = book.data;
     return (
-      <div className="rounded-xl border border-green-200 bg-green-50 p-8 text-center">
-        <CheckCircle className="mx-auto mb-4 h-10 w-10 text-green-500" strokeWidth={1.5} />
-        <h2 className="mb-2 text-xl font-semibold text-zinc-900">You're booked!</h2>
-        <p className="mb-1 text-zinc-600">
-          <span className="font-medium">{serviceName}</span> on{" "}
-          <span className="font-medium">{formatDate(appt.startsAt)}</span>
+      <div className="border border-clear/30 bg-clear/10 p-8 text-center" style={{ borderRadius: "2px" }}>
+        <CheckCircle className="mx-auto mb-4 h-10 w-10 text-clear" strokeWidth={1.5} />
+        <h2 className="mb-2 text-xl font-medium text-bone">You&apos;re booked!</h2>
+        <p className="mb-1 text-bone/60">
+          <span className="font-medium text-bone">{serviceName}</span> on{" "}
+          <span className="font-medium text-bone">{formatDate(appt.startsAt)}</span>
         </p>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-bone/40">
           Confirmation sent to {form.bookerEmail}. Use your email link to cancel if needed.
         </p>
       </div>
     );
   }
 
+  const inputClass = "w-full border border-bone/20 bg-bone/5 px-3 py-2 text-sm text-bone placeholder:text-bone/30 focus:border-conviction focus:outline-none";
+  const labelClass = "text-sm font-medium text-bone/70";
+
   return (
     <div className="space-y-6">
-      {/* Step: pick date */}
       {step === "date" && (
         <div>
-          <p className="mb-4 text-sm font-medium text-zinc-700">Select a date</p>
+          <p className="mb-4 text-sm font-medium text-bone/70">Select a date</p>
           <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
             {dates.map((d) => {
               const isSelected = selectedDate?.toDateString() === d.toDateString();
@@ -123,16 +121,17 @@ export function BookingFlow({ serviceId, serviceName }: { serviceId: string; ser
                     setSelectedSlot(null);
                     setStep("slot");
                   }}
-                  className={`flex flex-col items-center rounded-lg border px-2 py-3 text-center transition-colors ${
+                  className={`flex flex-col items-center border px-2 py-3 text-center transition-colors ${
                     isSelected
-                      ? "border-zinc-900 bg-zinc-900 text-white"
-                      : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400"
+                      ? "border-conviction bg-conviction text-midnight"
+                      : "border-bone/20 bg-bone/5 text-bone/70 hover:border-conviction/50"
                   }`}
+                  style={{ borderRadius: "2px" }}
                 >
                   <span className="text-xs font-medium uppercase opacity-60">
                     {d.toLocaleDateString([], { weekday: "short" })}
                   </span>
-                  <span className="text-lg font-semibold">{d.getDate()}</span>
+                  <span className="text-lg font-medium">{d.getDate()}</span>
                   <span className="text-xs opacity-60">
                     {d.toLocaleDateString([], { month: "short" })}
                   </span>
@@ -143,25 +142,24 @@ export function BookingFlow({ serviceId, serviceName }: { serviceId: string; ser
         </div>
       )}
 
-      {/* Step: pick slot */}
       {step === "slot" && selectedDate && (
         <div>
           <button
             type="button"
             onClick={() => setStep("date")}
-            className="mb-4 flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900"
+            className="mb-4 flex items-center gap-1 text-sm text-bone/40 hover:text-conviction"
           >
             <ChevronLeft className="h-4 w-4" /> Back
           </button>
-          <p className="mb-4 text-sm font-medium text-zinc-700">
+          <p className="mb-4 text-sm font-medium text-bone/70">
             Available times on{" "}
-            <span className="text-zinc-900">{formatDate(selectedDate)}</span>
+            <span className="text-bone">{formatDate(selectedDate)}</span>
           </p>
 
           {isFetching ? (
-            <p className="text-sm text-zinc-400">Loading…</p>
+            <p className="text-sm text-bone/30">Loading...</p>
           ) : !slots || slots.length === 0 ? (
-            <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center text-sm text-zinc-500">
+            <div className="border border-bone/10 bg-slate-brand/20 p-6 text-center text-sm text-bone/50" style={{ borderRadius: "2px" }}>
               No availability on this date. Try another day.
             </div>
           ) : (
@@ -178,60 +176,67 @@ export function BookingFlow({ serviceId, serviceName }: { serviceId: string; ser
           )}
 
           {selectedSlot && (
-            <Button
-              className="mt-6"
+            <button
+              className="mt-6 inline-flex items-center gap-1 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
               onClick={() => setStep("details")}
+              style={{ borderRadius: "2px" }}
             >
-              Continue <ChevronRight className="ml-1 h-4 w-4" />
-            </Button>
+              Continue <ChevronRight className="h-4 w-4" />
+            </button>
           )}
         </div>
       )}
 
-      {/* Step: booker details */}
       {step === "details" && selectedSlot && (
         <form onSubmit={handleBook} className="space-y-5">
           <button
             type="button"
             onClick={() => setStep("slot")}
-            className="flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900"
+            className="flex items-center gap-1 text-sm text-bone/40 hover:text-conviction"
           >
             <ChevronLeft className="h-4 w-4" /> Back
           </button>
 
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm">
-            <span className="font-medium text-zinc-700">{serviceName}</span>
+          <div className="border border-bone/10 bg-slate-brand/20 px-4 py-3 text-sm" style={{ borderRadius: "2px" }}>
+            <span className="font-medium text-bone">{serviceName}</span>
             {" — "}
-            {formatDate(selectedSlot.startsAt)}{" "}
-            {new Date(selectedSlot.startsAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            <span className="text-bone/60">
+              {formatDate(selectedSlot.startsAt)}{" "}
+              {new Date(selectedSlot.startsAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+            </span>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="name">Full name *</Label>
-              <Input id="name" required value={form.bookerName} onChange={field("bookerName")} />
+              <label htmlFor="name" className={labelClass}>Full name *</label>
+              <input id="name" required value={form.bookerName} onChange={field("bookerName")} className={inputClass} style={{ borderRadius: "2px" }} />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="email">Email *</Label>
-              <Input id="email" type="email" required value={form.bookerEmail} onChange={field("bookerEmail")} />
+              <label htmlFor="email" className={labelClass}>Email *</label>
+              <input id="email" type="email" required value={form.bookerEmail} onChange={field("bookerEmail")} className={inputClass} style={{ borderRadius: "2px" }} />
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="phone">Phone (optional)</Label>
-            <Input id="phone" type="tel" value={form.bookerPhone} onChange={field("bookerPhone")} />
+            <label htmlFor="phone" className={labelClass}>Phone (optional)</label>
+            <input id="phone" type="tel" value={form.bookerPhone} onChange={field("bookerPhone")} className={inputClass} style={{ borderRadius: "2px" }} />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="notes">Anything we should know? (optional)</Label>
-            <Textarea id="notes" rows={3} value={form.notes} onChange={field("notes")} />
+            <label htmlFor="notes" className={labelClass}>Anything we should know? (optional)</label>
+            <textarea id="notes" rows={3} value={form.notes} onChange={field("notes")} className={`${inputClass} resize-none`} style={{ borderRadius: "2px" }} />
           </div>
 
           {book.error && (
-            <p className="text-sm text-red-600">{book.error.message}</p>
+            <p className="text-sm text-alert">{book.error.message}</p>
           )}
 
-          <Button type="submit" disabled={book.isPending} className="w-full">
-            {book.isPending ? "Confirming…" : "Confirm booking"}
-          </Button>
+          <button
+            type="submit"
+            disabled={book.isPending}
+            className="w-full bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90 disabled:opacity-50"
+            style={{ borderRadius: "2px" }}
+          >
+            {book.isPending ? "Confirming..." : "Confirm booking"}
+          </button>
         </form>
       )}
     </div>

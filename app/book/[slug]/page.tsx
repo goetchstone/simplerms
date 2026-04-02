@@ -37,24 +37,23 @@ export default async function BookServicePage({ params }: Props) {
   if (!service) notFound();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-midnight">
       <SiteNav companyName={companyName} />
 
       <main className="flex flex-1 flex-col items-center px-6 py-20">
         <div className="w-full max-w-2xl">
-          {/* Service header */}
           <div className="mb-8 space-y-1">
-            <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">{service.name}</h1>
+            <h1 className="text-3xl font-medium tracking-tight text-bone">{service.name}</h1>
             {service.description && (
-              <p className="text-zinc-500">{service.description}</p>
+              <p className="text-bone/50">{service.description}</p>
             )}
-            <div className="flex items-center gap-4 pt-1 text-sm text-zinc-400">
+            <div className="flex items-center gap-4 pt-1 text-sm text-bone/30">
               <span className="flex items-center gap-1.5">
                 <Clock className="h-3.5 w-3.5" />
                 {service.duration} min
               </span>
               {service.price !== null && (
-                <span>{formatCurrency(Number(service.price), "CAD")}</span>
+                <span className="text-conviction">{formatCurrency(Number(service.price), "CAD")}</span>
               )}
             </div>
           </div>

@@ -35,14 +35,14 @@ export default async function BlogPostPage({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-midnight">
       <SiteNav companyName={companyName} />
 
       <main className="flex flex-1 flex-col items-center px-6 py-20">
         <div className="w-full max-w-2xl">
           <Link
             href="/blog"
-            className="mb-6 inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-900"
+            className="mb-6 inline-flex items-center gap-1 text-sm text-bone/40 hover:text-conviction"
           >
             <ChevronLeft className="h-4 w-4" /> All posts
           </Link>
@@ -51,16 +51,19 @@ export default async function BlogPostPage({ params }: Props) {
             <img
               src={post.coverImage}
               alt={post.title}
-              className="mb-8 h-56 w-full rounded-xl object-cover"
+              className="mb-8 h-56 w-full object-cover"
+              style={{ borderRadius: "2px" }}
             />
           )}
 
-          <h1 className="mb-2 text-3xl font-semibold tracking-tight text-zinc-900">{post.title}</h1>
+          <h1 className="mb-2 text-3xl font-medium tracking-tight text-bone">{post.title}</h1>
           {post.publishedAt && (
-            <p className="mb-8 text-sm text-zinc-400">{formatDate(post.publishedAt)}</p>
+            <p className="mb-8 text-sm text-bone/30">{formatDate(post.publishedAt)}</p>
           )}
 
-          <BlockRenderer blocks={post.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
+          <div className="prose-invert prose prose-sm max-w-none prose-headings:text-bone prose-p:text-bone/60 prose-a:text-conviction">
+            <BlockRenderer blocks={post.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
+          </div>
         </div>
       </main>
 

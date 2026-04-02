@@ -7,15 +7,11 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { BlockRenderer } from "@/components/cms/block-renderer";
 import { db } from "@/server/db";
 
-// Dynamic CMS pages — anything not matched by a static route falls here.
-// Slugs like /about, /services, /privacy etc.
-
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
-// Slugs that are handled by other routes — don't claim them.
-const RESERVED = new Set(["book", "support", "blog", "portal", "dashboard", "api"]);
+const RESERVED = new Set(["book", "support", "blog", "portal", "dashboard", "api", "pricing", "services"]);
 
 async function getData(slug: string) {
   const [setting, page] = await Promise.all([
@@ -44,13 +40,15 @@ export default async function CmsPageRoute({ params }: Props) {
   if (!page) notFound();
 
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-midnight">
       <SiteNav companyName={companyName} />
 
       <main className="flex flex-1 flex-col items-center px-6 py-20">
         <div className="w-full max-w-3xl">
-          <h1 className="mb-8 text-3xl font-semibold tracking-tight text-zinc-900">{page.title}</h1>
-          <BlockRenderer blocks={page.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
+          <h1 className="mb-8 text-3xl font-medium tracking-tight text-bone">{page.title}</h1>
+          <div className="prose-invert prose prose-sm max-w-none prose-headings:text-bone prose-p:text-bone/60 prose-a:text-conviction">
+            <BlockRenderer blocks={page.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
+          </div>
         </div>
       </main>
 
