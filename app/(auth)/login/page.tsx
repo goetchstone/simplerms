@@ -1,6 +1,7 @@
 // app/(auth)/login/page.tsx
 export const dynamic = "force-dynamic";
 
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 import { LogoMark } from "@/components/brand/logo-mark";
 import { auth } from "@/server/auth";
@@ -18,7 +19,9 @@ export default async function LoginPage() {
           <h1 className="text-2xl font-medium tracking-wider text-bone">Akritos</h1>
           <p className="text-sm text-slate-brand">Sign in to your account</p>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );

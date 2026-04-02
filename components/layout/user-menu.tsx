@@ -1,18 +1,10 @@
 // components/layout/user-menu.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { signOut } from "next-auth/react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChangePasswordDialog } from "./change-password-dialog";
+import { LogOut, KeyRound, User } from "lucide-react";
 
 function initials(name?: string | null, email?: string | null): string {
   if (name) {
@@ -33,41 +25,65 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ name, email, image }: UserMenuProps) {
-  const [passwordOpen, setPasswordOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          className="relative flex h-8 w-8 cursor-pointer items-center justify-center rounded-full"
-          aria-label="User menu"
-        >
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={image ?? undefined} />
-            <AvatarFallback className="text-xs">
-              {initials(name, email)}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        aria-label="User menu"
+      >
+        {image ? (
+          <img
+            src={image}
+            alt=""
+            className="h-8 w-8 rounded-full object-cover"
+          />
+        ) : (
+          initials(name, email)
+        )}
+      </button>
 
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuLabel className="font-normal">
+      {open && (
+        <div className="absolute right-0 top-full z-50 mt-2 w-52 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md">
+          <div className="px-2 py-1.5">
             <p className="text-sm font-medium">{name ?? email}</p>
             {name && (
               <p className="text-xs text-muted-foreground">{email}</p>
             )}
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={() => setPasswordOpen(true)}>
-            Change password
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => signOut({ callbackUrl: "/login" })}>
+          </div>
+          <div className="my-1 h-px bg-border" />
+          <Link
+            href="/dashboard/account"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground"
+          >
+            <KeyRound className="h-4 w-4" />
+            Account & password
+          </Link>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm text-destructive hover:bg-destructive/10"
+          >
+            <LogOut className="h-4 w-4" />
             Sign out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <ChangePasswordDialog open={passwordOpen} onOpenChange={setPasswordOpen} />
-    </>
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

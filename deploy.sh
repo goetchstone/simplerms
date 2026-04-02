@@ -89,46 +89,80 @@ echo "    App is up"
 
 echo "==> Configuring nginx"
 NGINX_DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/dev/null || echo "_")
-sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
+
+if [ -d "/etc/letsencrypt/live/$NGINX_DOMAIN" ]; then
+  echo "    SSL certificate found — configuring HTTPS"
+  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << NGINX
 server {
     listen 80;
-    server_name DOMAIN_PLACEHOLDER;
+    server_name $NGINX_DOMAIN;
+    return 301 https://\$host\$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name $NGINX_DOMAIN;
+
+    ssl_certificate /etc/letsencrypt/live/$NGINX_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$NGINX_DOMAIN/privkey.pem;
 
     client_max_body_size 20M;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_cache_bypass \$http_upgrade;
         proxy_read_timeout 60s;
     }
 }
 NGINX
+else
+  echo "    No SSL certificate — configuring HTTP only"
+  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << NGINX
+server {
+    listen 80;
+    server_name $NGINX_DOMAIN;
 
-sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/" /etc/nginx/sites-available/simplerms
+    client_max_body_size 20M;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+        proxy_read_timeout 60s;
+    }
+}
+NGINX
+fi
+
 sudo ln -sf /etc/nginx/sites-available/simplerms /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
-echo "    nginx configured"
+echo "    nginx configured for $NGINX_DOMAIN"
 
 echo "==> Checking HTTPS"
-DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/dev/null || echo "")
-if [ -n "$DOMAIN" ] && [ "$DOMAIN" != "localhost" ]; then
+if [ -n "$NGINX_DOMAIN" ] && [ "$NGINX_DOMAIN" != "_" ] && [ "$NGINX_DOMAIN" != "localhost" ]; then
   if ! command -v certbot &> /dev/null; then
     echo "    Installing certbot"
     sudo apt-get update -qq && sudo apt-get install -y -qq certbot python3-certbot-nginx > /dev/null
   fi
-  if [ ! -d "/etc/letsencrypt/live/$DOMAIN" ]; then
-    echo "    Requesting certificate for $DOMAIN"
-    sudo certbot --nginx -d "$DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email
+  if [ ! -d "/etc/letsencrypt/live/$NGINX_DOMAIN" ]; then
+    echo "    Requesting certificate for $NGINX_DOMAIN"
+    sudo certbot --nginx -d "$NGINX_DOMAIN" --non-interactive --agree-tos --register-unsafely-without-email
   else
-    echo "    Certificate exists for $DOMAIN"
+    echo "    Certificate exists for $NGINX_DOMAIN"
   fi
 else
   echo "    Skipping HTTPS (set NEXT_PUBLIC_APP_URL to enable)"
