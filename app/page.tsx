@@ -10,14 +10,11 @@ import { JsonLd, localBusinessSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
 import {
   ArrowRight,
-  Shield,
   MonitorSmartphone,
   Server,
   CreditCard,
   Globe,
-  Users,
   Handshake,
-  Lock,
   ArrowRightLeft,
   CheckCircle,
 } from "lucide-react";
@@ -25,7 +22,7 @@ import {
 export const metadata: Metadata = {
   title: "Akritos — Technology Partners for Small Business",
   description:
-    "Technology consulting that leaves you independent. Apple Business, MDM, PCI compliance, e-commerce, infrastructure. Published rates, zero vendor markup, no lock-in. Free consultation.",
+    "Technology consulting that leaves you independent. Apple Business, MDM, infrastructure, data migration, vendor management. Published rates, zero vendor markup, no lock-in. Free consultation.",
   alternates: { canonical: "https://akritos.com" },
 };
 
@@ -46,58 +43,28 @@ const services = [
   },
   {
     icon: Server,
-    title: "Infrastructure & Hardware",
-    body: "The right hardware for the job. Mac, networking, storage — spec'd correctly, owned outright. No hardware-as-a-service traps.",
-  },
-  {
-    icon: Shield,
-    title: "PCI Compliance",
-    body: "We help you understand PCI requirements, reduce your scope, and get the infrastructure right. When you need a formal assessment, we connect you with qualified partners.",
-  },
-  {
-    icon: Globe,
-    title: "Workspace & Domain",
-    body: "Google Workspace, Microsoft 365, DNS, email — set up correctly from day one. You own the domain, you own the accounts, you have the keys.",
-  },
-  {
-    icon: CreditCard,
-    title: "Vendor & Payment Stack",
-    body: "Payment terminals, processors, gateways — we help you pick vendors who don't lock you in and don't gouge on fees. We negotiate on your behalf.",
-  },
-  {
-    icon: Users,
-    title: "Virtual CTO",
-    body: "Ongoing technology leadership without the six-figure salary. We sit in on the decisions that matter, flag the risks you don't see, and keep your technology honest.",
-  },
-  {
-    icon: Handshake,
-    title: "Co-Management",
-    body: "Already have IT staff? We augment, not replace. Your team handles the day-to-day. We handle the hard stuff — architecture decisions, vendor negotiations, and the projects that need senior experience.",
-  },
-  {
-    icon: Lock,
-    title: "Security & Compliance",
-    body: "Endpoint protection, access controls, informed compliance guidance. We help you make smart decisions, limit your scope, and bring in specialist partners when the situation requires it.",
+    title: "Infrastructure & Networking",
+    body: "Wi-Fi that works, switches that don't bottleneck, networks that scale. We plan the architecture, spec the hardware, and coordinate the installers. For ongoing management, we vet and onboard trusted partners.",
   },
   {
     icon: ArrowRightLeft,
-    title: "Data Migration & Integration",
-    body: "Trapped in a system that doesn't work? We build the bridges to get your data out — API integrations, migrations, format conversions. We get you on your feet and moving.",
+    title: "Data Migration",
+    body: "Trapped in a system that doesn't work? We get your data out — clean exports, format conversions, zero data loss. No vendor holding you hostage.",
   },
   {
     icon: Globe,
-    title: "Legacy App Modernization",
-    body: "Still running FileMaker, Access, or a spreadsheet held together with duct tape? We migrate your data and build you a modern web app — hosted for as little as $12/month. You own the code.",
+    title: "Google Workspace & Email",
+    body: "Google Workspace, Microsoft 365, DNS, email — set up correctly from day one. You own the domain, you own the accounts, you have the keys.",
+  },
+  {
+    icon: Handshake,
+    title: "Ongoing IT Partnership",
+    body: "Technology leadership without the six-figure salary. We handle architecture decisions, vendor negotiations, and the projects that need senior experience. Your team handles the day-to-day.",
   },
   {
     icon: CreditCard,
-    title: "E-Commerce & POS",
-    body: "Shopify, Square, Toast, Clover — set up right, integrated with inventory and accounting, with payment processing rates that don't gouge you. We negotiate on your behalf.",
-  },
-  {
-    icon: Shield,
-    title: "White Glove Executive IT",
-    body: "High-end home office, network, and device management for executives and individuals who expect it done right. Discreet, thorough, referral-only.",
+    title: "Vendor Management",
+    body: "Are you overpaying? Locked into a bad contract? We audit your vendor stack, negotiate better rates, and make sure you can walk away when you need to.",
   },
 ];
 
@@ -234,7 +201,7 @@ export default async function HomePage() {
               control it, you can walk away from any vendor — including us.
             </p>
           </div>
-          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">
             {services.map((s) => {
               const Icon = s.icon;
               return (

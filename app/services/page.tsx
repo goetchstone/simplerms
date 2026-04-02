@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { JsonLd, serviceSchema } from "@/components/site/json-ld";
@@ -12,29 +11,27 @@ import { db } from "@/server/db";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Apple Business, MDM, infrastructure, e-commerce, VoIP, data migration, legacy app modernization, white glove executive IT. Every service leaves you more independent.",
+    "Apple Business & MDM, infrastructure planning, data migration, Google Workspace, ongoing IT partnership, vendor management. Every service leaves you more independent.",
   alternates: { canonical: "https://akritos.com/services" },
 };
 import {
   ArrowRight,
   MonitorSmartphone,
   Server,
-  Shield,
+  Wrench,
   Globe,
-  CreditCard,
-  Users,
   Handshake,
+  CreditCard,
+  ArrowRightLeft,
+  Phone,
+  ShoppingCart,
   Lock,
   FileCheck,
-  Wrench,
-  ArrowRightLeft,
-  ShoppingCart,
-  Phone,
-  Calculator,
   Camera,
-  GraduationCap,
   CloudOff,
+  GraduationCap,
   Crown,
+  Calculator,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -46,289 +43,110 @@ async function getCompanyName() {
   }
 }
 
-const serviceCategories = [
+// Core 3 — what we lead with, what people search for, what we have proven track record on.
+const coreServices = [
   {
-    category: "Migration & Integration",
-    services: [
-      {
-        icon: ArrowRightLeft,
-        title: "Data Migration",
-        description: "Trapped in a system that doesn't work? We get your data out. Clean exports, format conversions, validation, and import into whatever comes next. No data left behind, no vendor holding you hostage.",
-        details: [
-          "Full data extraction from legacy systems",
-          "Format conversion and data cleanup",
-          "Validation and integrity verification",
-          "Import into new platforms with zero data loss",
-          "Parallel running and cutover planning",
-        ],
-      },
-      {
-        icon: Globe,
-        title: "API Integration & Bridges",
-        description: "Your systems should talk to each other. We build the integrations — REST APIs, webhooks, sync jobs — that connect your tools without creating new dependencies.",
-        details: [
-          "Custom API integration development",
-          "Webhook and event-driven automation",
-          "Data sync between platforms",
-          "Integration monitoring and error handling",
-          "Documentation so your team can maintain it",
-        ],
-      },
-      {
-        icon: Wrench,
-        title: "Legacy App Modernization",
-        description: "FileMaker, Access, ancient Excel workbooks running your business — we've seen it all. We extract your data, understand your workflows, and build you a modern web application that does what the old one did, better. Hosted on a simple VPS for as little as $12/month. You own every line of code.",
-        details: [
-          "FileMaker, Access, and legacy database migration",
-          "Custom web application development",
-          "Data extraction, cleanup, and validation",
-          "Workflow analysis — we build what you actually need, not a bloated replacement",
-          "Self-hosted on affordable infrastructure you control",
-          "Full source code ownership — no vendor lock-in, ever",
-        ],
-      },
+    icon: MonitorSmartphone,
+    title: "Apple Business & MDM",
+    description: "Apple Business enrollment, managed Apple IDs, automated device enrollment, and the right MDM for your team — Mosyle, Jamf, Kandji, Addigy. We configure it once, correctly, so every device your team opens is ready to work. We don't take partnership revenue from any vendor. Your stack, your choice.",
+    details: [
+      "Apple Business registration and configuration",
+      "Automated Device Enrollment (ADE)",
+      "Managed Apple ID provisioning with identity federation",
+      "MDM platform evaluation — fit, not kickbacks",
+      "Zero-touch deployment for new hires",
+      "App distribution and patch management",
+      "Migration from existing MDM if needed",
     ],
   },
   {
-    category: "Setup & Deployment",
-    services: [
-      {
-        icon: MonitorSmartphone,
-        title: "Apple Business Setup",
-        description: "Apple Business (formerly ABM) enrollment, managed Apple IDs, volume purchasing, and automated device enrollment. We configure it once, correctly, so every device your team opens is ready to work.",
-        details: [
-          "Apple Business registration and configuration",
-          "Automated Device Enrollment (ADE)",
-          "Volume Purchase Program (VPP) for apps and books",
-          "Managed Apple ID provisioning",
-          "Federated authentication with your identity provider",
-        ],
-      },
-      {
-        icon: Server,
-        title: "Hardware Stack",
-        description: "We spec the right hardware for your team — not the most expensive, not the cheapest. Macs, displays, networking, printers, conference room tech. You buy it, you own it. No leasing traps.",
-        details: [
-          "Mac fleet planning and procurement guidance",
-          "Networking — Wi-Fi 6E, VLANs, firewalls",
-          "Conference room and AV equipment",
-          "Printer and peripheral selection",
-          "Lifecycle planning and refresh schedules",
-        ],
-      },
-      {
-        icon: Wrench,
-        title: "MDM Selection & Deployment",
-        description: "Mosyle, Jamf, Kandji, Addigy — we know them all. We recommend based on your team size, budget, and needs. We don't take partnership revenue from any of them.",
-        details: [
-          "MDM platform evaluation and selection",
-          "Zero-touch deployment configuration",
-          "App distribution and patch management",
-          "Security policies and compliance profiles",
-          "Migration from existing MDM if needed",
-        ],
-      },
+    icon: Server,
+    title: "Infrastructure & Networking",
+    description: "We plan the architecture, spec the hardware, and coordinate the people who install it. Wi-Fi, switching, VLANs, firewalls, cabling layout — designed for your space, your team size, and your budget. For ongoing network management, we connect you with trusted co-managed partners. You own every piece of hardware.",
+    details: [
+      "Network architecture and design",
+      "Wi-Fi planning — coverage, capacity, AP placement",
+      "Switching, VLANs, and network segmentation",
+      "Firewall selection and configuration",
+      "Cabling layout planning and installer coordination",
+      "New location IT buildouts — wiring, phones, Wi-Fi, vendor coordination",
+      "Co-managed partner vetting and onboarding for ongoing network ops",
     ],
   },
   {
-    category: "Compliance & Security",
-    services: [
-      {
-        icon: CreditCard,
-        title: "PCI Compliance",
-        description: "If you accept credit cards, you need PCI compliance. We help you understand the requirements, reduce your scope where possible, and get your infrastructure right. For formal assessments, we bring in qualified partners.",
-        details: [
-          "Scope reduction — fewer systems touching card data",
-          "Payment terminal and processor evaluation",
-          "Network segmentation for cardholder data",
-          "Employee training and policy documentation",
-          "Partner coordination for QSA and ASV scans",
-        ],
-      },
-      {
-        icon: Lock,
-        title: "Security Posture",
-        description: "Endpoint protection, access controls, encryption, backup verification. We protect your business from real threats — and from vendors who profit from your fear.",
-        details: [
-          "Endpoint detection and response (EDR)",
-          "FileVault encryption enforcement",
-          "Password policies and MFA deployment",
-          "Backup strategy and recovery testing",
-          "Incident response planning",
-        ],
-      },
-      {
-        icon: FileCheck,
-        title: "Compliance Guidance",
-        description: "HIPAA, PCI, state privacy laws — we help you understand what's required, limit your scope, and connect you with certified auditors when the situation calls for it. We're not auditors. We're the people who make sure you're ready for one.",
-        details: [
-          "Scope reduction and practical risk assessment",
-          "Technical safeguards implementation",
-          "Vendor evaluation for compliance impact",
-          "Documentation prep for auditors",
-          "Partner referrals for formal audits and certifications",
-        ],
-      },
+    icon: ArrowRightLeft,
+    title: "Data Migration",
+    description: "Trapped in a system that doesn't work? We get your data out. Clean exports, format conversions, validation, and import into whatever comes next. No data left behind, no vendor holding you hostage.",
+    details: [
+      "Full data extraction from legacy systems",
+      "Format conversion and data cleanup",
+      "Validation and integrity verification",
+      "Import into new platforms with zero data loss",
+      "Parallel running and cutover planning",
+      "FileMaker, Access, and legacy database migration",
+    ],
+  },
+];
+
+// Extended 3 — natural follow-ons that keep clients.
+const extendedServices = [
+  {
+    icon: Globe,
+    title: "Google Workspace & Email",
+    description: "Google Workspace, Microsoft 365, DNS, email routing, SSO — set up correctly from day one. You own the domain, you own the accounts, you hold the keys. We handle SPF, DKIM, DMARC so your email doesn't land in spam.",
+    details: [
+      "Google Workspace or Microsoft 365 deployment",
+      "SSO and identity provider configuration",
+      "DNS and email authentication (SPF, DKIM, DMARC)",
+      "Domain registration and management",
+      "User lifecycle automation",
     ],
   },
   {
-    category: "Ongoing Partnership",
-    services: [
-      {
-        icon: Users,
-        title: "Virtual CTO",
-        description: "Technology leadership without the executive salary. We attend the meetings that matter, flag risks before they become problems, and make sure your technology decisions are informed — not impulsive.",
-        details: [
-          "Technology strategy and roadmap",
-          "Vendor evaluation and contract review",
-          "Budget planning and cost optimization",
-          "Board and leadership tech briefings",
-          "Risk assessment and mitigation",
-        ],
-      },
-      {
-        icon: Handshake,
-        title: "Co-Management",
-        description: "Your IT team handles the day-to-day. We handle the hard stuff — architecture decisions, compliance requirements, vendor negotiations, and the things that keep IT directors up at night.",
-        details: [
-          "Escalation support for your IT team",
-          "Architecture and infrastructure design",
-          "Knowledge transfer — we teach, not hoard",
-          "Documentation and runbook development",
-          "Capacity planning and scaling guidance",
-        ],
-      },
-      {
-        icon: Globe,
-        title: "Workspace & Identity",
-        description: "Google Workspace, Microsoft 365, Okta, DNS, email routing — set up correctly from day one. You own the domain, you own the accounts, you hold the keys.",
-        details: [
-          "Google Workspace or Microsoft 365 deployment",
-          "SSO and identity provider configuration",
-          "DNS and email authentication (SPF, DKIM, DMARC)",
-          "Domain registration and management",
-          "User lifecycle automation",
-        ],
-      },
-      {
-        icon: Shield,
-        title: "Vendor & Payment Stack",
-        description: "Payment terminals, processors, gateways, POS systems — we help you pick vendors who don't lock you in, negotiate fair rates, and make sure everything talks to everything.",
-        details: [
-          "Payment processor evaluation and negotiation",
-          "POS system selection and deployment",
-          "Integration with accounting and inventory",
-          "Contract review and exit clause analysis",
-          "Vendor consolidation and cost reduction",
-        ],
-      },
+    icon: Handshake,
+    title: "Ongoing IT Partnership",
+    description: "Technology leadership without the six-figure salary. We attend the meetings that matter, handle architecture decisions, vendor negotiations, and the projects that need senior experience. Your team handles the day-to-day — we handle the hard stuff.",
+    details: [
+      "Technology strategy and roadmap",
+      "Vendor evaluation and contract review",
+      "Escalation support for your IT team",
+      "Budget planning and cost optimization",
+      "Knowledge transfer — we teach, not hoard",
+      "Quarterly technology reviews",
     ],
   },
   {
-    category: "Commerce & Operations",
-    services: [
-      {
-        icon: ShoppingCart,
-        title: "E-Commerce & POS",
-        description: "Shopify, Square, Toast, Clover — we set up your commerce platform, negotiate your payment processing rates, and integrate everything with inventory and accounting. You shouldn't be paying 3.2% when 2.4% is on the table.",
-        details: [
-          "Shopify store setup and configuration",
-          "POS system selection — Toast, Square, Clover",
-          "Payment processor negotiation (rates, contracts, exit clauses)",
-          "Inventory integration across channels",
-          "Accounting system integration (QuickBooks, Xero)",
-          "Tax and compliance configuration",
-        ],
-      },
-      {
-        icon: Phone,
-        title: "VoIP & Phone Systems",
-        description: "Still paying $60/line for a legacy phone system? We move you to modern VoIP — RingCentral, Dialpad, Teams Phone — at a fraction of the cost. Same features, better reliability, no long-term contract traps.",
-        details: [
-          "VoIP platform evaluation and migration",
-          "Number porting and call routing setup",
-          "Auto-attendant and call flow design",
-          "Mobile integration for remote teams",
-          "Contract negotiation and cost reduction",
-        ],
-      },
-      {
-        icon: Calculator,
-        title: "Accounting & Business Tools",
-        description: "We don't do your books. We make sure your tools talk to each other — QuickBooks, Xero, payment processors, payroll, inventory. Set up once, correctly, so the data flows without manual entry.",
-        details: [
-          "QuickBooks or Xero setup and configuration",
-          "Payment processor integration",
-          "Payroll system connection",
-          "Inventory and sales data sync",
-          "Reporting and dashboard setup",
-        ],
-      },
+    icon: CreditCard,
+    title: "Vendor Management",
+    description: "Are you overpaying? Locked into a bad contract? We audit your vendor stack, negotiate better rates, review exit clauses, and make sure you can walk away when you need to. We work for you, not the vendor.",
+    details: [
+      "Vendor audit and cost analysis",
+      "Contract review and exit clause analysis",
+      "Payment processor rate negotiation",
+      "Vendor consolidation and cost reduction",
+      "RFP development and vendor selection",
     ],
   },
-  {
-    category: "Physical & Operational Security",
-    services: [
-      {
-        icon: Camera,
-        title: "Camera & Physical Security",
-        description: "Ubiquiti, Verkada, or the right system for your space. We design, install, and configure camera systems that you own and control — no monthly cloud fees unless you choose them.",
-        details: [
-          "Camera system design and placement planning",
-          "Ubiquiti Protect and UniFi deployments",
-          "Verkada cloud-managed systems",
-          "NVR setup and storage planning",
-          "Remote access configuration",
-          "Integration with access control systems",
-        ],
-      },
-      {
-        icon: CloudOff,
-        title: "Business Continuity",
-        description: "What happens when the server dies, the building floods, or a ransomware attack hits? We build the plan, test the backups, and make sure you can be back up and running — not just theoretically, but actually.",
-        details: [
-          "Disaster recovery planning",
-          "Backup strategy and verification testing",
-          "Ransomware response procedures",
-          "Off-site and cloud backup configuration",
-          "Recovery time and recovery point objectives",
-          "Annual DR testing and documentation",
-        ],
-      },
-    ],
-  },
-  {
-    category: "People & Training",
-    services: [
-      {
-        icon: GraduationCap,
-        title: "Staff Training & Onboarding",
-        description: "New hire tech setup done right on day one. Security awareness training that doesn't put people to sleep. We teach your team to use the tools well and spot threats before they click.",
-        details: [
-          "New hire device provisioning and setup",
-          "Security awareness training",
-          "Phishing simulation and testing",
-          "Tool-specific training (Workspace, M365, Slack)",
-          "Onboarding documentation and checklists",
-          "Offboarding procedures and access revocation",
-        ],
-      },
-      {
-        icon: Crown,
-        title: "White Glove Executive IT",
-        description: "Home office, home network, personal devices, media systems — managed with the same rigor and discretion as a corporate environment. For executives and high-net-worth individuals who expect it done right, every time.",
-        details: [
-          "Home office network design and deployment",
-          "Personal device management and security",
-          "Home Wi-Fi optimization (Ubiquiti, Eero Pro)",
-          "Smart home and media system integration",
-          "Family device management and parental controls",
-          "On-call priority support — discreet and responsive",
-          "Referral-only availability",
-        ],
-      },
-    ],
-  },
+];
+
+// Everything else — listed compactly, not full service cards.
+const alsoServices = [
+  { icon: Wrench, title: "Legacy App Modernization", description: "FileMaker, Access, ancient spreadsheets — we migrate your data and build modern replacements." },
+  { icon: ShoppingCart, title: "E-Commerce & POS", description: "Shopify, Square, Toast, Clover — setup, integration, and payment rate negotiation." },
+  { icon: Phone, title: "VoIP & Phone Systems", description: "Modern phone systems at a fraction of legacy costs. Migration, porting, call flow design." },
+  { icon: Lock, title: "Security Posture", description: "Endpoint protection, encryption enforcement, MFA, backup verification, incident response planning." },
+  { icon: FileCheck, title: "Compliance Guidance", description: "PCI, HIPAA scope reduction, practical risk assessment. We connect you with auditors when needed." },
+  { icon: Calculator, title: "Accounting Integration", description: "QuickBooks, Xero, payroll, inventory — connected so the data flows without manual entry." },
+  { icon: Camera, title: "Camera & Physical Security", description: "Ubiquiti, Verkada — designed, installed, and configured. You own and control the system." },
+  { icon: CloudOff, title: "Business Continuity", description: "Disaster recovery planning, backup testing, ransomware response. Actually tested, not just documented." },
+  { icon: GraduationCap, title: "Staff Training", description: "Security awareness, tool training, onboarding/offboarding checklists." },
+  { icon: Crown, title: "White Glove Executive IT", description: "Home office, network, and device management for executives. Discreet, thorough, referral-only." },
+];
+
+const allServiceNames = [
+  ...coreServices.map((s) => ({ name: s.title, description: s.description })),
+  ...extendedServices.map((s) => ({ name: s.title, description: s.description })),
+  ...alsoServices.map((s) => ({ name: s.title, description: s.description })),
 ];
 
 export default async function ServicesPage() {
@@ -336,14 +154,9 @@ export default async function ServicesPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
-      {serviceCategories.flatMap((cat) =>
-        cat.services.map((s) => (
-          <JsonLd
-            key={s.title}
-            data={serviceSchema({ name: s.title, description: s.description })}
-          />
-        ))
-      )}
+      {allServiceNames.map((s) => (
+        <JsonLd key={s.name} data={serviceSchema(s)} />
+      ))}
       <SiteNav companyName={companyName} />
 
       {/* Header */}
@@ -352,7 +165,7 @@ export default async function ServicesPage() {
           Services
         </p>
         <h1 className="text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl">
-          Everything you need. Nothing you don&apos;t.
+          What we actually do
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
           Every service is designed to leave you more independent than we found
@@ -361,64 +174,100 @@ export default async function ServicesPage() {
         </p>
       </section>
 
-      {/* Service Categories */}
-      {serviceCategories.map((cat) => (
-        <section
-          key={cat.category}
-          className="border-t border-bone/10 px-6 py-24"
-        >
-          <div className="mx-auto max-w-[1200px]">
-            <p className="mb-12 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-              {cat.category}
-            </p>
-            <div className="space-y-16">
-              {cat.services.map((s) => {
-                const Icon = s.icon;
-                return (
-                  <div key={s.title} className="grid gap-8 lg:grid-cols-2">
-                    <div>
-                      <div className="mb-4 flex items-center gap-3">
-                        <Icon className="h-5 w-5 text-conviction" strokeWidth={1.5} />
-                        <h3 className="text-lg font-medium text-bone">{s.title}</h3>
-                      </div>
-                      <p className="text-sm leading-relaxed text-bone/60">
-                        {s.description}
-                      </p>
-                    </div>
-                    <ul className="space-y-2">
-                      {s.details.map((d) => (
-                        <li
-                          key={d}
-                          className="flex items-start gap-2 text-sm text-bone/50"
-                        >
-                          <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      ))}
-
-      {/* Photo Break */}
-      <section className="relative h-[300px] w-full overflow-hidden">
-        <Image
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1920&q=80"
-          alt="Modern office workspace"
-          fill
-          className="object-cover"
-          sizes="100vw"
-        />
-        <div className="absolute inset-0 bg-midnight/70" />
-        <div className="absolute inset-0 flex items-center justify-center px-6">
-          <p className="max-w-lg text-center text-xl font-medium text-bone">
-            Every vendor we recommend, every tool we deploy — you can walk away
-            from any of it. Including us. That&apos;s the point.
+      {/* Core Services */}
+      <section className="border-t border-bone/10 px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <p className="mb-12 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Core Services
           </p>
+          <div className="space-y-20">
+            {coreServices.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.title} className="grid gap-8 lg:grid-cols-2">
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <Icon className="h-5 w-5 text-conviction" strokeWidth={1.5} />
+                      <h2 className="text-lg font-medium text-bone">{s.title}</h2>
+                    </div>
+                    <p className="text-sm leading-relaxed text-bone/60">
+                      {s.description}
+                    </p>
+                  </div>
+                  <ul className="space-y-2">
+                    {s.details.map((d) => (
+                      <li key={d} className="flex items-start gap-2 text-sm text-bone/50">
+                        <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Extended Services */}
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <p className="mb-12 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Ongoing Partnership
+          </p>
+          <div className="space-y-20">
+            {extendedServices.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.title} className="grid gap-8 lg:grid-cols-2">
+                  <div>
+                    <div className="mb-4 flex items-center gap-3">
+                      <Icon className="h-5 w-5 text-conviction" strokeWidth={1.5} />
+                      <h2 className="text-lg font-medium text-bone">{s.title}</h2>
+                    </div>
+                    <p className="text-sm leading-relaxed text-bone/60">
+                      {s.description}
+                    </p>
+                  </div>
+                  <ul className="space-y-2">
+                    {s.details.map((d) => (
+                      <li key={d} className="flex items-start gap-2 text-sm text-bone/50">
+                        <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Also Services — compact grid */}
+      <section className="border-t border-bone/10 px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            We Also Do
+          </p>
+          <p className="mb-12 text-sm text-bone/40">
+            Not every engagement needs these — but when yours does, we handle it.
+          </p>
+          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            {alsoServices.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div
+                  key={s.title}
+                  className="bg-midnight p-6 transition-colors hover:bg-slate-brand/20"
+                >
+                  <Icon className="mb-3 h-4 w-4 text-conviction" strokeWidth={1.5} />
+                  <h3 className="mb-2 text-sm font-medium text-bone">{s.title}</h3>
+                  <p className="text-xs leading-relaxed text-bone/40">{s.description}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

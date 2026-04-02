@@ -8,7 +8,7 @@ import { db } from "@/server/db";
 import { formatDate } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 
-export const metadata = { title: "Blog | Akritos", description: "Insights and updates from our team." };
+export const metadata = { title: "Blog", description: "Insights and updates from our team." };
 
 async function getData() {
   const [setting, posts] = await Promise.all([
