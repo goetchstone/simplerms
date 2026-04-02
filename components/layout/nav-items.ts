@@ -12,6 +12,7 @@ import {
   BarChart2,
   Settings,
   ScrollText,
+  UserCog,
 } from "lucide-react";
 
 export const navItems = [
@@ -27,4 +28,5 @@ export const navItems = [
   { label: "Reports", href: "/dashboard/reports", icon: BarChart2 },
   { label: "Audit Log", href: "/dashboard/audit-log", icon: ScrollText, adminOnly: true },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
+  { label: "Account", href: "/dashboard/account", icon: UserCog },
 ] as const;
