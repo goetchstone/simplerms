@@ -19,6 +19,13 @@ import {
   FileCheck,
   Wrench,
   ArrowRightLeft,
+  ShoppingCart,
+  Phone,
+  Calculator,
+  Camera,
+  GraduationCap,
+  CloudOff,
+  Crown,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -204,6 +211,111 @@ const serviceCategories = [
           "Integration with accounting and inventory",
           "Contract review and exit clause analysis",
           "Vendor consolidation and cost reduction",
+        ],
+      },
+    ],
+  },
+  {
+    category: "Commerce & Operations",
+    services: [
+      {
+        icon: ShoppingCart,
+        title: "E-Commerce & POS",
+        description: "Shopify, Square, Toast, Clover — we set up your commerce platform, negotiate your payment processing rates, and integrate everything with inventory and accounting. You shouldn't be paying 3.2% when 2.4% is on the table.",
+        details: [
+          "Shopify store setup and configuration",
+          "POS system selection — Toast, Square, Clover",
+          "Payment processor negotiation (rates, contracts, exit clauses)",
+          "Inventory integration across channels",
+          "Accounting system integration (QuickBooks, Xero)",
+          "Tax and compliance configuration",
+        ],
+      },
+      {
+        icon: Phone,
+        title: "VoIP & Phone Systems",
+        description: "Still paying $60/line for a legacy phone system? We move you to modern VoIP — RingCentral, Dialpad, Teams Phone — at a fraction of the cost. Same features, better reliability, no long-term contract traps.",
+        details: [
+          "VoIP platform evaluation and migration",
+          "Number porting and call routing setup",
+          "Auto-attendant and call flow design",
+          "Mobile integration for remote teams",
+          "Contract negotiation and cost reduction",
+        ],
+      },
+      {
+        icon: Calculator,
+        title: "Accounting & Business Tools",
+        description: "We don't do your books. We make sure your tools talk to each other — QuickBooks, Xero, payment processors, payroll, inventory. Set up once, correctly, so the data flows without manual entry.",
+        details: [
+          "QuickBooks or Xero setup and configuration",
+          "Payment processor integration",
+          "Payroll system connection",
+          "Inventory and sales data sync",
+          "Reporting and dashboard setup",
+        ],
+      },
+    ],
+  },
+  {
+    category: "Physical & Operational Security",
+    services: [
+      {
+        icon: Camera,
+        title: "Camera & Physical Security",
+        description: "Ubiquiti, Verkada, or the right system for your space. We design, install, and configure camera systems that you own and control — no monthly cloud fees unless you choose them.",
+        details: [
+          "Camera system design and placement planning",
+          "Ubiquiti Protect and UniFi deployments",
+          "Verkada cloud-managed systems",
+          "NVR setup and storage planning",
+          "Remote access configuration",
+          "Integration with access control systems",
+        ],
+      },
+      {
+        icon: CloudOff,
+        title: "Business Continuity",
+        description: "What happens when the server dies, the building floods, or a ransomware attack hits? We build the plan, test the backups, and make sure you can be back up and running — not just theoretically, but actually.",
+        details: [
+          "Disaster recovery planning",
+          "Backup strategy and verification testing",
+          "Ransomware response procedures",
+          "Off-site and cloud backup configuration",
+          "Recovery time and recovery point objectives",
+          "Annual DR testing and documentation",
+        ],
+      },
+    ],
+  },
+  {
+    category: "People & Training",
+    services: [
+      {
+        icon: GraduationCap,
+        title: "Staff Training & Onboarding",
+        description: "New hire tech setup done right on day one. Security awareness training that doesn't put people to sleep. We teach your team to use the tools well and spot threats before they click.",
+        details: [
+          "New hire device provisioning and setup",
+          "Security awareness training",
+          "Phishing simulation and testing",
+          "Tool-specific training (Workspace, M365, Slack)",
+          "Onboarding documentation and checklists",
+          "Offboarding procedures and access revocation",
+        ],
+      },
+      {
+        icon: Crown,
+        title: "White Glove Executive IT",
+        description: "Home office, home network, personal devices, media systems — managed with the same rigor and discretion as a corporate environment. For executives and high-net-worth individuals who expect it done right, every time.",
+        details: [
+          "Home office network design and deployment",
+          "Personal device management and security",
+          "Home Wi-Fi optimization (Ubiquiti, Eero Pro)",
+          "Smart home and media system integration",
+          "Family device management and parental controls",
+          "On-call priority support — discreet and responsive",
+          "Referral-only availability",
         ],
       },
     ],

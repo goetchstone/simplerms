@@ -80,6 +80,16 @@ const services = [
     title: "Legacy App Modernization",
     body: "Still running FileMaker, Access, or a spreadsheet held together with duct tape? We migrate your data and build you a modern web app — hosted for as little as $12/month. You own the code.",
   },
+  {
+    icon: CreditCard,
+    title: "E-Commerce & POS",
+    body: "Shopify, Square, Toast, Clover — set up right, integrated with inventory and accounting, with payment processing rates that don't gouge you. We negotiate on your behalf.",
+  },
+  {
+    icon: Shield,
+    title: "White Glove Executive IT",
+    body: "High-end home office, network, and device management for executives and individuals who expect it done right. Discreet, thorough, referral-only.",
+  },
 ];
 
 const values = [
