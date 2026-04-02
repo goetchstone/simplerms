@@ -17,6 +17,7 @@ import {
   Users,
   Handshake,
   Lock,
+  ArrowRightLeft,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -68,6 +69,11 @@ const services = [
     icon: Lock,
     title: "Security & Compliance",
     body: "Endpoint protection, access controls, compliance audits. We make sure your business is protected from threats and from vendors who profit from your fear.",
+  },
+  {
+    icon: ArrowRightLeft,
+    title: "Data Migration & Integration",
+    body: "Trapped in a system that doesn't work? We build the bridges to get your data out — API integrations, migrations, format conversions. We get you on your feet and moving.",
   },
 ];
 

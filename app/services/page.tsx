@@ -18,6 +18,7 @@ import {
   Lock,
   FileCheck,
   Wrench,
+  ArrowRightLeft,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -30,6 +31,35 @@ async function getCompanyName() {
 }
 
 const serviceCategories = [
+  {
+    category: "Migration & Integration",
+    services: [
+      {
+        icon: ArrowRightLeft,
+        title: "Data Migration",
+        description: "Trapped in a system that doesn't work? We get your data out. Clean exports, format conversions, validation, and import into whatever comes next. No data left behind, no vendor holding you hostage.",
+        details: [
+          "Full data extraction from legacy systems",
+          "Format conversion and data cleanup",
+          "Validation and integrity verification",
+          "Import into new platforms with zero data loss",
+          "Parallel running and cutover planning",
+        ],
+      },
+      {
+        icon: Globe,
+        title: "API Integration & Bridges",
+        description: "Your systems should talk to each other. We build the integrations — REST APIs, webhooks, sync jobs — that connect your tools without creating new dependencies.",
+        details: [
+          "Custom API integration development",
+          "Webhook and event-driven automation",
+          "Data sync between platforms",
+          "Integration monitoring and error handling",
+          "Documentation so your team can maintain it",
+        ],
+      },
+    ],
+  },
   {
     category: "Setup & Deployment",
     services: [
