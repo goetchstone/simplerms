@@ -92,59 +92,61 @@ NGINX_DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/de
 
 if [ -d "/etc/letsencrypt/live/$NGINX_DOMAIN" ]; then
   echo "    SSL certificate found — configuring HTTPS"
-  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << NGINX
+  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
 server {
     listen 80;
-    server_name $NGINX_DOMAIN;
-    return 301 https://\$host\$request_uri;
+    server_name DOMAIN_PLACEHOLDER;
+    return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name $NGINX_DOMAIN;
+    server_name DOMAIN_PLACEHOLDER;
 
-    ssl_certificate /etc/letsencrypt/live/$NGINX_DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/$NGINX_DOMAIN/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/DOMAIN_PLACEHOLDER/privkey.pem;
 
     client_max_body_size 20M;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto https;
-        proxy_cache_bypass \$http_upgrade;
+        proxy_cache_bypass $http_upgrade;
         proxy_read_timeout 60s;
     }
 }
 NGINX
+  sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
 else
   echo "    No SSL certificate — configuring HTTP only"
-  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << NGINX
+  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
 server {
     listen 80;
-    server_name $NGINX_DOMAIN;
+    server_name DOMAIN_PLACEHOLDER;
 
     client_max_body_size 20M;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
         proxy_read_timeout 60s;
     }
 }
 NGINX
+  sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
 fi
 
 sudo ln -sf /etc/nginx/sites-available/simplerms /etc/nginx/sites-enabled/
