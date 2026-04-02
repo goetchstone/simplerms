@@ -12,7 +12,7 @@ import { ArrowRight, Check, X } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Published rates, no surprises. $175/hr on-demand, $150/hr retainer. Vendor costs pass through at cost — zero markup, ever. No contracts required.",
+    "Published rates, no surprises. Setup projects quoted flat. Managed Apple & MDM at $50/user/month. Advisory at $225/hr. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -27,55 +27,69 @@ async function getCompanyName() {
 
 const tiers = [
   {
-    name: "On-Demand",
-    price: "$175",
-    unit: "/ hour",
-    description: "Expert help when you need it. No contract, no commitment. Call us, we show up.",
+    name: "Get Set Up",
+    price: "Quoted",
+    unit: "per project",
+    description:
+      "Apple Business, MDM, Google Workspace, infrastructure planning — scoped, quoted, and delivered at a fixed price. You know the number before we start.",
     features: [
-      "No contract or minimum hours",
-      "Remote and on-site support",
-      "Hardware and software consulting",
-      "Vendor evaluation and negotiation",
-      "One-off projects and deployments",
-      "Emergency response available",
+      "Apple Business + MDM rollout",
+      "Google Workspace + domain + email",
+      "Infrastructure planning and vendor coordination",
+      "Identity federation and SSO",
+      "Data migration from legacy systems",
+      "Full documentation and knowledge transfer",
     ],
-    cta: "Book a session",
+    examples: [
+      { label: "Apple Business + MDM (10 users)", range: "$4,000 – 5,000" },
+      { label: "Google Workspace + domain", range: "$1,200 – 1,500" },
+      { label: "Full stack setup (10 users)", range: "$6,000 – 8,000" },
+    ],
+    cta: "Book a free consultation",
     href: "/book",
     featured: false,
   },
   {
-    name: "Retainer",
-    price: "$150",
-    unit: "/ hour",
-    description: "Monthly block of hours at a reduced rate. Priority response, ongoing relationship. You get a partner who knows your environment.",
+    name: "Stay Managed",
+    price: "$50",
+    unit: "/ user / month",
+    description:
+      "Ongoing Apple Business and MDM management. Device enrollment, app deployment, security policies, quarterly reviews. No RMM agents — we manage through MDM, no extra attack surface.",
     features: [
-      "10+ hour monthly block commitment",
-      "Priority response — same business day",
-      "Ongoing technology oversight",
-      "Apple Business & MDM management",
-      "Vendor management and negotiations",
-      "Quarterly technology reviews",
-      "Compliance guidance (PCI, HIPAA scope reduction)",
+      "Device enrollment and offboarding",
+      "App deployment and updates",
+      "Security policy management",
+      "Quarterly environment reviews",
+      "Priority response for managed clients",
+      "MDM license billed separately at cost",
+      "Minimum 5 users",
       "Month-to-month after 3-month onboarding",
+    ],
+    examples: [
+      { label: "10-person team", range: "$500 /month" },
+      { label: "25-person team", range: "$1,250 /month" },
+      { label: "50-person team", range: "$2,500 /month" },
     ],
     cta: "Book a free consultation",
     href: "/book",
     featured: true,
   },
   {
-    name: "Projects",
-    price: "Quoted",
-    unit: "per scope",
-    description: "Migrations, deployments, modernization. We scope it, quote it, and deliver it. Fixed price, no surprises.",
+    name: "Advisory",
+    price: "$225",
+    unit: "/ hour",
+    description:
+      "Vendor negotiations, architecture planning, contract reviews, one-off consulting. Senior-level expertise when you need it, no retainer required.",
     features: [
-      "FileMaker & legacy app modernization",
-      "Infrastructure deployments",
-      "Office buildouts and AV",
-      "MDM rollouts and migrations",
-      "Data migration and cleanup",
-      "Full documentation and handoff",
+      "No contract or minimum hours",
+      "Vendor audit and cost analysis",
+      "Architecture and infrastructure planning",
+      "Contract review and negotiation",
+      "Remote and on-site available",
+      "Emergency response available",
     ],
-    cta: "Let's scope it",
+    examples: null,
+    cta: "Book a session",
     href: "/book",
     featured: false,
   },
@@ -91,16 +105,20 @@ const faqs = [
     a: "No. We never accept partnership revenue, referral fees, or volume incentives from vendors we recommend. Our recommendations are based on what's right for you, not what pays us the most.",
   },
   {
+    q: "What's the difference between managed and advisory?",
+    a: "Managed is ongoing Apple & MDM management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, project, or negotiation. Many clients use both.",
+  },
+  {
+    q: "Why no RMM agents?",
+    a: "RMM (remote monitoring and management) tools are installed on every device and have deep system access — which makes them a prime target for attackers. We manage through MDM, which is already on Apple devices by design. One less agent, one less attack surface.",
+  },
+  {
     q: "What if I want to leave?",
     a: "You leave. There's no exit fee, no contract penalty, no hostage negotiation. You own everything we built for you. We'll even help with the transition to whoever comes next.",
   },
   {
     q: "What does a typical monthly bill look like?",
-    a: "A 25-person company on a 10-hour retainer might see: $1,500 for our time, plus $100 for MDM licensing, plus $125 for endpoint security — all at cost. Total: $1,725. Every line item is visible and verifiable.",
-  },
-  {
-    q: "What if I don't use all my retainer hours?",
-    a: "Then you had a good month. Hours don't roll over — but if you're consistently using less, we'll tell you to drop to a smaller block. We'd rather you pay for what you need than carry hours you don't use.",
+    a: "A 15-person company on managed services: $750 for management (15 × $50), plus ~$60 for MDM licensing at cost, plus any advisory hours used. Every line item is visible and verifiable.",
   },
   {
     q: "Do you charge for initial consultations?",
@@ -108,7 +126,7 @@ const faqs = [
   },
   {
     q: "Do you require long-term contracts?",
-    a: "Retainer plans are month-to-month after a 3-month onboarding period. The onboarding minimum exists because it takes time to learn your environment and do this right. After that, you stay because it works, not because you're trapped.",
+    a: "Managed plans are month-to-month after a 3-month onboarding period. The onboarding minimum exists because it takes time to learn your environment and do this right. After that, you stay because it works, not because you're trapped.",
   },
 ];
 
@@ -129,8 +147,8 @@ export default async function PricingPage() {
           Published rates. No surprises.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Our time is billed hourly. Vendor costs are pass-through at cost — no
-          markup, ever. You see every line item on every invoice.
+          Setup projects are quoted flat. Managed services are per-user.
+          Advisory is hourly. Vendor costs pass through at cost — zero markup, ever.
         </p>
       </section>
 
@@ -148,7 +166,7 @@ export default async function PricingPage() {
             >
               {tier.featured && (
                 <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-                  Most clients choose this
+                  Recurring revenue for us. Predictable cost for you.
                 </p>
               )}
               <h2 className="text-xl font-medium text-bone">{tier.name}</h2>
@@ -169,6 +187,22 @@ export default async function PricingPage() {
                   </li>
                 ))}
               </ul>
+
+              {/* Example pricing */}
+              {tier.examples && (
+                <div className="mt-8 space-y-2 border-t border-bone/10 pt-6">
+                  <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
+                    Typical ranges
+                  </p>
+                  {tier.examples.map((ex) => (
+                    <div key={ex.label} className="flex justify-between text-xs">
+                      <span className="text-bone/40">{ex.label}</span>
+                      <span className="text-bone/60">{ex.range}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <Link
                 href={tier.href}
                 className={`mt-10 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-medium transition-colors ${
@@ -197,42 +231,37 @@ export default async function PricingPage() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
               Most MSPs bundle everything into one per-user fee so you can&apos;t
-              see the markup. We do the opposite. Our time is our time. Vendor
+              see the markup. We do the opposite. Our fee is our fee. Vendor
               costs are vendor costs. You see both.
             </p>
           </div>
           <div className="space-y-1 border border-bone/10 bg-midnight p-6" style={{ borderRadius: "2px" }}>
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
-              How your invoice looks
+              Sample monthly invoice — 15-person managed client
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-bone/60">
-                <span>Akritos — retainer hours</span>
-                <span className="text-bone">Our rate</span>
+                <span>Managed services — 15 users × $50</span>
+                <span className="text-bone">$750.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
-                <span>MDM licensing <span className="text-bone/30">(pass-through at cost)</span></span>
-                <span className="text-bone">Vendor&apos;s price</span>
+                <span>Mosyle MDM licensing <span className="text-bone/30">(pass-through)</span></span>
+                <span className="text-bone">$60.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
-                <span>Endpoint security <span className="text-bone/30">(pass-through at cost)</span></span>
-                <span className="text-bone">Vendor&apos;s price</span>
+                <span>Advisory — vendor contract review, 2 hrs</span>
+                <span className="text-bone">$450.00</span>
               </div>
-              <div className="flex justify-between text-bone/60">
-                <span>Backup <span className="text-bone/30">(pass-through at cost)</span></span>
-                <span className="text-bone">Vendor&apos;s price</span>
+              <div className="mt-3 flex justify-between border-t border-bone/10 pt-3 font-medium">
+                <span className="text-bone/60">Total</span>
+                <span className="text-bone">$1,260.00</span>
               </div>
-              <div className="mt-3 border-t border-bone/10 pt-3 text-bone/40 text-xs">
-                Every vendor line item links to the vendor&apos;s own invoice.
-                We add zero markup. You verify every dollar.
+              <div className="pt-2 text-bone/30 text-xs">
+                Vendor line items link to the vendor&apos;s own invoice.
+                Zero markup. You verify every dollar.
               </div>
             </div>
           </div>
-          <p className="text-center text-sm text-bone/40">
-            Vendor costs depend on your stack — we recommend the right tools for
-            your needs and you pay the vendor directly, or we pass through at
-            cost. Either way, no markup.
-          </p>
         </div>
       </section>
 
@@ -245,10 +274,10 @@ export default async function PricingPage() {
           <div className="grid gap-6 text-left sm:grid-cols-2">
             {[
               "Vendor markup — ever",
-              "Travel fees for local visits",
+              "RMM agent fees or monitoring charges",
               "Hidden 'project management' charges",
               "Charges for problems we caused",
-              "Emergency surcharges for retainer clients",
+              "Emergency surcharges for managed clients",
               "Exit fees or contract penalties",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2 text-sm text-bone/60">
@@ -270,10 +299,6 @@ export default async function PricingPage() {
             <h2 className="text-[28px] font-medium text-bone">
               Typical MSP vs. Akritos
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
-              Most managed service providers profit from your dependency. We
-              profit from your independence. Here&apos;s what that looks like.
-            </p>
           </div>
           <div className="grid gap-px bg-bone/5 md:grid-cols-3">
             {/* Header row */}
@@ -292,13 +317,18 @@ export default async function PricingPage() {
             {[
               {
                 label: "Pricing model",
-                them: "Bundled per-user fee",
-                us: "Hourly + vendor pass-through at cost",
+                them: "Bundled per-user fee hiding markup",
+                us: "Per-user management + vendor pass-through",
               },
               {
                 label: "Vendor markup",
                 them: "20-40% hidden markup",
                 us: "Zero. You see the vendor invoice.",
+              },
+              {
+                label: "Monitoring",
+                them: "RMM agents on every device",
+                us: "MDM-native. No extra agents or attack surface.",
               },
               {
                 label: "Contracts",
@@ -309,11 +339,6 @@ export default async function PricingPage() {
                 label: "Vendor kickbacks",
                 them: "Partnership revenue, referral fees",
                 us: "None. Recommendations based on fit.",
-              },
-              {
-                label: "Data ownership",
-                them: "Held in their systems",
-                us: "You own everything. Always.",
               },
               {
                 label: "Exit process",
