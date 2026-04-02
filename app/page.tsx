@@ -3,7 +3,6 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { LogoMark } from "@/components/brand/logo-mark";
@@ -177,6 +176,23 @@ export default async function HomePage() {
             </span>
           ))}
         </div>
+
+        <p className="mt-8 text-xs text-bone/25">
+          Founded by{" "}
+          <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
+            Goetch Stone
+          </Link>
+          {" "}· 20+ years in IT · Based in Connecticut ·{" "}
+          <a
+            href="https://psumac.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-bone/40"
+          >
+            PSU MacAdmins
+          </a>
+          {" "}speaker
+        </p>
       </section>
 
       {/* Origin Story */}
@@ -244,26 +260,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Photo Break */}
-      <section className="relative h-[400px] w-full overflow-hidden">
-        {/* Unsplash: small business team working together */}
-        <Image
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80"
-          alt="Team collaborating around a table"
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-midnight/70" />
-        <div className="absolute inset-0 flex items-center justify-center px-6">
-          <blockquote className="max-w-2xl text-center">
-            <p className="text-2xl font-medium leading-relaxed text-bone sm:text-3xl">
-              &ldquo;We don&apos;t profit from your confusion.
-              We profit when you don&apos;t need us anymore.&rdquo;
-            </p>
-          </blockquote>
-        </div>
+      {/* Quote Break */}
+      <section className="border-y border-conviction/20 bg-slate-brand/20 px-6 py-20">
+        <blockquote className="mx-auto max-w-2xl text-center">
+          <p className="text-2xl font-medium leading-relaxed text-bone sm:text-3xl">
+            &ldquo;We don&apos;t profit from your confusion.
+            We profit when you don&apos;t need us anymore.&rdquo;
+          </p>
+          <footer className="mt-4 text-sm text-bone/30">
+            — Goetch Stone, Founder
+          </footer>
+        </blockquote>
       </section>
 
       {/* Values */}

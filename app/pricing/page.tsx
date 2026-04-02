@@ -372,9 +372,19 @@ export default async function PricingPage() {
       {/* FAQ */}
       <section className="border-t border-bone/10 px-6 py-24">
         <div className="mx-auto max-w-[720px]">
-          <h2 className="mb-12 text-center text-[28px] font-medium text-bone">
+          <h2 className="mb-4 text-center text-[28px] font-medium text-bone">
             Common questions
           </h2>
+          <p className="mb-12 text-center text-sm text-bone/40">
+            Have a question not listed here? Call{" "}
+            <a href="tel:+18609343410" className="text-conviction underline underline-offset-2">
+              (860) 934-3410
+            </a>{" "}
+            or email{" "}
+            <a href="mailto:gstone@akritos.com" className="text-conviction underline underline-offset-2">
+              gstone@akritos.com
+            </a>
+          </p>
           <div className="space-y-8">
             {faqs.map((faq) => (
               <div key={faq.q} className="space-y-2">

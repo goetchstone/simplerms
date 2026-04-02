@@ -11,8 +11,8 @@ const links = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/book", label: "Book a session" },
-  { href: "/support", label: "Support" },
+  { href: "/book", label: "Book" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function SiteNav({ companyName = "Akritos" }: { companyName?: string }) {

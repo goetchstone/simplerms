@@ -1,6 +1,7 @@
 // components/site/site-footer.tsx
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/logo-mark";
+import { Phone, Mail } from "lucide-react";
 
 export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }) {
   return (
@@ -15,10 +16,16 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
             <p className="text-xs uppercase tracking-[0.15em] text-conviction">
               Technology Partners
             </p>
-            <p className="max-w-xs text-sm leading-relaxed text-bone/50">
-              We fix the confusion. You keep the independence. Every vendor we
-              recommend, every tool we deploy — you can walk away from any of
-              it. Including us.
+            <div className="space-y-2 text-sm text-bone/50">
+              <a href="tel:+18609343410" className="flex items-center gap-2 hover:text-conviction">
+                <Phone className="h-3.5 w-3.5" /> (860) 934-3410
+              </a>
+              <a href="mailto:info@akritos.com" className="flex items-center gap-2 hover:text-conviction">
+                <Mail className="h-3.5 w-3.5" /> info@akritos.com
+              </a>
+            </div>
+            <p className="text-xs text-bone/30">
+              18 Pine Tree Rd, Moodus, CT 06469
             </p>
           </div>
 
@@ -34,30 +41,43 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
           <div className="space-y-3">
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">Company</p>
             <ul className="space-y-2 text-sm text-bone/60">
-              <li><Link href="/about" className="hover:text-conviction">About</Link></li>
+              <li><Link href="/about" className="hover:text-conviction">About Goetch Stone</Link></li>
+              <li><Link href="/contact" className="hover:text-conviction">Contact</Link></li>
               <li><Link href="/support" className="hover:text-conviction">Get support</Link></li>
               <li><Link href="/blog" className="hover:text-conviction">Blog</Link></li>
-              <li><Link href="/portal" className="hover:text-conviction">Client portal</Link></li>
             </ul>
           </div>
 
           <div className="space-y-3">
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">Our commitments</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">Commitments</p>
             <ul className="space-y-2 text-sm text-bone/50">
-              <li>Living wages for every team member</li>
-              <li>No vendor lock-in, ever</li>
               <li>Published rates, no hidden fees</li>
               <li>Zero vendor markup — you verify every dollar</li>
               <li>No partnership revenue or kickbacks</li>
+              <li>No vendor lock-in, ever</li>
+              <li>Living wages for every team member</li>
             </ul>
+            <div className="pt-2">
+              <a
+                href="https://www.macadmins.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-bone/30 hover:text-conviction"
+              >
+                MacAdmins Foundation supporter ↗
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-bone/10 pt-6 text-sm text-bone/30 sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} {companyName}. Built with integrity.</p>
-          <p className="text-xs text-bone/20">
-            Connecticut · Massachusetts · Rhode Island · New York
-          </p>
+        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-bone/10 pt-6 sm:flex-row sm:items-center">
+          <div className="text-sm text-bone/30">
+            <p>© {new Date().getFullYear()} {companyName}. Moodus, Connecticut.</p>
+          </div>
+          <div className="flex gap-4 text-xs text-bone/20">
+            <Link href="/privacy" className="hover:text-bone/40">Privacy</Link>
+            <Link href="/terms" className="hover:text-bone/40">Terms</Link>
+          </div>
         </div>
       </div>
     </footer>
