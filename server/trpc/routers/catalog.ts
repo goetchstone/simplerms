@@ -1,7 +1,7 @@
 // server/trpc/routers/catalog.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { catalogItemSchema } from "@/lib/validations/catalog";
 import { z } from "zod";
 
@@ -33,7 +33,7 @@ export const catalogRouter = createTRPCRouter({
       })
     ),
 
-  create: protectedProcedure
+  create: staffProcedure
     .input(catalogItemSchema)
     .mutation(async ({ ctx, input }) => {
       const item = await ctx.db.catalogItem.create({
@@ -54,7 +54,7 @@ export const catalogRouter = createTRPCRouter({
       };
     }),
 
-  update: protectedProcedure
+  update: staffProcedure
     .input(z.object({ id: z.string().cuid(), data: catalogItemSchema.partial() }))
     .mutation(async ({ ctx, input }) => {
       const before = await ctx.db.catalogItem.findUniqueOrThrow({
@@ -78,7 +78,7 @@ export const catalogRouter = createTRPCRouter({
       };
     }),
 
-  archive: protectedProcedure
+  archive: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       const item = await ctx.db.catalogItem.update({

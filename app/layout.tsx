@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s | Akritos",
   },
   description:
-    "Technology consulting that leaves you independent. Apple Business, MDM, compliance, e-commerce, infrastructure — published rates, zero vendor markup, no lock-in.",
+    "Technology consulting that leaves you independent. Apple Business, MDM, infrastructure, e-commerce — published rates, zero vendor markup, no lock-in.",
   metadataBase: new URL("https://akritos.com"),
   openGraph: {
     type: "website",

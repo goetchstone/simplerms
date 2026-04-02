@@ -55,7 +55,7 @@ const tiers = [
       "Apple Business & MDM management",
       "Vendor management and negotiations",
       "Quarterly technology reviews",
-      "Compliance monitoring (PCI, HIPAA)",
+      "Compliance guidance (PCI, HIPAA scope reduction)",
       "Month-to-month after 3-month onboarding",
     ],
     cta: "Book a free consultation",

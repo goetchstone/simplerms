@@ -1,7 +1,7 @@
 // server/trpc/routers/inventory.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { z } from "zod";
 
 export const inventoryRouter = createTRPCRouter({
@@ -47,7 +47,7 @@ export const inventoryRouter = createTRPCRouter({
     ),
 
   // Adjust stock — positive delta = receiving, negative = consuming/writing off.
-  adjust: protectedProcedure
+  adjust: staffProcedure
     .input(
       z.object({
         inventoryItemId: z.string().cuid(),
@@ -82,7 +82,7 @@ export const inventoryRouter = createTRPCRouter({
       };
     }),
 
-  upsertItem: protectedProcedure
+  upsertItem: staffProcedure
     .input(
       z.object({
         catalogItemId: z.string().cuid(),

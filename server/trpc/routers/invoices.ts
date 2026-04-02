@@ -1,7 +1,7 @@
 // server/trpc/routers/invoices.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure } from "@/server/trpc/trpc";
 import { createInvoiceSchema } from "@/lib/validations/invoice";
 import { computeInvoice } from "@/server/invoice/tax";
 import { nextInvoiceNumber } from "@/server/invoice/number";
@@ -103,7 +103,7 @@ export const invoicesRouter = createTRPCRouter({
       return invoice;
     }),
 
-  create: protectedProcedure
+  create: staffProcedure
     .input(createInvoiceSchema)
     .mutation(async ({ ctx, input }) => {
       const { clientId, issueDate, dueDate, currency, notes, lines: lineInputs } = input;
@@ -196,7 +196,7 @@ export const invoicesRouter = createTRPCRouter({
     }),
 
   // Generates a Stripe Payment Link and attaches it to the invoice.
-  generatePaymentLink: protectedProcedure
+  generatePaymentLink: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       const invoice = await ctx.db.invoice.findUniqueOrThrow({
@@ -243,7 +243,7 @@ export const invoicesRouter = createTRPCRouter({
     }),
 
   // Sends the invoice email to the client with the payment link.
-  send: protectedProcedure
+  send: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       const invoice = await ctx.db.invoice.findUniqueOrThrow({
@@ -315,7 +315,7 @@ export const invoicesRouter = createTRPCRouter({
       };
     }),
 
-  void: protectedProcedure
+  void: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       const invoice = await ctx.db.invoice.findUniqueOrThrow({

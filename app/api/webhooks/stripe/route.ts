@@ -28,13 +28,32 @@ export async function POST(req: NextRequest) {
     const invoiceId = object.metadata?.invoiceId;
 
     if (invoiceId) {
-      await db.invoice.update({
-        where: { id: invoiceId },
-        data: {
-          status: "PAID",
-          paidAt: new Date(),
-        },
-      });
+      const amountPaid = (object.amount_total ?? 0) / 100;
+
+      const invoice = await db.invoice.findUnique({ where: { id: invoiceId } });
+      if (invoice) {
+        const newPaidAmount = Number(invoice.paidAmount) + amountPaid;
+        const isFullyPaid = newPaidAmount >= Number(invoice.total);
+
+        await db.invoice.update({
+          where: { id: invoiceId },
+          data: {
+            paidAmount: newPaidAmount,
+            status: isFullyPaid ? "PAID" : "PARTIAL",
+            ...(isFullyPaid && { paidAt: new Date() }),
+          },
+        });
+
+        await db.payment.create({
+          data: {
+            invoiceId,
+            amount: amountPaid,
+            method: "STRIPE",
+            reference: object.payment_intent as string ?? object.id,
+            paidAt: new Date(),
+          },
+        });
+      }
     }
   }
 

@@ -88,11 +88,20 @@ done
 echo "    App is up"
 
 echo "==> Configuring nginx"
-NGINX_DOMAIN=$(grep -oP 'NEXT_PUBLIC_APP_URL=https?://\K[^/:]+' .env.local 2>/dev/null || echo "_")
+# Extract domain — use sed instead of grep -oP for portability.
+NGINX_DOMAIN=$(sed -n 's|^NEXT_PUBLIC_APP_URL=https\?://\([^/:]*\).*|\1|p' .env.local 2>/dev/null)
+NGINX_DOMAIN="${NGINX_DOMAIN:-_}"
+echo "    Detected domain: $NGINX_DOMAIN"
 
-if [ -d "/etc/letsencrypt/live/$NGINX_DOMAIN" ]; then
-  echo "    SSL certificate found — configuring HTTPS"
-  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
+# Only write nginx config if it doesn't exist or if --force-nginx was passed.
+# This prevents deploy from clobbering a working nginx config every time.
+if [ -f /etc/nginx/sites-available/simplerms ] && [ "$1" != "--force-nginx" ]; then
+  echo "    nginx config already exists — skipping (use --force-nginx to overwrite)"
+  sudo nginx -t && sudo systemctl reload nginx
+else
+  if [ -d "/etc/letsencrypt/live/$NGINX_DOMAIN" ]; then
+    echo "    SSL certificate found — configuring HTTPS"
+    sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
 server {
     listen 80;
     server_name DOMAIN_PLACEHOLDER;
@@ -122,10 +131,10 @@ server {
     }
 }
 NGINX
-  sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
-else
-  echo "    No SSL certificate — configuring HTTP only"
-  sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
+    sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
+  else
+    echo "    No SSL certificate — configuring HTTP only"
+    sudo tee /etc/nginx/sites-available/simplerms > /dev/null << 'NGINX'
 server {
     listen 80;
     server_name DOMAIN_PLACEHOLDER;
@@ -146,13 +155,14 @@ server {
     }
 }
 NGINX
-  sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
-fi
+    sudo sed -i "s/DOMAIN_PLACEHOLDER/$NGINX_DOMAIN/g" /etc/nginx/sites-available/simplerms
+  fi
 
-sudo ln -sf /etc/nginx/sites-available/simplerms /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
-sudo nginx -t && sudo systemctl reload nginx
-echo "    nginx configured for $NGINX_DOMAIN"
+  sudo ln -sf /etc/nginx/sites-available/simplerms /etc/nginx/sites-enabled/
+  sudo rm -f /etc/nginx/sites-enabled/default
+  sudo nginx -t && sudo systemctl reload nginx
+  echo "    nginx configured for $NGINX_DOMAIN"
+fi
 
 echo "==> Checking HTTPS"
 if [ -n "$NGINX_DOMAIN" ] && [ "$NGINX_DOMAIN" != "_" ] && [ "$NGINX_DOMAIN" != "localhost" ]; then

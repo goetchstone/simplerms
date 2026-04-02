@@ -1,7 +1,8 @@
 // server/trpc/routers/tickets.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure } from "@/server/trpc/trpc";
+import { rateLimit } from "@/server/rate-limit";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -21,24 +22,32 @@ export const ticketsRouter = createTRPCRouter({
   submit: publicProcedure
     .input(createTicketSchema)
     .mutation(async ({ ctx, input }) => {
-      const count = await ctx.db.ticket.count();
-      const ticketNumber = `TKT-${String(count + 1).padStart(5, "0")}`;
+      // Rate limit: 5 tickets per IP per 15 minutes.
+      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const { allowed } = rateLimit(`ticket:${ip}`, 5, 900000);
+      if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many submissions. Please try again later." });
 
-      const ticket = await ctx.db.ticket.create({
-        data: {
-          ticketNumber,
-          submitterName: input.submitterName,
-          submitterEmail: input.submitterEmail,
-          subject: input.subject,
-          clientId: input.clientId ?? null,
-          messages: {
-            create: {
-              senderName: input.submitterName,
-              body: input.body,
-              isInternal: false,
+      // Atomic number generation to prevent race conditions.
+      const ticket = await ctx.db.$transaction(async (tx) => {
+        const count = await tx.ticket.count();
+        const ticketNumber = `TKT-${String(count + 1).padStart(5, "0")}`;
+
+        return tx.ticket.create({
+          data: {
+            ticketNumber,
+            submitterName: input.submitterName,
+            submitterEmail: input.submitterEmail,
+            subject: input.subject,
+            clientId: input.clientId ?? null,
+            messages: {
+              create: {
+                senderName: input.submitterName,
+                body: input.body,
+                isInternal: false,
+              },
             },
           },
-        },
+        });
       });
 
       return { ticketNumber: ticket.ticketNumber, publicToken: ticket.publicToken };
@@ -116,7 +125,7 @@ export const ticketsRouter = createTRPCRouter({
       })
     ),
 
-  assign: protectedProcedure
+  assign: staffProcedure
     .input(z.object({ ticketId: z.string().cuid(), userId: z.string().cuid().nullable() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.ticket.update({
@@ -132,7 +141,7 @@ export const ticketsRouter = createTRPCRouter({
       };
     }),
 
-  updateStatus: protectedProcedure
+  updateStatus: staffProcedure
     .input(z.object({ ticketId: z.string().cuid(), status: ticketStatusEnum, priority: priorityEnum.optional() }))
     .mutation(async ({ ctx, input }) => {
       const ticket = await ctx.db.ticket.update({
@@ -149,7 +158,7 @@ export const ticketsRouter = createTRPCRouter({
       };
     }),
 
-  reply: protectedProcedure
+  reply: staffProcedure
     .input(
       z.object({
         ticketId: z.string().cuid(),

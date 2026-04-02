@@ -1,7 +1,7 @@
 // server/trpc/routers/crm.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { clientSchema, contactSchema } from "@/lib/validations/client";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
@@ -66,7 +66,7 @@ export const crmRouter = createTRPCRouter({
       })
     ),
 
-  createClient: protectedProcedure
+  createClient: staffProcedure
     .input(clientSchema)
     .mutation(async ({ ctx, input }) => {
       const { address, ...rest } = input;
@@ -96,7 +96,7 @@ export const crmRouter = createTRPCRouter({
       };
     }),
 
-  updateClient: protectedProcedure
+  updateClient: staffProcedure
     .input(z.object({ id: z.string().cuid(), data: clientSchema.partial() }))
     .mutation(async ({ ctx, input }) => {
       const before = await ctx.db.client.findUniqueOrThrow({
@@ -132,7 +132,7 @@ export const crmRouter = createTRPCRouter({
       };
     }),
 
-  addNote: protectedProcedure
+  addNote: staffProcedure
     .input(z.object({ clientId: z.string().cuid(), content: z.string().min(1).max(5000) }))
     .mutation(async ({ ctx, input }) => {
       const note = await ctx.db.note.create({ data: input });
@@ -150,7 +150,7 @@ export const crmRouter = createTRPCRouter({
 
   // ── Contacts ─────────────────────────────────────────────────────────────
 
-  createContact: protectedProcedure
+  createContact: staffProcedure
     .input(contactSchema)
     .mutation(async ({ ctx, input }) => {
       // Only one primary contact per client.
@@ -173,7 +173,7 @@ export const crmRouter = createTRPCRouter({
       };
     }),
 
-  updateContact: protectedProcedure
+  updateContact: staffProcedure
     .input(z.object({ id: z.string().cuid(), data: contactSchema.omit({ clientId: true }).partial() }))
     .mutation(async ({ ctx, input }) => {
       const existing = await ctx.db.contact.findUniqueOrThrow({
@@ -202,7 +202,7 @@ export const crmRouter = createTRPCRouter({
       };
     }),
 
-  deleteContact: protectedProcedure
+  deleteContact: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       await ctx.db.contact.delete({ where: { id: input } });

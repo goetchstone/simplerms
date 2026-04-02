@@ -1,7 +1,7 @@
 // server/trpc/routers/orders.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -60,7 +60,7 @@ export const ordersRouter = createTRPCRouter({
       })
     ),
 
-  create: protectedProcedure
+  create: staffProcedure
     .input(
       z.object({
         clientId: z.string().cuid(),
@@ -69,24 +69,27 @@ export const ordersRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const count = await ctx.db.order.count();
-      const orderNumber = `ORD-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
+      // Atomic number generation to prevent race conditions.
+      const order = await ctx.db.$transaction(async (tx) => {
+        const count = await tx.order.count();
+        const orderNumber = `ORD-${new Date().getFullYear()}-${String(count + 1).padStart(4, "0")}`;
 
-      const order = await ctx.db.order.create({
-        data: {
-          orderNumber,
-          clientId: input.clientId,
-          notes: input.notes ?? null,
-          lines: { create: input.lines },
-        },
-        include: { lines: true },
+        return tx.order.create({
+          data: {
+            orderNumber,
+            clientId: input.clientId,
+            notes: input.notes ?? null,
+            lines: { create: input.lines },
+          },
+          include: { lines: true },
+        });
       });
 
       await ctx.db.activityLog.create({
         data: {
           clientId: input.clientId,
           type: "order.created",
-          summary: `Order ${orderNumber} created`,
+          summary: `Order ${order.orderNumber} created`,
         },
       });
 
@@ -96,7 +99,7 @@ export const ordersRouter = createTRPCRouter({
       };
     }),
 
-  updateStatus: protectedProcedure
+  updateStatus: staffProcedure
     .input(z.object({ id: z.string().cuid(), status: orderStatusEnum }))
     .mutation(async ({ ctx, input }) => {
       const order = await ctx.db.order.update({
@@ -110,7 +113,7 @@ export const ordersRouter = createTRPCRouter({
     }),
 
   // Attach an existing invoice to an order (or detach by passing null).
-  linkInvoice: protectedProcedure
+  linkInvoice: staffProcedure
     .input(z.object({ id: z.string().cuid(), invoiceId: z.string().cuid().nullable() }))
     .mutation(({ ctx, input }) =>
       ctx.db.order.update({

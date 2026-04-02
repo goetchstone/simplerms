@@ -12,7 +12,7 @@ import { db } from "@/server/db";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Apple Business, MDM, PCI compliance, e-commerce, VoIP, data migration, legacy app modernization, white glove executive IT. Every service leaves you more independent.",
+    "Apple Business, MDM, infrastructure, e-commerce, VoIP, data migration, legacy app modernization, white glove executive IT. Every service leaves you more independent.",
   alternates: { canonical: "https://akritos.com/services" },
 };
 import {
@@ -136,13 +136,13 @@ const serviceCategories = [
       {
         icon: CreditCard,
         title: "PCI Compliance",
-        description: "If you accept credit cards, you need PCI compliance. We walk you through every requirement, audit your current setup, and get you to compliant — properly, not just on paper.",
+        description: "If you accept credit cards, you need PCI compliance. We help you understand the requirements, reduce your scope where possible, and get your infrastructure right. For formal assessments, we bring in qualified partners.",
         details: [
-          "PCI DSS assessment and gap analysis",
+          "Scope reduction — fewer systems touching card data",
           "Payment terminal and processor evaluation",
           "Network segmentation for cardholder data",
           "Employee training and policy documentation",
-          "Quarterly scan coordination with ASVs",
+          "Partner coordination for QSA and ASV scans",
         ],
       },
       {
@@ -159,14 +159,14 @@ const serviceCategories = [
       },
       {
         icon: FileCheck,
-        title: "Compliance Audits",
-        description: "HIPAA, SOC 2, state privacy laws — we know what auditors look for because we've been on both sides of the table. We prepare you to pass, not to panic.",
+        title: "Compliance Guidance",
+        description: "HIPAA, PCI, state privacy laws — we help you understand what's required, limit your scope, and connect you with certified auditors when the situation calls for it. We're not auditors. We're the people who make sure you're ready for one.",
         details: [
-          "HIPAA technical safeguards review",
-          "SOC 2 readiness assessments",
-          "State privacy law compliance (CCPA, etc.)",
-          "Vendor risk assessment documentation",
-          "Audit preparation and remediation support",
+          "Scope reduction and practical risk assessment",
+          "Technical safeguards implementation",
+          "Vendor evaluation for compliance impact",
+          "Documentation prep for auditors",
+          "Partner referrals for formal audits and certifications",
         ],
       },
     ],

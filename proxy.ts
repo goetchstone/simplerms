@@ -30,10 +30,14 @@ export default auth((req: NextRequest & { auth: unknown }) => {
 
   if (isPublic) return NextResponse.next();
 
-  // Portal routes accept either a session or a ?token= query param.
+  // Portal routes accept either a session or a valid-looking token.
+  // The actual token validation happens in the page's tRPC call (byPublicToken),
+  // but we require UUID format to reject obvious junk at the middleware layer.
   if (pathname.startsWith("/portal")) {
     const token = req.nextUrl.searchParams.get("token");
-    if (token) return NextResponse.next();
+    if (token && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) {
+      return NextResponse.next();
+    }
   }
 
   if (!(req as { auth: unknown }).auth) {

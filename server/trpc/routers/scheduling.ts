@@ -1,7 +1,8 @@
 // server/trpc/routers/scheduling.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
+import { rateLimit } from "@/server/rate-limit";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { addMinutes, startOfDay, endOfDay } from "date-fns";
@@ -56,7 +57,7 @@ export const schedulingRouter = createTRPCRouter({
 
   // ── Availability ─────────────────────────────────────────────────────────
 
-  setAvailability: protectedProcedure
+  setAvailability: staffProcedure
     .input(
       z.object({
         serviceId: z.string().cuid().optional(),
@@ -180,6 +181,11 @@ export const schedulingRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Rate limit: 10 bookings per IP per hour.
+      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const { allowed } = rateLimit(`book:${ip}`, 10, 3600000);
+      if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many booking attempts. Please try again later." });
+
       const service = await ctx.db.service.findUniqueOrThrow({
         where: { id: input.serviceId, isActive: true },
       });

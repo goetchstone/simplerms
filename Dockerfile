@@ -26,5 +26,8 @@ ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+
+# Run as non-root for defense in depth.
+USER node
 EXPOSE 3000
 CMD ["node", "server.js"]

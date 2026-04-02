@@ -68,25 +68,39 @@ const withAudit = t.middleware(async ({ ctx, next, path }) => {
   return result;
 });
 
-// Any signed-in staff member (ADMIN, STAFF, READONLY).
-export const protectedProcedure = t.procedure
+// Require authentication — enforces signed-in user exists.
+const requireAuth = t.middleware(({ ctx, next }) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({ ctx: { ...ctx, session: ctx.session } });
+});
+
+// Any signed-in user including READONLY — use for queries only.
+export const protectedProcedure = t.procedure.use(requireAuth).use(withAudit);
+
+// ADMIN or STAFF — use for mutations that modify data.
+// READONLY users are blocked from these endpoints.
+export const staffProcedure = t.procedure
+  .use(requireAuth)
   .use(({ ctx, next }) => {
-    if (!ctx.session?.user) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
+    if (ctx.session.user.role === "READONLY") {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Read-only accounts cannot perform this action",
+      });
     }
-    return next({ ctx: { ...ctx, session: ctx.session } });
+    return next({ ctx });
   })
   .use(withAudit);
 
 // Admins only — user management, settings, audit log, destructive actions.
 export const adminProcedure = t.procedure
+  .use(requireAuth)
   .use(({ ctx, next }) => {
-    if (!ctx.session?.user) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
-    }
     if (ctx.session.user.role !== "ADMIN") {
       throw new TRPCError({ code: "FORBIDDEN" });
     }
-    return next({ ctx: { ...ctx, session: ctx.session } });
+    return next({ ctx });
   })
   .use(withAudit);

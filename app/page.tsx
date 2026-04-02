@@ -52,7 +52,7 @@ const services = [
   {
     icon: Shield,
     title: "PCI Compliance",
-    body: "Payment card industry compliance done right. We walk you through every requirement, connect you with the right payment processor, and make sure you pass — not just on paper.",
+    body: "We help you understand PCI requirements, reduce your scope, and get the infrastructure right. When you need a formal assessment, we connect you with qualified partners.",
   },
   {
     icon: Globe,
@@ -72,12 +72,12 @@ const services = [
   {
     icon: Handshake,
     title: "Co-Management",
-    body: "Already have IT staff? We augment, not replace. Your team handles the day-to-day. We handle the hard stuff — architecture, compliance, vendor negotiations.",
+    body: "Already have IT staff? We augment, not replace. Your team handles the day-to-day. We handle the hard stuff — architecture decisions, vendor negotiations, and the projects that need senior experience.",
   },
   {
     icon: Lock,
     title: "Security & Compliance",
-    body: "Endpoint protection, access controls, compliance audits. We make sure your business is protected from threats and from vendors who profit from your fear.",
+    body: "Endpoint protection, access controls, informed compliance guidance. We help you make smart decisions, limit your scope, and bring in specialist partners when the situation requires it.",
   },
   {
     icon: ArrowRightLeft,
@@ -330,7 +330,7 @@ export default async function HomePage() {
               },
               {
                 title: "Risk snapshot",
-                body: "Security gaps, compliance issues, single points of failure. The things that keep you up at night — or should.",
+                body: "Security gaps, single points of failure, vendor lock-in. The things that keep you up at night — or should.",
               },
               {
                 title: "No obligation",

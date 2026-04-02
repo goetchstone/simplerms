@@ -1,7 +1,7 @@
 // server/trpc/routers/timeTracking.ts
 import "server-only";
 
-import { createTRPCRouter, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { z } from "zod";
 
 export const timeTrackingRouter = createTRPCRouter({
@@ -46,7 +46,7 @@ export const timeTrackingRouter = createTRPCRouter({
       return { items, total, pages: Math.ceil(total / limit), totalMinutes };
     }),
 
-  create: protectedProcedure
+  create: staffProcedure
     .input(
       z.object({
         clientId: z.string().cuid().optional().nullable(),
@@ -76,7 +76,7 @@ export const timeTrackingRouter = createTRPCRouter({
       };
     }),
 
-  update: protectedProcedure
+  update: staffProcedure
     .input(
       z.object({
         id: z.string().cuid(),
@@ -96,7 +96,7 @@ export const timeTrackingRouter = createTRPCRouter({
       };
     }),
 
-  delete: protectedProcedure
+  delete: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {
       await ctx.db.timeEntry.delete({ where: { id: input } });
