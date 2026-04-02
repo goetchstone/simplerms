@@ -21,7 +21,7 @@ const tiers = [
     name: "On-Demand",
     price: "$175",
     unit: "/ hour",
-    description: "For businesses that need expert help without a recurring commitment.",
+    description: "Expert help when you need it. No contract, no commitment. Call us, we show up.",
     features: [
       "No contract or minimum hours",
       "Remote and on-site support",
@@ -35,44 +35,48 @@ const tiers = [
     featured: false,
   },
   {
-    name: "Partner",
+    name: "Retainer",
     price: "$150",
-    unit: "/ user / month",
-    description: "Ongoing technology partnership. We act as your virtual CTO and keep everything running.",
+    unit: "/ hour",
+    description: "Monthly block of hours at a reduced rate. Priority response, ongoing relationship. You get a partner who knows your environment.",
     features: [
-      "Everything in On-Demand",
-      "Virtual CTO — ongoing technology leadership",
+      "10+ hour monthly block commitment",
+      "Priority response — same business day",
+      "Ongoing technology oversight",
       "Apple Business & MDM management",
-      "Endpoint security and monitoring",
       "Vendor management and negotiations",
       "Quarterly technology reviews",
-      "Priority response — same business day",
       "Compliance monitoring (PCI, HIPAA)",
+      "Month-to-month after 3-month onboarding",
     ],
     cta: "Book a free consultation",
     href: "/book",
     featured: true,
   },
   {
-    name: "Co-Managed",
-    price: "Custom",
-    unit: null,
-    description: "You have IT staff. We augment them with architecture, compliance, and the hard decisions.",
+    name: "Projects",
+    price: "Quoted",
+    unit: "per scope",
+    description: "Migrations, deployments, modernization. We scope it, quote it, and deliver it. Fixed price, no surprises.",
     features: [
-      "Tailored scope to your team's gaps",
-      "Architecture and infrastructure planning",
-      "Security audits and compliance",
-      "Vendor and contract review",
-      "Escalation path for your IT team",
-      "Knowledge transfer — we teach, not hoard",
+      "FileMaker & legacy app modernization",
+      "Infrastructure deployments",
+      "Office buildouts and AV",
+      "MDM rollouts and migrations",
+      "Data migration and cleanup",
+      "Full documentation and handoff",
     ],
-    cta: "Let's talk",
+    cta: "Let's scope it",
     href: "/book",
     featured: false,
   },
 ];
 
 const faqs = [
+  {
+    q: "Do you mark up vendor costs?",
+    a: "No. Vendor costs are pass-through at cost. If Mosyle charges $4/device/month, you pay $4/device/month. If we negotiate a better rate with a vendor, the savings go to you. We show you the vendor invoice — you see exactly what you're paying for.",
+  },
   {
     q: "Do you take vendor kickbacks?",
     a: "No. We never accept partnership revenue, referral fees, or volume incentives from vendors we recommend. Our recommendations are based on what's right for you, not what pays us the most.",
@@ -82,20 +86,20 @@ const faqs = [
     a: "You leave. There's no exit fee, no contract penalty, no hostage negotiation. You own everything we built for you. We'll even help with the transition to whoever comes next.",
   },
   {
-    q: "Why is On-Demand more expensive per hour than Partner?",
-    a: "Partner pricing reflects a committed relationship. On-Demand carries the overhead of context-switching, scheduling, and one-off scoping. Both are fair rates for Apple-specialist technology consulting.",
+    q: "What does a typical monthly bill look like?",
+    a: "A 25-person company on a 10-hour retainer might see: $1,500 for our time, plus $100 for MDM licensing, plus $125 for endpoint security — all at cost. Total: $1,725. Every line item is visible and verifiable.",
+  },
+  {
+    q: "What if I don't use all my retainer hours?",
+    a: "Then you had a good month. Hours don't roll over — but if you're consistently using less, we'll tell you to drop to a smaller block. We'd rather you pay for what you need than carry hours you don't use.",
   },
   {
     q: "Do you charge for initial consultations?",
     a: "No. The first conversation is always free. We'll tell you what we see, what it would cost, and whether we're the right fit. If we're not, we'll tell you that too.",
   },
   {
-    q: "What's included in 'per user'?",
-    a: "All devices for that user. We don't charge per device — a person with a MacBook, iPhone, and iPad is one user, not three charges.",
-  },
-  {
     q: "Do you require long-term contracts?",
-    a: "Partner plans are month-to-month after a 3-month onboarding period. The onboarding minimum exists because it takes time to do this right. After that, you stay because it works, not because you're trapped.",
+    a: "Retainer plans are month-to-month after a 3-month onboarding period. The onboarding minimum exists because it takes time to learn your environment and do this right. After that, you stay because it works, not because you're trapped.",
   },
 ];
 
@@ -115,8 +119,8 @@ export default async function PricingPage() {
           Published rates. No surprises.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          We believe you should know what something costs before you commit.
-          These are our real rates — the same for every client.
+          Our time is billed hourly. Vendor costs are pass-through at cost — no
+          markup, ever. You see every line item on every invoice.
         </p>
       </section>
 
@@ -171,19 +175,70 @@ export default async function PricingPage() {
         </div>
       </section>
 
-      {/* Transparency Section */}
+      {/* Pass-Through Explanation */}
       <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
+        <div className="mx-auto max-w-[720px] space-y-8">
+          <div className="text-center">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+              Radical Transparency
+            </p>
+            <h2 className="text-[28px] font-medium text-bone">
+              Your bill, line by line
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+              Most MSPs bundle everything into one per-user fee so you can&apos;t
+              see the markup. We do the opposite. Our time is our time. Vendor
+              costs are vendor costs. You see both.
+            </p>
+          </div>
+          <div className="space-y-1 border border-bone/10 bg-midnight p-6" style={{ borderRadius: "2px" }}>
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
+              How your invoice looks
+            </p>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between text-bone/60">
+                <span>Akritos — retainer hours</span>
+                <span className="text-bone">Our rate</span>
+              </div>
+              <div className="flex justify-between text-bone/60">
+                <span>MDM licensing <span className="text-bone/30">(pass-through at cost)</span></span>
+                <span className="text-bone">Vendor&apos;s price</span>
+              </div>
+              <div className="flex justify-between text-bone/60">
+                <span>Endpoint security <span className="text-bone/30">(pass-through at cost)</span></span>
+                <span className="text-bone">Vendor&apos;s price</span>
+              </div>
+              <div className="flex justify-between text-bone/60">
+                <span>Backup <span className="text-bone/30">(pass-through at cost)</span></span>
+                <span className="text-bone">Vendor&apos;s price</span>
+              </div>
+              <div className="mt-3 border-t border-bone/10 pt-3 text-bone/40 text-xs">
+                Every vendor line item links to the vendor&apos;s own invoice.
+                We add zero markup. You verify every dollar.
+              </div>
+            </div>
+          </div>
+          <p className="text-center text-sm text-bone/40">
+            Vendor costs depend on your stack — we recommend the right tools for
+            your needs and you pay the vendor directly, or we pass through at
+            cost. Either way, no markup.
+          </p>
+        </div>
+      </section>
+
+      {/* What you won't find */}
+      <section className="border-t border-bone/10 px-6 py-24">
         <div className="mx-auto max-w-[720px] space-y-6 text-center">
           <h2 className="text-[28px] font-medium text-bone">
             What you won&apos;t find on our invoice
           </h2>
           <div className="grid gap-6 text-left sm:grid-cols-2">
             {[
+              "Vendor markup — ever",
               "Travel fees for local visits",
-              "Vendor markup on hardware",
               "Hidden 'project management' charges",
               "Charges for problems we caused",
-              "Emergency surcharges for Partner clients",
+              "Emergency surcharges for retainer clients",
               "Exit fees or contract penalties",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2 text-sm text-bone/60">
@@ -196,7 +251,7 @@ export default async function PricingPage() {
       </section>
 
       {/* Non-Profits */}
-      <section className="border-t border-bone/10 px-6 py-24">
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
         <div className="mx-auto max-w-[720px] text-center">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
             Community
