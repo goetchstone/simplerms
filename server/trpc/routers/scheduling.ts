@@ -9,6 +9,35 @@ import { addMinutes, startOfDay, endOfDay } from "date-fns";
 
 const appointmentStatusEnum = z.enum(["PENDING", "CONFIRMED", "CANCELLED", "NO_SHOW", "COMPLETED"]);
 
+// Build a UTC Date from a local time string ("HH:MM") in a given IANA timezone on a specific date.
+// E.g. toUTCDate(someDate, "09:00", "America/New_York") → the UTC instant when it's 9 AM Eastern.
+function toUTCDate(date: Date, timeStr: string, timezone: string): Date {
+  const [h, m] = timeStr.split(":").map(Number);
+  // Format the target date in the target timezone to get the year/month/day there.
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
+  const year = Number(parts.find((p) => p.type === "year")!.value);
+  const month = Number(parts.find((p) => p.type === "month")!.value);
+  const day = Number(parts.find((p) => p.type === "day")!.value);
+
+  // Create a UTC date string and parse it, then find the offset by comparing
+  // with what the timezone thinks the time is.
+  const utcGuess = new Date(Date.UTC(year, month - 1, day, h, m, 0, 0));
+  const inTZ = new Intl.DateTimeFormat("en-US", {
+    timeZone: timezone,
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false,
+  }).format(utcGuess);
+  const [tzH, tzM] = inTZ.split(":").map(Number);
+  const offsetMinutes = (tzH * 60 + tzM) - (h * 60 + m);
+  return new Date(utcGuess.getTime() - offsetMinutes * 60000);
+}
+
 export const schedulingRouter = createTRPCRouter({
   // ── Services ─────────────────────────────────────────────────────────────
 
@@ -139,13 +168,9 @@ export const schedulingRouter = createTRPCRouter({
       const slots: { startsAt: Date; endsAt: Date }[] = [];
 
       for (const avail of availability) {
-        const [startH, startM] = avail.startTime.split(":").map(Number);
-        const [endH, endM] = avail.endTime.split(":").map(Number);
-
-        const windowStart = new Date(date);
-        windowStart.setHours(startH, startM, 0, 0);
-        const windowEnd = new Date(date);
-        windowEnd.setHours(endH, endM, 0, 0);
+        const tz = avail.timezone || "America/New_York";
+        const windowStart = toUTCDate(date, avail.startTime, tz);
+        const windowEnd = toUTCDate(date, avail.endTime, tz);
 
         let cursor = windowStart;
         while (cursor < windowEnd) {
