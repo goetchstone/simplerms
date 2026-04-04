@@ -44,7 +44,7 @@ const services = [
   {
     icon: Laptop,
     title: "MDM Setup & Migration",
-    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. Already running Intune? Keep it for Windows. We deploy Apple MDM alongside it and connect the two.",
+    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. Already running Intune? Keep it for Windows. We deploy Apple MDM alongside it.",
   },
   {
     icon: Globe,

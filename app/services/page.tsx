@@ -51,14 +51,14 @@ const coreServices = [
   {
     icon: Laptop,
     title: "MDM Setup & Migration",
-    description: "Mosyle, Jamf, Iru, Addigy — we evaluate each for your environment and deploy the right one. Not whatever pays us the most. Already running Intune? Keep it for Windows — it's great at that. We deploy a purpose-built Apple MDM alongside it and connect the two so your team has one view across both platforms.",
+    description: "Mosyle, Jamf, Iru, Addigy — we evaluate each for your environment and deploy the right one. Not whatever pays us the most. Already running Intune? Keep it for Windows — it's great at that. We deploy a purpose-built Apple MDM alongside it so the right tool manages the right platform.",
     details: [
       "MDM platform evaluation — fit, not kickbacks",
       "Zero-touch deployment for new hires",
       "Apple MDM deployed alongside Intune for Windows",
       "Migration from existing MDM or from no MDM",
       "App deployment, patching, and security policy configuration",
-      "Unified device visibility across Intune + Apple MDM",
+      "Profile and configuration management",
     ],
   },
   {

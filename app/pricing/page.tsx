@@ -134,7 +134,7 @@ const faqs = [
   },
   {
     q: "We already use Intune. Do we have to get rid of it?",
-    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its ABM integration is shallow. As the Mac fleet grows, the gap widens. We connect both platforms so your team has one view across Windows and Mac.",
+    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its ABM integration is shallow. As the Mac fleet grows, the gap widens. Right tool for the right platform.",
   },
   {
     q: "What does PCI scope reduction actually save?",
