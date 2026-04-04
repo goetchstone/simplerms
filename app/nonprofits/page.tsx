@@ -80,7 +80,7 @@ export default async function NonprofitsPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {painPoints.map((p) => (
               <div key={p.heading} className="space-y-2">
-                <h2 className="text-sm font-medium text-bone">{p.heading}</h2>
+                <h2 className="text-base font-medium text-bone">{p.heading}</h2>
                 <p className="text-base leading-relaxed text-bone/60">{p.body}</p>
               </div>
             ))}
@@ -115,7 +115,7 @@ export default async function NonprofitsPage() {
               "No lock-in, no contracts — month-to-month after onboarding",
               "You own every account, every domain, every credential",
             ].map((item) => (
-              <div key={item} className="flex items-start gap-2 text-sm text-bone/60">
+              <div key={item} className="flex items-start gap-2 text-base text-bone/60">
                 <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                 {item}
               </div>
@@ -158,7 +158,7 @@ export default async function NonprofitsPage() {
                   {s.step}
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-sm font-medium text-bone">{s.title}</h3>
+                  <h3 className="text-base font-medium text-bone">{s.title}</h3>
                   <p className="text-base leading-relaxed text-bone/60">{s.body}</p>
                 </div>
               </div>

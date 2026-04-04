@@ -92,7 +92,7 @@ export default async function AboutPage() {
               <p className="text-sm text-conviction">
                 Founder &amp; Principal Consultant
               </p>
-              <p className="mt-4 max-w-lg text-sm leading-relaxed text-bone/60">
+              <p className="mt-4 max-w-lg text-base leading-relaxed text-bone/60">
                 20+ years in IT. I&apos;ve been the MSP engineer, the Director
                 of IT, and the client. I know where the fees are hidden because
                 I used to watch them get added. I started Akritos because small
@@ -131,11 +131,11 @@ export default async function AboutPage() {
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-conviction">
                 Early Career
               </p>
-              <p className="mt-1 text-sm font-medium text-bone">
+              <p className="mt-1 text-base font-medium text-bone">
                 MSP Engineer
               </p>
             </div>
-            <p className="text-sm leading-relaxed text-bone/60">
+            <p className="text-base leading-relaxed text-bone/60">
               Started at a managed service provider. Learned the business inside
               and out — including how the model works. Watched vendors bake fees
               into every layer, mark up hardware, and build dependencies that
@@ -149,11 +149,11 @@ export default async function AboutPage() {
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-conviction">
                 12+ Years
               </p>
-              <p className="mt-1 text-sm font-medium text-bone">
+              <p className="mt-1 text-base font-medium text-bone">
                 Director of IT
               </p>
             </div>
-            <p className="text-sm leading-relaxed text-bone/60">
+            <p className="text-base leading-relaxed text-bone/60">
               Became the client. Ran technology for a multi-location regional
               retailer and learned what it actually takes to keep a business
               running. Network deployments, phone systems, POS migrations, PCI
@@ -167,11 +167,11 @@ export default async function AboutPage() {
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-conviction">
                 Community
               </p>
-              <p className="mt-1 text-sm font-medium text-bone">
+              <p className="mt-1 text-base font-medium text-bone">
                 Workshop Instructor &amp; Donor
               </p>
             </div>
-            <p className="text-sm leading-relaxed text-bone/60">
+            <p className="text-base leading-relaxed text-bone/60">
               Presented a{" "}
               <a
                 href="https://bpb-us-e1.wpmucdn.com/sites.psu.edu/dist/4/24696/files/2025/08/psumac2025-873049-Apple-Device-Administration-Essentials-A-Beginners-Guide.pdf"
@@ -229,7 +229,7 @@ export default async function AboutPage() {
                 className="border-l-2 border-conviction/30 pl-6"
               >
                 <div className="mb-1 flex flex-wrap items-baseline gap-x-3">
-                  <h3 className="text-sm font-medium text-bone">{p.title}</h3>
+                  <h3 className="text-base font-medium text-bone">{p.title}</h3>
                   <span className="text-xs text-bone/30">{p.duration}</span>
                 </div>
                 <p className="text-xs text-conviction/60">{p.context}</p>
@@ -251,7 +251,7 @@ export default async function AboutPage() {
           <h2 className="text-[28px] font-medium text-bone">
             The industry is broken. I got tired of watching.
           </h2>
-          <div className="space-y-4 text-sm leading-relaxed text-bone/60">
+          <div className="space-y-4 text-base leading-relaxed text-bone/60">
             <p>
               Most MSPs make money when you&apos;re confused. They bundle
               services so you can&apos;t see the markup. They take vendor
@@ -319,7 +319,7 @@ export default async function AboutPage() {
                 key={p.title}
                 className="space-y-2 border-l-2 border-conviction/30 pl-5"
               >
-                <h3 className="text-sm font-medium text-bone">{p.title}</h3>
+                <h3 className="text-base font-medium text-bone">{p.title}</h3>
                 <p className="text-base leading-relaxed text-bone/60">
                   {p.body}
                 </p>

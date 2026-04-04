@@ -197,7 +197,7 @@ export default async function PricingPage() {
               </p>
               <ul className="mt-8 flex-1 space-y-3">
                 {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-bone/60">
+                  <li key={f} className="flex items-start gap-2 text-base text-bone/60">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-conviction/60" />
                     {f}
                   </li>
@@ -255,7 +255,7 @@ export default async function PricingPage() {
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
               Sample monthly invoice — 15-person managed client
             </p>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-base">
               <div className="flex justify-between text-bone/60">
                 <span>Managed services — 15 users × $50</span>
                 <span className="text-bone">$750.00</span>
@@ -296,7 +296,7 @@ export default async function PricingPage() {
               "Emergency surcharges for managed clients",
               "Exit fees or contract penalties",
             ].map((item) => (
-              <div key={item} className="flex items-start gap-2 text-sm text-bone/60">
+              <div key={item} className="flex items-start gap-2 text-base text-bone/60">
                 <span className="mt-0.5 text-conviction">✕</span>
                 {item}
               </div>
@@ -363,16 +363,16 @@ export default async function PricingPage() {
               },
             ].flatMap((row) => [
               <div key={`${row.label}-label`} className="flex items-center bg-midnight p-5">
-                <p className="text-sm font-medium text-bone">{row.label}</p>
+                <p className="text-base font-medium text-bone">{row.label}</p>
               </div>,
               <div key={`${row.label}-them`} className="flex items-center bg-midnight p-5">
-                <p className="flex items-start gap-2 text-sm text-bone/40">
+                <p className="flex items-start gap-2 text-base text-bone/40">
                   <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-alert/60" />
                   {row.them}
                 </p>
               </div>,
               <div key={`${row.label}-us`} className="flex items-center bg-slate-brand/30 p-5 ring-1 ring-conviction/20">
-                <p className="flex items-start gap-2 text-sm text-bone/70">
+                <p className="flex items-start gap-2 text-base text-bone/70">
                   <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-conviction" />
                   {row.us}
                 </p>
@@ -429,7 +429,7 @@ export default async function PricingPage() {
           <div className="space-y-8">
             {faqs.map((faq) => (
               <div key={faq.q} className="space-y-2">
-                <h3 className="text-sm font-medium text-bone">{faq.q}</h3>
+                <h3 className="text-base font-medium text-bone">{faq.q}</h3>
                 <p className="text-base leading-relaxed text-bone/60">{faq.a}</p>
               </div>
             ))}

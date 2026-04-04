@@ -212,7 +212,7 @@ export default async function HomePage() {
                   className="bg-midnight p-8 transition-colors hover:bg-slate-brand/20"
                 >
                   <Icon className="mb-4 h-5 w-5 text-conviction" strokeWidth={1.5} />
-                  <h3 className="mb-2 text-sm font-medium text-bone">{s.title}</h3>
+                  <h3 className="mb-2 text-base font-medium text-bone">{s.title}</h3>
                   <p className="text-base leading-relaxed text-bone/60">{s.body}</p>
                 </div>
               );
@@ -311,7 +311,7 @@ export default async function HomePage() {
               },
             ].map((item) => (
               <div key={item.title} className="space-y-2">
-                <h3 className="text-sm font-medium text-bone">{item.title}</h3>
+                <h3 className="text-base font-medium text-bone">{item.title}</h3>
                 <p className="text-base leading-relaxed text-bone/60">{item.body}</p>
               </div>
             ))}
@@ -322,7 +322,7 @@ export default async function HomePage() {
       {/* Testimonials — earned, not invented */}
       <section className="border-t border-bone/10 px-6 py-16">
         <div className="mx-auto max-w-[720px] text-center">
-          <p className="text-sm leading-relaxed text-bone/30">
+          <p className="text-base leading-relaxed text-bone/30">
             We&apos;re new. Testimonials are earned, not invented.
             When we have them, they&apos;ll be here — with real names
             and real numbers.

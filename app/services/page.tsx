@@ -172,7 +172,7 @@ export default async function ServicesPage() {
                   </div>
                   <ul className="space-y-2">
                     {s.details.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-sm text-bone/60">
+                      <li key={d} className="flex items-start gap-2 text-base text-bone/60">
                         <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                         {d}
                       </li>
@@ -220,7 +220,7 @@ export default async function ServicesPage() {
                   "Troubleshooting Mac-specific issues your team will actually hit",
                   "Ongoing self-sufficiency — new hires, offboarding, OS updates",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-bone/60">
+                  <li key={item} className="flex items-start gap-2 text-base text-bone/60">
                     <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                     {item}
                   </li>
@@ -240,7 +240,7 @@ export default async function ServicesPage() {
                   "Post-training support period for questions that come up in practice",
                   "Goal: your team runs this independently within 60–90 days",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-bone/60">
+                  <li key={item} className="flex items-start gap-2 text-base text-bone/60">
                     <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                     {item}
                   </li>
@@ -307,7 +307,7 @@ export default async function ServicesPage() {
                   </div>
                   <ul className="space-y-2">
                     {s.details.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-sm text-bone/60">
+                      <li key={d} className="flex items-start gap-2 text-base text-bone/60">
                         <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                         {d}
                       </li>
