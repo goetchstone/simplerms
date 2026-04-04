@@ -37,7 +37,7 @@ export default async function BlogPage() {
           <h1 className="mb-2 text-3xl font-medium tracking-tight text-bone">
             Insights and updates
           </h1>
-          <p className="mb-10 text-bone/50">Thoughts from our team — no fluff, no filler.</p>
+          <p className="mb-10 text-bone/60">Thoughts from our team — no fluff, no filler.</p>
 
           {posts.length === 0 ? (
             <p className="py-12 text-center text-bone/30">No posts yet. Check back soon.</p>
@@ -58,7 +58,7 @@ export default async function BlogPage() {
                       {post.title}
                     </h2>
                     {post.excerpt && (
-                      <p className="text-bone/50 leading-relaxed">{post.excerpt}</p>
+                      <p className="text-base text-bone/60 leading-relaxed">{post.excerpt}</p>
                     )}
                     <div className="flex items-center justify-between text-sm text-bone/30">
                       <span>{post.publishedAt ? formatDate(post.publishedAt) : ""}</span>

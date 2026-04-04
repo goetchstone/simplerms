@@ -61,7 +61,7 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="mb-8 text-sm text-bone/30">{formatDate(post.publishedAt)}</p>
           )}
 
-          <div className="prose-invert prose prose-sm max-w-none prose-headings:text-bone prose-p:text-bone/60 prose-a:text-conviction">
+          <div className="prose-invert prose prose-base max-w-none prose-headings:text-bone prose-p:text-bone/80 prose-a:text-conviction">
             <BlockRenderer blocks={post.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
           </div>
         </div>

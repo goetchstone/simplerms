@@ -22,7 +22,7 @@ const headingSizes: Record<number, string> = {
 };
 
 function HeadingBlock({ content = "", level = 2 }: Block) {
-  const cls = `${headingSizes[level] ?? headingSizes[2]} mt-8 mb-3 tracking-tight text-zinc-900`;
+  const cls = `${headingSizes[level] ?? headingSizes[2]} mt-8 mb-3 tracking-tight text-bone`;
   if (level === 1) return <h1 className={cls}>{content}</h1>;
   if (level === 3) return <h3 className={cls}>{content}</h3>;
   if (level === 4) return <h4 className={cls}>{content}</h4>;
@@ -33,7 +33,7 @@ function HeadingBlock({ content = "", level = 2 }: Block) {
 
 export function BlockRenderer({ blocks }: { blocks: Block[] }) {
   return (
-    <div className="prose-zinc max-w-none">
+    <div className="max-w-none">
       {blocks.map((block, i) => {
         switch (block.type) {
           case "heading":
@@ -41,7 +41,7 @@ export function BlockRenderer({ blocks }: { blocks: Block[] }) {
 
           case "paragraph":
             return (
-              <p key={i} className="my-4 leading-relaxed text-zinc-600">
+              <p key={i} className="my-4 text-base leading-relaxed text-bone/80">
                 {block.content}
               </p>
             );
@@ -52,23 +52,25 @@ export function BlockRenderer({ blocks }: { blocks: Block[] }) {
                 key={i}
                 src={block.src}
                 alt={block.alt ?? ""}
-                className="my-6 w-full rounded-xl object-cover"
+                className="my-6 w-full object-cover"
+                style={{ borderRadius: "2px" }}
               />
             ) : null;
 
           case "divider":
-            return <hr key={i} className="my-8 border-zinc-200" />;
+            return <hr key={i} className="my-8 border-bone/10" />;
 
           case "cta":
             return (
-              <div key={i} className="my-8 rounded-xl border border-zinc-200 bg-zinc-50 p-6 text-center">
+              <div key={i} className="my-8 border border-conviction/20 bg-slate-brand/20 p-6 text-center" style={{ borderRadius: "2px" }}>
                 {block.content && (
-                  <p className="mb-4 text-zinc-600">{block.content}</p>
+                  <p className="mb-4 text-bone/70">{block.content}</p>
                 )}
                 {block.ctaHref && (
                   <Link
                     href={block.ctaHref}
-                    className="inline-flex items-center gap-2 rounded-md bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-zinc-700"
+                    className="inline-flex items-center gap-2 bg-conviction px-5 py-2.5 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
+                    style={{ borderRadius: "2px" }}
                   >
                     {block.ctaText ?? "Learn more"} <ArrowRight className="h-4 w-4" />
                   </Link>
