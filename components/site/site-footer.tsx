@@ -71,7 +71,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-bone/10 pt-6 sm:flex-row sm:items-center">
           <div className="text-sm text-bone/30">
-            <p>© {new Date().getFullYear()} {companyName}, LLC. Moodus, Connecticut.</p>
+            <p>© {new Date().getFullYear()} Akritos Technology Partners LLC. Moodus, Connecticut.</p>
           </div>
           <div className="flex gap-4 text-xs text-bone/20">
             <Link href="/privacy" className="hover:text-bone/40">Privacy</Link>

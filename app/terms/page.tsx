@@ -35,7 +35,7 @@ export default function TermsPage() {
 
           <Section title="What this site is">
             This website provides information about Akritos Technology
-            Partners, LLC&apos;s technology consulting services, allows you to
+            Partners LLC&apos;s technology consulting services, allows you to
             book consultations, submit support requests, and access client
             tools. It is operated by Goetch Stone, based in Moodus,
             Connecticut.
@@ -76,13 +76,13 @@ export default function TermsPage() {
 
           <Section title="Intellectual property">
             The Akritos name, logo, and website content are the property of
-            Akritos Technology Partners, LLC. You may not reproduce, distribute, or create derivative
+            Akritos Technology Partners LLC. You may not reproduce, distribute, or create derivative
             works from this content without written permission.
           </Section>
 
           <Section title="Limitation of liability">
             To the maximum extent permitted by law, Akritos Technology
-            Partners, LLC shall not be liable
+            Partners LLC shall not be liable
             for any indirect, incidental, special, consequential, or punitive
             damages arising from your use of this website or our services. Our
             total liability for any claim shall not exceed the amount you paid

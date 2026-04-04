@@ -29,7 +29,7 @@ export default function PrivacyPage() {
           </div>
 
           <Section title="Who we are">
-            Akritos Technology Partners, LLC is a technology consulting firm
+            Akritos Technology Partners LLC is a technology consulting firm
             based in Moodus, Connecticut, operated by Goetch Stone. This policy describes how we
             handle information collected through our website at akritos.com.
           </Section>

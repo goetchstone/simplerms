@@ -16,7 +16,7 @@ export function localBusinessSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "Akritos Technology Partners, LLC",
+    name: "Akritos Technology Partners LLC",
     alternateName: "Akritos",
     description:
       "Apple Business setup, MDM deployment, Google Workspace, and Mac management training for Windows-native IT teams. Published rates, zero vendor markup, no lock-in.",
