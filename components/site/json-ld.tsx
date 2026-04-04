@@ -52,6 +52,17 @@ export function localBusinessSchema() {
       "Zero-Touch Deployment",
     ],
     slogan: "Your IT team knows Windows. We teach them Apple.",
+    founder: {
+      "@type": "Person",
+      name: "Goetch Stone",
+      jobTitle: "Founder",
+    },
+    email: "info@akritos.com",
+    address: {
+      "@type": "PostalAddress",
+      addressRegion: "CT",
+      addressCountry: "US",
+    },
     foundingDate: "2026",
     makesOffer: {
       "@type": "Offer",

@@ -318,6 +318,17 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Testimonials — earned, not invented */}
+      <section className="border-t border-bone/10 px-6 py-16">
+        <div className="mx-auto max-w-[720px] text-center">
+          <p className="text-sm leading-relaxed text-bone/30">
+            We&apos;re new. Testimonials are earned, not invented.
+            When we have them, they&apos;ll be here — with real names
+            and real numbers.
+          </p>
+        </div>
+      </section>
+
       {/* Pricing Teaser */}
       <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
         <div className="mx-auto max-w-[720px] text-center">
