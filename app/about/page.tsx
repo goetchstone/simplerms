@@ -217,7 +217,7 @@ export default async function AboutPage() {
           <h2 className="mb-4 text-[28px] font-medium text-bone">
             Projects I planned, executed, and delivered
           </h2>
-          <p className="mb-12 text-sm text-bone/50">
+          <p className="mb-12 text-base text-bone/60">
             Every one of these shipped in a production business environment —
             multi-location retail, real budgets, real deadlines. Client details
             anonymized.
@@ -233,7 +233,7 @@ export default async function AboutPage() {
                   <span className="text-xs text-bone/30">{p.duration}</span>
                 </div>
                 <p className="text-xs text-conviction/60">{p.context}</p>
-                <p className="mt-3 text-sm leading-relaxed text-bone/50">
+                <p className="mt-3 text-base leading-relaxed text-bone/60">
                   {p.narrative}
                 </p>
               </div>
@@ -320,7 +320,7 @@ export default async function AboutPage() {
                 className="space-y-2 border-l-2 border-conviction/30 pl-5"
               >
                 <h3 className="text-sm font-medium text-bone">{p.title}</h3>
-                <p className="text-sm leading-relaxed text-bone/50">
+                <p className="text-base leading-relaxed text-bone/60">
                   {p.body}
                 </p>
               </div>
@@ -334,7 +334,7 @@ export default async function AboutPage() {
         <h2 className="text-2xl font-medium text-bone">
           Want to see if we&apos;re a fit?
         </h2>
-        <p className="mx-auto mt-4 max-w-lg text-bone/50">
+        <p className="mx-auto mt-4 max-w-lg text-bone/60">
           Book a free consultation or reach out directly. I&apos;ll tell you
           what I see, what it would cost, and whether I&apos;m the right person
           for the job. If I&apos;m not, I&apos;ll tell you that too.

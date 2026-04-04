@@ -166,13 +166,13 @@ export default async function ServicesPage() {
                       <Icon className="h-5 w-5 text-conviction" strokeWidth={1.5} />
                       <h2 className="text-lg font-medium text-bone">{s.title}</h2>
                     </div>
-                    <p className="text-sm leading-relaxed text-bone/60">
+                    <p className="text-base leading-relaxed text-bone/60">
                       {s.description}
                     </p>
                   </div>
                   <ul className="space-y-2">
                     {s.details.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-sm text-bone/50">
+                      <li key={d} className="flex items-start gap-2 text-sm text-bone/60">
                         <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                         {d}
                       </li>
@@ -198,7 +198,7 @@ export default async function ServicesPage() {
                 Mac management training for Windows teams
               </h2>
             </div>
-            <p className="max-w-2xl text-sm leading-relaxed text-bone/60">
+            <p className="max-w-2xl text-base leading-relaxed text-bone/60">
               Your IT team knows Windows — Group Policy, SCCM, Active Directory.
               Then the company buys Macs and nothing transfers. MDM is not Group
               Policy. Apple IDs are not AD accounts. The management model is
@@ -220,7 +220,7 @@ export default async function ServicesPage() {
                   "Troubleshooting Mac-specific issues your team will actually hit",
                   "Ongoing self-sufficiency — new hires, offboarding, OS updates",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-bone/50">
+                  <li key={item} className="flex items-start gap-2 text-sm text-bone/60">
                     <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                     {item}
                   </li>
@@ -240,7 +240,7 @@ export default async function ServicesPage() {
                   "Post-training support period for questions that come up in practice",
                   "Goal: your team runs this independently within 60–90 days",
                 ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-bone/50">
+                  <li key={item} className="flex items-start gap-2 text-sm text-bone/60">
                     <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                     {item}
                   </li>
@@ -254,11 +254,11 @@ export default async function ServicesPage() {
             className="mt-12 border border-conviction/20 bg-midnight p-6"
             style={{ borderRadius: "2px" }}
           >
-            <p className="text-sm leading-relaxed text-bone/60">
+            <p className="text-base leading-relaxed text-bone/60">
               <span className="font-medium text-bone">This is NOT outsourced IT.</span>{" "}
-              We don&apos;t want to manage your Macs forever. We want your team
-              to be confident managing them. We set it up, we train your people,
-              you own it.
+              We want your team to be confident managing their own Macs. We
+              set it up, train your people, and make sure you can run it
+              without us — even if you choose to keep us around.
             </p>
             <p className="mt-3 text-xs text-bone/30">
               Goetch Stone presented a{" "}
@@ -301,13 +301,13 @@ export default async function ServicesPage() {
                       <Icon className="h-5 w-5 text-conviction" strokeWidth={1.5} />
                       <h2 className="text-lg font-medium text-bone">{s.title}</h2>
                     </div>
-                    <p className="text-sm leading-relaxed text-bone/60">
+                    <p className="text-base leading-relaxed text-bone/60">
                       {s.description}
                     </p>
                   </div>
                   <ul className="space-y-2">
                     {s.details.map((d) => (
-                      <li key={d} className="flex items-start gap-2 text-sm text-bone/50">
+                      <li key={d} className="flex items-start gap-2 text-sm text-bone/60">
                         <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
                         {d}
                       </li>
@@ -323,7 +323,7 @@ export default async function ServicesPage() {
       {/* Limited capacity */}
       <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-16">
         <div className="mx-auto max-w-[720px] text-center">
-          <p className="text-sm leading-relaxed text-bone/50">
+          <p className="text-base leading-relaxed text-bone/60">
             We intentionally limit the number of clients we work with. Every
             business we partner with gets direct access to senior-level
             expertise — not a help desk. If we&apos;re at capacity,

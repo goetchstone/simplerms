@@ -130,7 +130,7 @@ const faqs = [
   },
   {
     q: "Do you replace our IT team?",
-    a: "No. We train them. Most clients have competent Windows-native IT teams that just lack Apple experience. We set up the infrastructure, train the team on MDM and Apple Business Manager, and get out of the way. The goal is your team running this independently within 60–90 days.",
+    a: "No. We train them. Most clients have competent Windows-native IT teams that just lack Apple experience. We set up the infrastructure, train the team on MDM and Apple Business Manager, and make sure they can run it independently within 60–90 days. After that, you can keep us on a managed plan for backup and escalation — or run it yourself. Either way, you own everything.",
   },
   {
     q: "We already use Intune. Do we have to get rid of it?",
@@ -192,7 +192,7 @@ export default async function PricingPage() {
                   <span className="text-sm text-bone/40">{tier.unit}</span>
                 )}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-bone/50">
+              <p className="mt-4 text-base leading-relaxed text-bone/60">
                 {tier.description}
               </p>
               <ul className="mt-8 flex-1 space-y-3">
@@ -245,7 +245,7 @@ export default async function PricingPage() {
             <h2 className="text-[28px] font-medium text-bone">
               Your bill, line by line
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               Most MSPs bundle everything into one per-user fee so you can&apos;t
               see the markup. We do the opposite. Our fee is our fee. Vendor
               costs are vendor costs. You see both.
@@ -391,7 +391,7 @@ export default async function PricingPage() {
           <h2 className="text-[28px] font-medium text-bone">
             Non-profits and community organizations
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+          <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
             If you&apos;re a non-profit or community organization doing real
             work, talk to us. We offer reduced rates because the work matters.
             We won&apos;t work for free — our team earns living wages and
@@ -430,7 +430,7 @@ export default async function PricingPage() {
             {faqs.map((faq) => (
               <div key={faq.q} className="space-y-2">
                 <h3 className="text-sm font-medium text-bone">{faq.q}</h3>
-                <p className="text-sm leading-relaxed text-bone/50">{faq.a}</p>
+                <p className="text-base leading-relaxed text-bone/60">{faq.a}</p>
               </div>
             ))}
           </div>
@@ -440,7 +440,7 @@ export default async function PricingPage() {
       {/* CTA */}
       <section className="border-t border-bone/10 px-6 py-24 text-center">
         <h2 className="text-2xl font-medium text-bone">No obligation. No sales pitch.</h2>
-        <p className="mx-auto mt-4 max-w-lg text-bone/50">
+        <p className="mx-auto mt-4 max-w-lg text-bone/60">
           Book a free consultation. We&apos;ll tell you what we see and what it
           would cost. If we&apos;re not the right fit, we&apos;ll tell you that too.
         </p>

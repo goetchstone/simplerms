@@ -79,7 +79,7 @@ const values = [
   },
   {
     heading: "Everything is divorceable",
-    body: "Every vendor we recommend, every tool we deploy, every partnership we build — you can walk away from any of it, including us. That's the point.",
+    body: "Every vendor we recommend, every tool we deploy, every partnership we build — you can walk away from any of it, including us. You stay because we earn it, not because we engineered it.",
   },
   {
     heading: "The P is Partner",
@@ -110,7 +110,8 @@ export default async function HomePage() {
           Your IT team knows Windows. Then the company buys Macs and everything
           they know stops applying. We set up Apple Business, deploy the right
           MDM, configure Google Workspace, and train your team to own it
-          all — so you never depend on us.
+          all — and you can run it without us. Most clients don&apos;t
+          want to, and that&apos;s the point.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -196,10 +197,10 @@ export default async function HomePage() {
             <h2 className="text-[28px] font-medium text-bone">
               Apple device management, done right and handed off
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               We set up Apple Business, deploy MDM, configure Google Workspace,
-              and train your Windows-native IT team to run it all. Then we get
-              out of the way.
+              and train your Windows-native IT team to run it all. Then we
+              stay because you want us to, not because you have to.
             </p>
           </div>
           <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">
@@ -212,7 +213,7 @@ export default async function HomePage() {
                 >
                   <Icon className="mb-4 h-5 w-5 text-conviction" strokeWidth={1.5} />
                   <h3 className="mb-2 text-sm font-medium text-bone">{s.title}</h3>
-                  <p className="text-sm leading-relaxed text-bone/50">{s.body}</p>
+                  <p className="text-base leading-relaxed text-bone/60">{s.body}</p>
                 </div>
               );
             })}
@@ -233,7 +234,7 @@ export default async function HomePage() {
         <blockquote className="mx-auto max-w-2xl text-center">
           <p className="text-2xl font-medium leading-relaxed text-bone sm:text-3xl">
             &ldquo;We don&apos;t profit from your confusion.
-            We profit when you don&apos;t need us anymore.&rdquo;
+            We profit from your trust.&rdquo;
           </p>
           <footer className="mt-4 text-sm text-bone/30">
             — Goetch Stone, Founder
@@ -251,7 +252,7 @@ export default async function HomePage() {
             <h2 className="text-[28px] font-medium text-bone">
               These aren&apos;t marketing words
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               They&apos;re the rules we make every decision by. We publish them
               because you should be able to hold us to them.
             </p>
@@ -260,7 +261,7 @@ export default async function HomePage() {
             {values.map((v) => (
               <div key={v.heading} className="space-y-3 border-l-2 border-conviction/30 pl-6">
                 <h3 className="text-base font-medium text-bone">{v.heading}</h3>
-                <p className="text-sm leading-relaxed text-bone/50">{v.body}</p>
+                <p className="text-base leading-relaxed text-bone/60">{v.body}</p>
               </div>
             ))}
           </div>
@@ -277,7 +278,7 @@ export default async function HomePage() {
             <h2 className="text-[28px] font-medium text-bone">
               What you get before you pay a dime
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               Your first consultation is free. Here&apos;s what you walk away with —
               even if you never hire us.
             </p>
@@ -311,7 +312,7 @@ export default async function HomePage() {
             ].map((item) => (
               <div key={item.title} className="space-y-2">
                 <h3 className="text-sm font-medium text-bone">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-bone/50">{item.body}</p>
+                <p className="text-base leading-relaxed text-bone/60">{item.body}</p>
               </div>
             ))}
           </div>
@@ -338,7 +339,7 @@ export default async function HomePage() {
           <h2 className="text-[28px] font-medium text-bone">
             Published rates. No surprises.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+          <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
             We believe you should know what something costs before you commit.
             Our rates are public, our invoices are clear, and we don&apos;t
             bill for problems we created.
@@ -359,7 +360,7 @@ export default async function HomePage() {
       <section className="border-t border-bone/10 px-6 py-24 text-center">
         <div className="mx-auto max-w-xl">
           <h2 className="text-2xl font-medium text-bone">Ready to end the confusion?</h2>
-          <p className="mt-4 text-bone/50">
+          <p className="mt-4 text-bone/60">
             Book a free initial consultation. We&apos;ll tell you what we see,
             what it would cost to fix, and whether we&apos;re the right fit.
             No sales pitch. No obligation.

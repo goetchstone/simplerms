@@ -81,7 +81,7 @@ export default async function NonprofitsPage() {
             {painPoints.map((p) => (
               <div key={p.heading} className="space-y-2">
                 <h2 className="text-sm font-medium text-bone">{p.heading}</h2>
-                <p className="text-sm leading-relaxed text-bone/50">{p.body}</p>
+                <p className="text-base leading-relaxed text-bone/60">{p.body}</p>
               </div>
             ))}
           </div>
@@ -98,7 +98,7 @@ export default async function NonprofitsPage() {
             <h2 className="text-[28px] font-medium text-bone">
               Same services. Same standards. Reduced rate.
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
+            <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               We don&apos;t offer a stripped-down &ldquo;nonprofit tier.&rdquo;
               You get the same Apple Business setup, MDM deployment, Google
               Workspace configuration, and knowledge transfer that our business
@@ -159,7 +159,7 @@ export default async function NonprofitsPage() {
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-sm font-medium text-bone">{s.title}</h3>
-                  <p className="text-sm leading-relaxed text-bone/50">{s.body}</p>
+                  <p className="text-base leading-relaxed text-bone/60">{s.body}</p>
                 </div>
               </div>
             ))}
@@ -170,7 +170,7 @@ export default async function NonprofitsPage() {
       {/* Honest note */}
       <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-16">
         <div className="mx-auto max-w-[720px] text-center">
-          <p className="text-sm leading-relaxed text-bone/50">
+          <p className="text-base leading-relaxed text-bone/60">
             We won&apos;t work for free — our team earns living wages and
             that&apos;s non-negotiable. But we will find a number that works for
             both of us. If we can&apos;t, we&apos;ll tell you and point you
@@ -184,7 +184,7 @@ export default async function NonprofitsPage() {
         <h2 className="text-2xl font-medium text-bone">
           Tell us about your organization
         </h2>
-        <p className="mx-auto mt-4 max-w-lg text-bone/50">
+        <p className="mx-auto mt-4 max-w-lg text-bone/60">
           No pitch, no pressure. We&apos;ll listen to what you&apos;re dealing
           with and tell you honestly whether we can help.
         </p>
