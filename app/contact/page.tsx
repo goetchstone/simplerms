@@ -87,9 +87,9 @@ export default async function ContactPage() {
                     <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-conviction/60" />
                     <div>
                       <p className="font-medium text-bone">
-                        18 Pine Tree Rd
+                        Connecticut
                       </p>
-                      <p>Moodus, CT 06469</p>
+                      <p>On-site service · We come to you</p>
                     </div>
                   </div>
                 </div>
