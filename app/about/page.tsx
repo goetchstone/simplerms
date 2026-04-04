@@ -117,6 +117,8 @@ export default async function AboutPage() {
                 >
                   MacAdmins Foundation donor
                 </a>
+                <span className="text-bone/20">·</span>
+                <span>Fully insured</span>
               </div>
             </div>
           </div>

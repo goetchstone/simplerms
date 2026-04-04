@@ -56,6 +56,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
               <li>No partnership revenue or kickbacks</li>
               <li>No vendor lock-in, ever</li>
               <li>Living wages for every team member</li>
+              <li>Fully insured — COI available on request</li>
             </ul>
             <div className="pt-2">
               <a

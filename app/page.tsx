@@ -159,7 +159,7 @@ export default async function HomePage() {
           >
             PSU MacAdmins
           </a>
-          {" "}workshop instructor
+          {" "}workshop instructor · Fully insured
         </p>
       </section>
 
