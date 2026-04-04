@@ -11,27 +11,18 @@ import { db } from "@/server/db";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Apple Business & MDM, infrastructure planning, data migration, Google Workspace, ongoing IT partnership, vendor management. Every service leaves you more independent.",
+    "Apple Business setup, MDM deployment & migration, Google Workspace, and Mac management training for Windows-native IT teams. We set it up, train your team, you own it.",
   alternates: { canonical: "https://akritos.com/services" },
 };
 import {
   ArrowRight,
   MonitorSmartphone,
-  Server,
-  Wrench,
+  Laptop,
   Globe,
-  Handshake,
   CreditCard,
-  ArrowRightLeft,
-  Phone,
-  ShoppingCart,
-  Lock,
-  FileCheck,
-  Camera,
-  CloudOff,
-  GraduationCap,
   Crown,
-  Calculator,
+  Wrench,
+  GraduationCap,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -43,110 +34,95 @@ async function getCompanyName() {
   }
 }
 
-// Core 3 — what we lead with, what people search for, what we have proven track record on.
 const coreServices = [
   {
     icon: MonitorSmartphone,
-    title: "Apple Business & MDM",
-    description: "Apple Business enrollment, managed Apple IDs, automated device enrollment, and the right MDM for your team — Mosyle, Jamf, Kandji, Addigy. We configure it once, correctly, so every device your team opens is ready to work. We don't take partnership revenue from any vendor. Your stack, your choice.",
+    title: "Apple Business Setup",
+    description: "Apple Business Manager is the foundation everything else builds on. We handle registration, verification, managed Apple ID provisioning, and Automated Device Enrollment so every device your team opens is enrolled and secured before they touch it. Identity federation with Google Workspace or Azure AD means one login, everywhere.",
     details: [
-      "Apple Business registration and configuration",
-      "Automated Device Enrollment (ADE)",
-      "Managed Apple ID provisioning with identity federation",
+      "Apple Business Manager registration and verification",
+      "Managed Apple ID provisioning",
+      "Identity federation with Google Workspace or Azure AD",
+      "Automated Device Enrollment (ADE) configuration",
+      "Volume purchasing and app distribution",
+      "APNS certificate and token management",
+    ],
+  },
+  {
+    icon: Laptop,
+    title: "MDM Setup & Migration",
+    description: "Mosyle, Jamf, Iru, Addigy — we evaluate each for your environment and deploy the right one. Not whatever pays us the most. Already running Intune? Keep it for Windows — it's great at that. We deploy a purpose-built Apple MDM alongside it and connect the two so your team has one view across both platforms.",
+    details: [
       "MDM platform evaluation — fit, not kickbacks",
       "Zero-touch deployment for new hires",
-      "App distribution and patch management",
-      "Migration from existing MDM if needed",
+      "Apple MDM deployed alongside Intune for Windows",
+      "Migration from existing MDM or from no MDM",
+      "App deployment, patching, and security policy configuration",
+      "Unified device visibility across Intune + Apple MDM",
     ],
   },
   {
-    icon: Server,
-    title: "Infrastructure & Networking",
-    description: "We plan the architecture, spec the hardware, and coordinate the people who install it. Wi-Fi, switching, VLANs, firewalls, cabling layout — designed for your space, your team size, and your budget. For ongoing network management, we connect you with trusted co-managed partners. You own every piece of hardware.",
+    icon: Globe,
+    title: "Google Workspace Setup",
+    description: "Google Workspace, domain, email, SSO, and directory — configured correctly from day one and federated with Apple Business Manager for seamless identity. You own the domain, you own the accounts, you hold the keys. We handle SPF, DKIM, DMARC so your email actually arrives.",
     details: [
-      "Network architecture and design",
-      "Wi-Fi planning — coverage, capacity, AP placement",
-      "Switching, VLANs, and network segmentation",
-      "Firewall selection and configuration",
-      "Cabling layout planning and installer coordination",
-      "New location IT buildouts — wiring, phones, Wi-Fi, vendor coordination",
-      "Co-managed partner vetting and onboarding for ongoing network ops",
-    ],
-  },
-  {
-    icon: ArrowRightLeft,
-    title: "Data Migration",
-    description: "Trapped in a system that doesn't work? We get your data out. Clean exports, format conversions, validation, and import into whatever comes next. No data left behind, no vendor holding you hostage.",
-    details: [
-      "Full data extraction from legacy systems",
-      "Format conversion and data cleanup",
-      "Validation and integrity verification",
-      "Import into new platforms with zero data loss",
-      "Parallel running and cutover planning",
-      "FileMaker, Access, and legacy database migration",
+      "Google Workspace deployment and domain configuration",
+      "SSO and identity provider setup",
+      "Identity federation with Apple Business Manager",
+      "DNS and email authentication (SPF, DKIM, DMARC)",
+      "User lifecycle automation",
+      "Domain registration and management",
     ],
   },
 ];
 
-// Extended 3 — natural follow-ons that keep clients.
-const extendedServices = [
-  {
-    icon: Globe,
-    title: "Google Workspace & Email",
-    description: "Google Workspace, Microsoft 365, DNS, email routing, SSO — set up correctly from day one. You own the domain, you own the accounts, you hold the keys. We handle SPF, DKIM, DMARC so your email doesn't land in spam.",
-    details: [
-      "Google Workspace or Microsoft 365 deployment",
-      "SSO and identity provider configuration",
-      "DNS and email authentication (SPF, DKIM, DMARC)",
-      "Domain registration and management",
-      "User lifecycle automation",
-    ],
-  },
-  {
-    icon: Handshake,
-    title: "Ongoing IT Partnership",
-    description: "Technology leadership without the six-figure salary. We attend the meetings that matter, handle architecture decisions, vendor negotiations, and the projects that need senior experience. Your team handles the day-to-day — we handle the hard stuff.",
-    details: [
-      "Technology strategy and roadmap",
-      "Vendor evaluation and contract review",
-      "Escalation support for your IT team",
-      "Budget planning and cost optimization",
-      "Knowledge transfer — we teach, not hoard",
-      "Quarterly technology reviews",
-    ],
-  },
+const advisoryServices = [
   {
     icon: CreditCard,
-    title: "Vendor Management",
-    description: "Are you overpaying? Locked into a bad contract? We audit your vendor stack, negotiate better rates, review exit clauses, and make sure you can walk away when you need to. We work for you, not the vendor.",
+    title: "Payment Processing & PCI Scope Reduction",
+    description: "Most businesses are in a broader PCI scope than necessary and paying higher card processing rates than they should. We audit your current setup, negotiate better rates, and reduce your compliance surface. Less scope means lower audit costs, fewer requirements, and reduced breach liability.",
+    details: [
+      "Payment processing rate audit and negotiation",
+      "PCI scope assessment and reduction planning",
+      "SAQ level optimization (C/D → A/A-EP where possible)",
+      "Tokenization and scope-reducing architecture guidance",
+      "Processor contract review and competitive benchmarking",
+    ],
+  },
+  {
+    icon: Crown,
+    title: "Executive IT",
+    description: "C-suite runs on Apple. Home office network, devices, security, and seamless integration with the company environment. Discreet, thorough, and available when they need it — not when the help desk gets around to it.",
+    details: [
+      "Home office network and Wi-Fi optimization",
+      "Personal and company device management",
+      "Security hardening for high-profile targets",
+      "Seamless integration with corporate environment",
+      "Priority response and direct access",
+    ],
+  },
+  {
+    icon: Wrench,
+    title: "IT Advisory",
+    description: "Vendor negotiations, contract reviews, architecture planning, and the hard questions that need senior experience. No retainer required. We work for you, not the vendor.",
     details: [
       "Vendor audit and cost analysis",
       "Contract review and exit clause analysis",
-      "Payment processor rate negotiation",
-      "Vendor consolidation and cost reduction",
+      "Architecture and infrastructure planning",
+      "Technology strategy and roadmap",
       "RFP development and vendor selection",
     ],
   },
 ];
 
-// Everything else — listed compactly, not full service cards.
-const alsoServices = [
-  { icon: Wrench, title: "Legacy App Modernization", description: "FileMaker, Access, ancient spreadsheets — we migrate your data and build modern replacements." },
-  { icon: ShoppingCart, title: "E-Commerce & POS", description: "Shopify, Square, Toast, Clover — setup, integration, and payment rate negotiation." },
-  { icon: Phone, title: "VoIP & Phone Systems", description: "Modern phone systems at a fraction of legacy costs. Migration, porting, call flow design." },
-  { icon: Lock, title: "Security Posture", description: "Endpoint protection, encryption enforcement, MFA, backup verification, incident response planning." },
-  { icon: FileCheck, title: "Compliance Guidance", description: "PCI, HIPAA scope reduction, practical risk assessment. We connect you with auditors when needed." },
-  { icon: Calculator, title: "Accounting Integration", description: "QuickBooks, Xero, payroll, inventory — connected so the data flows without manual entry." },
-  { icon: Camera, title: "Camera & Physical Security", description: "Ubiquiti, Verkada — designed, installed, and configured. You own and control the system." },
-  { icon: CloudOff, title: "Business Continuity", description: "Disaster recovery planning, backup testing, ransomware response. Actually tested, not just documented." },
-  { icon: GraduationCap, title: "Staff Training", description: "Security awareness, tool training, onboarding/offboarding checklists." },
-  { icon: Crown, title: "White Glove Executive IT", description: "Home office, network, and device management for executives. Discreet, thorough, referral-only." },
-];
-
 const allServiceNames = [
   ...coreServices.map((s) => ({ name: s.title, description: s.description })),
-  ...extendedServices.map((s) => ({ name: s.title, description: s.description })),
-  ...alsoServices.map((s) => ({ name: s.title, description: s.description })),
+  {
+    name: "Mac Management Training for Windows Teams",
+    description:
+      "We train your Windows-native IT team to manage Apple devices with MDM. Not outsourced IT — IT team enablement. Independence in 60-90 days.",
+  },
+  ...advisoryServices.map((s) => ({ name: s.title, description: s.description })),
 ];
 
 export default async function ServicesPage() {
@@ -165,12 +141,12 @@ export default async function ServicesPage() {
           Services
         </p>
         <h1 className="text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl">
-          What we actually do
+          Apple device management, done right
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Every service is designed to leave you more independent than we found
-          you. We set it up right, we transfer the knowledge, and you own the
-          result.
+          Apple Business, MDM, Google Workspace — set up right and handed off to
+          your team. We train Windows-native IT teams to own their Apple
+          environment.
         </p>
       </section>
 
@@ -209,14 +185,114 @@ export default async function ServicesPage() {
         </div>
       </section>
 
-      {/* Extended Services */}
+      {/* Mac Management Training — the differentiator */}
       <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-24">
         <div className="mx-auto max-w-[1200px]">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            The Differentiator
+          </p>
+          <div className="mb-12">
+            <div className="mb-4 flex items-center gap-3">
+              <GraduationCap className="h-5 w-5 text-conviction" strokeWidth={1.5} />
+              <h2 className="text-2xl font-medium text-bone">
+                Mac management training for Windows teams
+              </h2>
+            </div>
+            <p className="max-w-2xl text-sm leading-relaxed text-bone/60">
+              Your IT team knows Windows — Group Policy, SCCM, Active Directory.
+              Then the company buys Macs and nothing transfers. MDM is not Group
+              Policy. Apple IDs are not AD accounts. The management model is
+              fundamentally different. We bridge that gap.
+            </p>
+          </div>
+
+          <div className="grid gap-12 lg:grid-cols-2">
+            <div>
+              <h3 className="mb-6 text-sm font-medium uppercase tracking-[0.15em] text-bone/40">
+                What we teach
+              </h3>
+              <ul className="space-y-3">
+                {[
+                  "How MDM works vs. Group Policy — the mental model shift",
+                  "Apple Business Manager and device enrollment workflows",
+                  "MDM console operation — profiles, policies, app deployment",
+                  "macOS security model vs. Windows security model",
+                  "Troubleshooting Mac-specific issues your team will actually hit",
+                  "Ongoing self-sufficiency — new hires, offboarding, OS updates",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-bone/50">
+                    <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="mb-6 text-sm font-medium uppercase tracking-[0.15em] text-bone/40">
+                How it works
+              </h3>
+              <ul className="space-y-3">
+                {[
+                  "We set up Apple Business + MDM alongside your team",
+                  "Hands-on training during the deployment, not a separate class",
+                  "Your team operates the MDM console from day one",
+                  "Knowledge transfer documentation specific to your environment",
+                  "Post-training support period for questions that come up in practice",
+                  "Goal: your team runs this independently within 60–90 days",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-bone/50">
+                    <span className="mt-1 block h-1 w-1 shrink-0 rounded-full bg-conviction/60" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Callout */}
+          <div
+            className="mt-12 border border-conviction/20 bg-midnight p-6"
+            style={{ borderRadius: "2px" }}
+          >
+            <p className="text-sm leading-relaxed text-bone/60">
+              <span className="font-medium text-bone">This is NOT outsourced IT.</span>{" "}
+              We don&apos;t want to manage your Macs forever. We want your team
+              to be confident managing them. We set it up, we train your people,
+              you own it.
+            </p>
+            <p className="mt-3 text-xs text-bone/30">
+              Goetch Stone presented a{" "}
+              <a
+                href="https://bpb-us-e1.wpmucdn.com/sites.psu.edu/dist/4/24696/files/2025/08/psumac2025-873049-Apple-Device-Administration-Essentials-A-Beginners-Guide.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-conviction/60 underline underline-offset-2 hover:text-conviction"
+              >
+                hands-on workshop
+              </a>{" "}
+              on exactly this topic at the{" "}
+              <a
+                href="https://macadmins.psu.edu/conference/resources/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-conviction/60 underline underline-offset-2 hover:text-conviction"
+              >
+                PSU MacAdmins Conference
+              </a>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Advisory Services */}
+      <section className="border-t border-bone/10 px-6 py-24">
+        <div className="mx-auto max-w-[1200px]">
           <p className="mb-12 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-            Ongoing Partnership
+            Advisory &amp; Specialized
           </p>
           <div className="space-y-20">
-            {extendedServices.map((s) => {
+            {advisoryServices.map((s) => {
               const Icon = s.icon;
               return (
                 <div key={s.title} className="grid gap-8 lg:grid-cols-2">
@@ -237,33 +313,6 @@ export default async function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Also Services — compact grid */}
-      <section className="border-t border-bone/10 px-6 py-24">
-        <div className="mx-auto max-w-[1200px]">
-          <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-            We Also Do
-          </p>
-          <p className="mb-12 text-sm text-bone/40">
-            Not every engagement needs these — but when yours does, we handle it.
-          </p>
-          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-            {alsoServices.map((s) => {
-              const Icon = s.icon;
-              return (
-                <div
-                  key={s.title}
-                  className="bg-midnight p-6 transition-colors hover:bg-slate-brand/20"
-                >
-                  <Icon className="mb-3 h-4 w-4 text-conviction" strokeWidth={1.5} />
-                  <h3 className="mb-2 text-sm font-medium text-bone">{s.title}</h3>
-                  <p className="text-xs leading-relaxed text-bone/40">{s.description}</p>
                 </div>
               );
             })}

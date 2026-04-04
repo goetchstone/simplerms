@@ -11,18 +11,18 @@ import { db } from "@/server/db";
 import {
   ArrowRight,
   MonitorSmartphone,
-  Server,
+  Laptop,
   CreditCard,
   Globe,
-  Handshake,
-  ArrowRightLeft,
+  GraduationCap,
+  Crown,
   CheckCircle,
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Akritos — Technology Partners for Small Business",
+  title: "Akritos — Apple MDM & Mac Management for Business",
   description:
-    "Technology consulting that leaves you independent. Apple Business, MDM, infrastructure, data migration, vendor management. Published rates, zero vendor markup, no lock-in. Free consultation.",
+    "Apple Business setup, MDM deployment, Google Workspace, and Mac management training for Windows-native IT teams. Published rates, zero vendor markup, no lock-in. Free consultation.",
   alternates: { canonical: "https://akritos.com" },
 };
 
@@ -38,33 +38,33 @@ async function getCompanyName() {
 const services = [
   {
     icon: MonitorSmartphone,
-    title: "Apple Business & MDM",
-    body: "Apple Business setup, the right MDM for your team — Mosyle, Jamf, Kandji — chosen for fit, not kickbacks. We don't take partnership revenue. Your stack, your choice.",
+    title: "Apple Business Setup",
+    body: "Apple Business Manager, managed Apple IDs, Automated Device Enrollment, identity federation. The foundation everything else builds on. We handle registration through deployment.",
   },
   {
-    icon: Server,
-    title: "Infrastructure & Networking",
-    body: "Wi-Fi that works, switches that don't bottleneck, networks that scale. We plan the architecture, spec the hardware, and coordinate the installers. For ongoing management, we vet and onboard trusted partners.",
-  },
-  {
-    icon: ArrowRightLeft,
-    title: "Data Migration",
-    body: "Trapped in a system that doesn't work? We get your data out — clean exports, format conversions, zero data loss. No vendor holding you hostage.",
+    icon: Laptop,
+    title: "MDM Setup & Migration",
+    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. Already running Intune? Keep it for Windows. We deploy Apple MDM alongside it and connect the two.",
   },
   {
     icon: Globe,
-    title: "Google Workspace & Email",
-    body: "Google Workspace, Microsoft 365, DNS, email — set up correctly from day one. You own the domain, you own the accounts, you have the keys.",
+    title: "Google Workspace Setup",
+    body: "Domain, email, SSO, identity federation with Apple Business Manager. SPF, DKIM, DMARC. You own the domain, you own the accounts, you hold the keys.",
   },
   {
-    icon: Handshake,
-    title: "Ongoing IT Partnership",
-    body: "Technology leadership without the six-figure salary. We handle architecture decisions, vendor negotiations, and the projects that need senior experience. Your team handles the day-to-day.",
+    icon: GraduationCap,
+    title: "Mac Training for Windows Teams",
+    body: "Your IT team knows Windows. We teach them Apple. MDM vs. Group Policy, Apple IDs vs. AD, the whole mental model shift. We set it up, train your people, you own it.",
   },
   {
     icon: CreditCard,
-    title: "Vendor Management",
-    body: "Are you overpaying? Locked into a bad contract? We audit your vendor stack, negotiate better rates, and make sure you can walk away when you need to.",
+    title: "PCI & Payment Processing",
+    body: "Better card rates, smaller PCI compliance surface. Most businesses are in a broader scope than necessary and paying more than they should. We fix both.",
+  },
+  {
+    icon: Crown,
+    title: "Executive IT",
+    body: "C-suite runs on Apple. Home office, devices, network, security — discreet, thorough, and available when they need it. Not when the help desk gets around to it.",
   },
 ];
 
@@ -107,10 +107,10 @@ export default async function HomePage() {
           <span className="text-conviction">We end it.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/60">
-          Locked into vendors who profit from your dependency. Overwhelmed by
-          technology decisions designed to confuse you. We partner with small
-          businesses to build technology they own — and tell them the truth
-          even when it&apos;s hard to hear.
+          Your IT team knows Windows. Then the company buys Macs and everything
+          they know stops applying. We set up Apple Business, deploy the right
+          MDM, configure Google Workspace, and train your team to own it
+          all — so you never depend on us.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -151,14 +151,14 @@ export default async function HomePage() {
           </Link>
           {" "}· 20+ years in IT · Based in Connecticut ·{" "}
           <a
-            href="https://psumac.com"
+            href="https://macadmins.psu.edu/conference/resources/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-2 hover:text-bone/40"
           >
             PSU MacAdmins
           </a>
-          {" "}speaker
+          {" "}workshop instructor
         </p>
       </section>
 
@@ -194,11 +194,12 @@ export default async function HomePage() {
               What We Do
             </p>
             <h2 className="text-[28px] font-medium text-bone">
-              Technology consulting that leaves you independent
+              Apple device management, done right and handed off
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/50">
-              Every service we offer is designed with one goal: you own it, you
-              control it, you can walk away from any vendor — including us.
+              We set up Apple Business, deploy MDM, configure Google Workspace,
+              and train your Windows-native IT team to run it all. Then we get
+              out of the way.
             </p>
           </div>
           <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">

@@ -12,7 +12,7 @@ import { ArrowRight, Check, X } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Published rates, no surprises. Setup projects quoted flat. Managed Apple & MDM at $50/user/month. Advisory at $225/hr. Vendor costs pass through at cost — zero markup.",
+    "Published rates, no surprises. Apple Business & MDM setup quoted flat. Managed Apple device management at $50/user/month. Advisory and training at $225/hr. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -31,19 +31,20 @@ const tiers = [
     price: "Quoted",
     unit: "per project",
     description:
-      "Apple Business, MDM, Google Workspace, infrastructure planning — scoped, quoted, and delivered at a fixed price. You know the number before we start.",
+      "Apple Business, MDM, Google Workspace — scoped, quoted, and delivered at a fixed price. Includes hands-on training for your IT team. You know the number before we start.",
     features: [
-      "Apple Business + MDM rollout",
-      "Google Workspace + domain + email",
-      "Infrastructure planning and vendor coordination",
-      "Identity federation and SSO",
-      "Data migration from legacy systems",
+      "Apple Business Manager setup and configuration",
+      "MDM deployment — Mosyle, Jamf, Iru, Addigy",
+      "MDM migration from Intune or other platforms",
+      "Google Workspace + domain + email + SSO",
+      "Identity federation (Apple Business ↔ Google/Azure)",
+      "Mac management training for your IT team",
       "Full documentation and knowledge transfer",
     ],
     examples: [
       { label: "Apple Business + MDM (10 users)", range: "$4,000 – 5,000" },
       { label: "Google Workspace + domain", range: "$1,200 – 1,500" },
-      { label: "Full stack setup (10 users)", range: "$6,000 – 8,000" },
+      { label: "Full stack + team training (10 users)", range: "$7,000 – 9,000" },
     ],
     cta: "Book a free consultation",
     href: "/book",
@@ -54,12 +55,13 @@ const tiers = [
     price: "$50",
     unit: "/ user / month",
     description:
-      "Ongoing Apple Business and MDM management. Device enrollment, app deployment, security policies, quarterly reviews. No RMM agents — we manage through MDM, no extra attack surface.",
+      "Ongoing Apple Business and MDM management. Device enrollment, app deployment, security policies, quarterly reviews. Your IT team handles day-to-day with our backup. No RMM agents — we manage through MDM, no extra attack surface.",
     features: [
       "Device enrollment and offboarding",
       "App deployment and updates",
       "Security policy management",
       "Quarterly environment reviews",
+      "Escalation support for your IT team",
       "Priority response for managed clients",
       "MDM license billed separately at cost",
       "Minimum 5 users",
@@ -79,14 +81,16 @@ const tiers = [
     price: "$225",
     unit: "/ hour",
     description:
-      "Vendor negotiations, architecture planning, contract reviews, one-off consulting. Senior-level expertise when you need it, no retainer required.",
+      "Payment processing rate negotiation, PCI scope reduction, vendor audits, architecture planning, executive IT. Senior-level expertise when you need it, no retainer required.",
     features: [
       "No contract or minimum hours",
+      "Payment processor rate negotiation",
+      "PCI scope assessment and reduction",
       "Vendor audit and cost analysis",
-      "Architecture and infrastructure planning",
       "Contract review and negotiation",
+      "Architecture and infrastructure planning",
+      "Executive IT support",
       "Remote and on-site available",
-      "Emergency response available",
     ],
     examples: null,
     cta: "Book a session",
@@ -106,7 +110,7 @@ const faqs = [
   },
   {
     q: "What's the difference between managed and advisory?",
-    a: "Managed is ongoing Apple & MDM management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, project, or negotiation. Many clients use both.",
+    a: "Managed is ongoing Apple & MDM management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, payment processor negotiation, or project. Many clients use both.",
   },
   {
     q: "Why no RMM agents?",
@@ -123,6 +127,18 @@ const faqs = [
   {
     q: "Do you charge for initial consultations?",
     a: "No. The first conversation is always free. We'll tell you what we see, what it would cost, and whether we're the right fit. If we're not, we'll tell you that too.",
+  },
+  {
+    q: "Do you replace our IT team?",
+    a: "No. We train them. Most clients have competent Windows-native IT teams that just lack Apple experience. We set up the infrastructure, train the team on MDM and Apple Business Manager, and get out of the way. The goal is your team running this independently within 60–90 days.",
+  },
+  {
+    q: "We already use Intune. Do we have to get rid of it?",
+    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its ABM integration is shallow. As the Mac fleet grows, the gap widens. We connect both platforms so your team has one view across Windows and Mac.",
+  },
+  {
+    q: "What does PCI scope reduction actually save?",
+    a: "Most businesses we audit are in SAQ C or D when they could be in SAQ A or A-EP. That's the difference between a full audit with quarterly scans and a simple self-assessment. Less scope means lower audit costs, fewer compliance requirements, and reduced breach liability. The rate negotiation usually pays for our time on its own.",
   },
   {
     q: "Do you require long-term contracts?",
@@ -249,7 +265,7 @@ export default async function PricingPage() {
                 <span className="text-bone">$60.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
-                <span>Advisory — vendor contract review, 2 hrs</span>
+                <span>Advisory — payment processor rate negotiation, 2 hrs</span>
                 <span className="text-bone">$450.00</span>
               </div>
               <div className="mt-3 flex justify-between border-t border-bone/10 pt-3 font-medium">

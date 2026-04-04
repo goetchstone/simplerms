@@ -12,7 +12,7 @@ import { ArrowRight, CheckCircle, Mail } from "lucide-react";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Goetch Stone — 20+ years in IT. Started at an MSP, became Director of IT for a multi-location retailer, PSU MacAdmins speaker. Founded Akritos to fix what's broken in the industry.",
+    "Goetch Stone — 20+ years in IT, PSU MacAdmins workshop instructor. Started at an MSP, became Director of IT for a multi-location retailer. Founded Akritos to fix what's broken in the industry.",
   alternates: { canonical: "https://akritos.com/about" },
 };
 
@@ -101,12 +101,12 @@ export default async function AboutPage() {
               </p>
               <div className="mt-4 flex flex-wrap gap-3 text-xs text-bone/40">
                 <a
-                  href="https://psumac.com"
+                  href="https://bpb-us-e1.wpmucdn.com/sites.psu.edu/dist/4/24696/files/2025/08/psumac2025-873049-Apple-Device-Administration-Essentials-A-Beginners-Guide.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="border-b border-bone/20 hover:border-conviction hover:text-conviction"
                 >
-                  PSU MacAdmins Conference speaker
+                  PSU MacAdmins workshop instructor
                 </a>
                 <span className="text-bone/20">·</span>
                 <a
@@ -168,13 +168,22 @@ export default async function AboutPage() {
                 Community
               </p>
               <p className="mt-1 text-sm font-medium text-bone">
-                Speaker &amp; Donor
+                Workshop Instructor &amp; Donor
               </p>
             </div>
             <p className="text-sm leading-relaxed text-bone/60">
-              Speaker at the{" "}
+              Presented a{" "}
               <a
-                href="https://psumac.com"
+                href="https://bpb-us-e1.wpmucdn.com/sites.psu.edu/dist/4/24696/files/2025/08/psumac2025-873049-Apple-Device-Administration-Essentials-A-Beginners-Guide.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-bone/80 underline underline-offset-2 hover:text-conviction"
+              >
+                hands-on workshop
+              </a>{" "}
+              on Apple Device Administration at the{" "}
+              <a
+                href="https://macadmins.psu.edu/conference/resources/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-bone/80 underline underline-offset-2 hover:text-conviction"
@@ -182,7 +191,9 @@ export default async function AboutPage() {
                 PSU MacAdmins Conference
               </a>{" "}
               at Penn State — the premier conference for Apple enterprise and
-              education IT professionals. Donor to the{" "}
+              education IT professionals. Covering everything from DUNS
+              registration through ABM setup, MDM selection, and zero-touch
+              deployment. Donor to the{" "}
               <a
                 href="https://www.macadmins.org"
                 target="_blank"
@@ -191,9 +202,7 @@ export default async function AboutPage() {
               >
                 MacAdmins Foundation
               </a>
-              , supporting community education and open-source tooling. The best
-              way to stay sharp is to teach, and the best way to earn trust is
-              to give knowledge away.
+              , supporting community education and open-source tooling.
             </p>
           </div>
         </div>
