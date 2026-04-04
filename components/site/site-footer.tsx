@@ -42,6 +42,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">Company</p>
             <ul className="space-y-2 text-sm text-bone/60">
               <li><Link href="/about" className="hover:text-conviction">About Goetch Stone</Link></li>
+              <li><Link href="/blog" className="hover:text-conviction">Blog</Link></li>
               <li><Link href="/contact" className="hover:text-conviction">Contact</Link></li>
               <li><Link href="/support" className="hover:text-conviction">Get support</Link></li>
             </ul>
