@@ -172,14 +172,15 @@ export default async function HomePage() {
             Akritos means unwatered.
           </h2>
           <p className="text-base leading-relaxed text-bone/60">
-            The Ancient Greeks watered down their wine. Akritos wine
-            was full strength. Uncut. The real thing.
+            From the Ancient Greek <em>ἄκριτος</em>. The Greeks
+            watered down their wine. Akritos wine was full
+            strength — uncut, undiluted, the real thing.
           </p>
           <p className="text-base leading-relaxed text-bone/60">
-            That&apos;s the consulting we deliver. No filler. No
-            padded hours. No recommending things you don&apos;t need
-            so we can bill more. Full strength, or we don&apos;t
-            show up.
+            Most IT consulting is watered down. Padded hours.
+            Unnecessary recommendations. Vendor kickbacks baked
+            into the price. We don&apos;t do any of that.
+            Full strength, or we don&apos;t show up.
           </p>
         </div>
       </section>
