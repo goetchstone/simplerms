@@ -170,20 +170,17 @@ export default async function HomePage() {
             The Name
           </p>
           <h2 className="text-[28px] font-medium text-bone">
-            Akritos means undiluted.
+            Akritos means unwatered.
           </h2>
           <p className="text-base leading-relaxed text-bone/60">
-            From the Ancient Greek <em>ἄκριτος</em> — unseparated,
-            unwatered. The Greeks diluted their wine. Akritos wine was
-            full strength, uncut. When we asked AI what it meant, it
-            said &ldquo;uncompromising.&rdquo; We ran with the name.
-            Then we looked it up ourselves.
+            The Ancient Greeks watered down their wine. Akritos wine
+            was full strength. Uncut. The real thing.
           </p>
           <p className="text-base leading-relaxed text-bone/60">
-            Turns out the real meaning was better. No watered-down
-            advice. No filler engagements. No recommending things you
-            don&apos;t need so we can bill more. Unseparated from your
-            team, undiluted in what we deliver. That&apos;s the model.
+            That&apos;s the consulting we deliver. No filler. No
+            padded hours. No recommending things you don&apos;t need
+            so we can bill more. Full strength, or we don&apos;t
+            show up.
           </p>
         </div>
       </section>
