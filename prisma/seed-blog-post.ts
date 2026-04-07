@@ -13,7 +13,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "In the summer of 2021, we partnered with a regional apparel retailer. We'd been running a solid apparel business for over a decade, and while it showed a profit on paper, it was draining us on cash flow. The idea was to bring in a seasoned retail partner to fix the cash issues and grow the business.",
+      "In the summer of 2021, the company I was running IT for partnered with a regional apparel retailer. We'd been running the apparel side for over a decade, and while it showed a profit on paper, it was draining us on cash flow. The idea was to bring in a seasoned retail partner to fix the cash issues and grow the business.",
   },
   {
     type: "paragraph",
@@ -122,7 +122,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "Created a temporary WPA3 network. Pushed a new configuration profile to my managed devices. Noted the four devices that didn't receive it. Reconfigured the primary network to WPA3. Sent a new profile to my fleet with the updated settings. Noted any devices that missed the payload. Removed the temporary network.",
+      "Created a temporary WPA3 network. Pushed a new configuration profile to our managed devices. Noted the four devices that didn't receive it. Reconfigured the primary network to WPA3. Sent a new profile to the fleet with the updated settings. Noted any devices that missed the payload. Removed the temporary network.",
   },
   {
     type: "paragraph",

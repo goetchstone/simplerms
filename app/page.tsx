@@ -110,8 +110,7 @@ export default async function HomePage() {
           Your IT team knows Windows. Then the company buys Macs and everything
           they know stops applying. We set up Apple Business, deploy the right
           MDM, configure Google Workspace, and train your team to own it
-          all — and you can run it without us. Most clients don&apos;t
-          want to, and that&apos;s the point.
+          all — so you can run it yourself, even if you choose not to.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -197,8 +196,8 @@ export default async function HomePage() {
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
               We set up Apple Business, deploy MDM, configure Google Workspace,
-              and train your Windows-native IT team to run it all. Then we
-              stay because you want us to, not because you have to.
+              and train your Windows-native IT team to run it all. You decide
+              what happens after that.
             </p>
           </div>
           <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">
@@ -232,7 +231,7 @@ export default async function HomePage() {
         <blockquote className="mx-auto max-w-2xl text-center">
           <p className="text-2xl font-medium leading-relaxed text-bone sm:text-3xl">
             &ldquo;We don&apos;t profit from your confusion.
-            We profit from your trust.&rdquo;
+            We profit when you choose to keep us.&rdquo;
           </p>
           <footer className="mt-4 text-sm text-bone/30">
             — Goetch Stone, Founder
