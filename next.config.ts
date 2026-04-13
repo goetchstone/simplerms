@@ -1,6 +1,8 @@
 // next.config.ts
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   output: "standalone",
 
@@ -23,10 +25,11 @@ const nextConfig: NextConfig = {
           key: "Content-Security-Policy",
           value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline'",
+            // React dev mode requires unsafe-eval for error overlay stack traces.
+            `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https://images.unsplash.com",
-            "connect-src 'self' https://js.stripe.com",
+            `connect-src 'self' https://js.stripe.com${isDev ? " ws://localhost:*" : ""}`,
             "font-src 'self'",
             "frame-src https://js.stripe.com",
             "frame-ancestors 'none'",

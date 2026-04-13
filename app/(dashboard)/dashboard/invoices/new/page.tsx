@@ -11,7 +11,7 @@ export default async function NewInvoicePage({ searchParams }: Props) {
   const caller = await createCachedCaller();
 
   const [clients, taxRates] = await Promise.all([
-    caller.crm.listClients({ page: 1, limit: 200 }),
+    caller.crm.listClients({ page: 1, limit: 100 }),
     caller.tax.list({ includeInactive: false }),
   ]);
 

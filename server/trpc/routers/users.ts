@@ -83,6 +83,87 @@ export const usersRouter = createTRPCRouter({
       };
     }),
 
+  // Any authenticated user can update their own name/email.
+  updateProfile: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1).max(255),
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      if (input.email !== ctx.session.user.email) {
+        const existing = await ctx.db.user.findUnique({ where: { email: input.email } });
+        if (existing && existing.id !== userId) {
+          throw new TRPCError({ code: "CONFLICT", message: "Email already in use" });
+        }
+      }
+
+      const before = await ctx.db.user.findUniqueOrThrow({
+        where: { id: userId },
+        select: { name: true, email: true },
+      });
+
+      const user = await ctx.db.user.update({
+        where: { id: userId },
+        data: { name: input.name, email: input.email },
+        select: { id: true, name: true, email: true, role: true },
+      });
+
+      return {
+        ...user,
+        _audit: {
+          action: "users.updateProfile",
+          entityType: "User",
+          entityId: user.id,
+          before,
+          after: { name: input.name, email: input.email },
+        },
+      };
+    }),
+
+  // Admin can update any user's name and email.
+  update: adminProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        name: z.string().min(1).max(255),
+        email: z.string().email(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const before = await ctx.db.user.findUniqueOrThrow({
+        where: { id: input.id },
+        select: { name: true, email: true },
+      });
+
+      if (input.email !== before.email) {
+        const existing = await ctx.db.user.findUnique({ where: { email: input.email } });
+        if (existing && existing.id !== input.id) {
+          throw new TRPCError({ code: "CONFLICT", message: "Email already in use" });
+        }
+      }
+
+      const user = await ctx.db.user.update({
+        where: { id: input.id },
+        data: { name: input.name, email: input.email },
+        select: { id: true, name: true, email: true, role: true, isActive: true },
+      });
+
+      return {
+        ...user,
+        _audit: {
+          action: "users.update",
+          entityType: "User",
+          entityId: user.id,
+          before,
+          after: { name: input.name, email: input.email },
+        },
+      };
+    }),
+
   // Staff can change their own password.
   changePassword: protectedProcedure
     .input(

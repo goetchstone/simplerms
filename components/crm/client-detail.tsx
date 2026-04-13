@@ -5,16 +5,34 @@ import { useState } from "react";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { StatusBadge } from "@/components/ui/status-badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatDate } from "@/lib/utils";
-import { ChevronLeft, Plus, MessageSquare } from "lucide-react";
+import { ChevronLeft, Pencil, Plus, MessageSquare } from "lucide-react";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type ClientData = RouterOutputs["crm"]["clientById"];
 
+interface EditForm {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  notes: string;
+}
+
 export function ClientDetail({ initialData }: { initialData: ClientData }) {
   const [noteContent, setNoteContent] = useState("");
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState<EditForm>({ name: "", email: "", phone: "", company: "", notes: "" });
 
   const { data: client } = trpc.crm.clientById.useQuery(initialData.id, { initialData });
   const utils = trpc.useUtils();
@@ -25,6 +43,39 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
       setNoteContent("");
     },
   });
+
+  const updateClient = trpc.crm.updateClient.useMutation({
+    onSuccess: () => {
+      utils.crm.clientById.invalidate(initialData.id);
+      utils.crm.listClients.invalidate();
+      setEditOpen(false);
+    },
+  });
+
+  function openEdit() {
+    setEditForm({
+      name: c.name,
+      email: c.email ?? "",
+      phone: c.phone ?? "",
+      company: c.company ?? "",
+      notes: c.notes ?? "",
+    });
+    setEditOpen(true);
+  }
+
+  function submitEdit(e: React.FormEvent) {
+    e.preventDefault();
+    updateClient.mutate({
+      id: c.id,
+      data: {
+        name: editForm.name,
+        email: editForm.email || null,
+        phone: editForm.phone || null,
+        company: editForm.company || null,
+        notes: editForm.notes || null,
+      },
+    });
+  }
 
   const c = client ?? initialData;
 
@@ -48,12 +99,17 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
           <h1 className="text-2xl font-semibold tracking-tight">{c.name}</h1>
           {c.company && <p className="mt-0.5 text-sm text-muted-foreground">{c.company}</p>}
         </div>
-        <Link
-          href={`/dashboard/invoices/new?clientId=${c.id}`}
-          className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
-        >
-          <Plus className="h-4 w-4" /> New invoice
-        </Link>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" onClick={openEdit}>
+            <Pencil className="mr-1.5 h-4 w-4" /> Edit
+          </Button>
+          <Link
+            href={`/dashboard/invoices/new?clientId=${c.id}`}
+            className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+          >
+            <Plus className="h-4 w-4" /> New invoice
+          </Link>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -176,6 +232,72 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
           </div>
         </div>
       </div>
+
+      <Dialog open={editOpen} onOpenChange={(v) => { if (!v) setEditOpen(false); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit client</DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={submitEdit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-name">Name *</Label>
+              <Input
+                id="edit-name"
+                required
+                value={editForm.name}
+                onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-company">Company</Label>
+              <Input
+                id="edit-company"
+                value={editForm.company}
+                onChange={(e) => setEditForm((f) => ({ ...f, company: e.target.value }))}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-email">Email</Label>
+                <Input
+                  id="edit-email"
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="edit-phone">Phone</Label>
+                <Input
+                  id="edit-phone"
+                  type="tel"
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
+                />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-notes">Notes</Label>
+              <Textarea
+                id="edit-notes"
+                rows={2}
+                value={editForm.notes}
+                onChange={(e) => setEditForm((f) => ({ ...f, notes: e.target.value }))}
+              />
+            </div>
+
+            {updateClient.error && <p className="text-sm text-destructive">{updateClient.error.message}</p>}
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => setEditOpen(false)}>Cancel</Button>
+              <Button type="submit" size="sm" disabled={updateClient.isPending}>
+                {updateClient.isPending ? "Saving…" : "Save changes"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -195,6 +195,173 @@ export const invoicesRouter = createTRPCRouter({
       };
     }),
 
+  // Updates a DRAFT invoice — replaces all lines and recalculates totals.
+  update: staffProcedure
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        data: createInvoiceSchema,
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.invoice.findUniqueOrThrow({
+        where: { id: input.id },
+      });
+
+      if (existing.status !== "DRAFT") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only DRAFT invoices can be edited",
+        });
+      }
+
+      const { clientId, issueDate, dueDate, currency, notes, lines: lineInputs } = input.data;
+
+      const allTaxRateIds = [...new Set(lineInputs.flatMap((l) => l.taxRateIds))];
+      const taxRates = await ctx.db.taxRate.findMany({
+        where: { id: { in: allTaxRateIds }, isActive: true },
+      });
+      const taxRateMap = new Map(taxRates.map((t) => [t.id, t]));
+
+      for (const id of allTaxRateIds) {
+        if (!taxRateMap.has(id)) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: `Tax rate ${id} not found or inactive` });
+        }
+      }
+
+      const computed = computeInvoice(
+        lineInputs.map((l) => ({
+          quantity: l.quantity,
+          unitPrice: l.unitPrice,
+          taxRates: l.taxRateIds.map((id) => {
+            const t = taxRateMap.get(id)!;
+            return { id: t.id, name: t.name, rate: toNum(t.rate), isCompound: t.isCompound };
+          }),
+        }))
+      );
+
+      // Delete existing lines and their taxes, then recreate.
+      await ctx.db.invoiceLineTax.deleteMany({
+        where: { invoiceLine: { invoiceId: input.id } },
+      });
+      await ctx.db.invoiceLine.deleteMany({ where: { invoiceId: input.id } });
+
+      const invoice = await ctx.db.invoice.update({
+        where: { id: input.id },
+        data: {
+          clientId,
+          issueDate,
+          dueDate,
+          currency,
+          notes,
+          subtotal: computed.subtotal,
+          taxTotal: computed.taxTotal,
+          total: computed.total,
+          version: { increment: 1 },
+          lines: {
+            create: lineInputs.map((line, i) => ({
+              catalogItemId: line.catalogItemId,
+              description: line.description,
+              quantity: line.quantity,
+              unitPrice: line.unitPrice,
+              lineTotal: computed.lines[i].lineTotal,
+              sortOrder: line.sortOrder ?? i,
+              taxes: {
+                create: computed.lines[i].taxes.map((t) => ({
+                  taxRateId: t.taxRateId,
+                  taxAmount: t.taxAmount,
+                })),
+              },
+            })),
+          },
+        },
+        include: {
+          lines: { include: { taxes: true } },
+          client: true,
+        },
+      });
+
+      return {
+        ...invoice,
+        _audit: {
+          action: "invoice.update",
+          entityType: "Invoice",
+          entityId: invoice.id,
+          after: { total: computed.total, clientId },
+        },
+      };
+    }),
+
+  // Duplicates an existing invoice as a new DRAFT.
+  duplicate: staffProcedure
+    .input(z.string().cuid())
+    .mutation(async ({ ctx, input }) => {
+      const source = await ctx.db.invoice.findUniqueOrThrow({
+        where: { id: input },
+        include: {
+          lines: {
+            orderBy: { sortOrder: "asc" },
+            include: { taxes: true },
+          },
+        },
+      });
+
+      const invoiceNumber = await nextInvoiceNumber();
+
+      const invoice = await ctx.db.invoice.create({
+        data: {
+          invoiceNumber,
+          clientId: source.clientId,
+          createdById: ctx.session.user.id,
+          issueDate: new Date(),
+          dueDate: source.dueDate
+            ? new Date(Date.now() + (source.dueDate.getTime() - source.issueDate.getTime()))
+            : null,
+          currency: source.currency,
+          notes: source.notes,
+          subtotal: source.subtotal,
+          taxTotal: source.taxTotal,
+          total: source.total,
+          lines: {
+            create: source.lines.map((line) => ({
+              catalogItemId: line.catalogItemId,
+              description: line.description,
+              quantity: line.quantity,
+              unitPrice: line.unitPrice,
+              lineTotal: line.lineTotal,
+              sortOrder: line.sortOrder,
+              taxes: {
+                create: line.taxes.map((t) => ({
+                  taxRateId: t.taxRateId,
+                  taxAmount: t.taxAmount,
+                })),
+              },
+            })),
+          },
+        },
+        include: { client: true },
+      });
+
+      await ctx.db.activityLog.create({
+        data: {
+          clientId: source.clientId,
+          type: "invoice.created",
+          summary: `Invoice ${invoiceNumber} created (duplicated from ${source.invoiceNumber})`,
+          metadata: { invoiceId: invoice.id, sourceInvoiceId: source.id },
+        },
+      });
+
+      return {
+        ...invoice,
+        _audit: {
+          action: "invoice.duplicate",
+          entityType: "Invoice",
+          entityId: invoice.id,
+          after: { invoiceNumber, sourceInvoiceNumber: source.invoiceNumber },
+        },
+      };
+    }),
+
   // Generates a Stripe Payment Link and attaches it to the invoice.
   generatePaymentLink: staffProcedure
     .input(z.string().cuid())

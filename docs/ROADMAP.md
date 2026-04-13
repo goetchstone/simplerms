@@ -4,18 +4,16 @@
 
 These are blockers. You cannot invoice a client or manage their account without these.
 
-### 1.1 User Profile Management
+### 1.1 User Profile Management ✅
 - **File:** `docs/features/user-management.md`
-- Admin can edit any user's name and email
-- User can edit their own name and email
-- Password reset flow (forgot password → email → reset)
-- **Why first:** You can't change admin@example.com to gstone@akritos.com without this
+- ✅ Admin can edit any user's name and email
+- ✅ User can edit their own name and email
+- ⬜ Password reset flow (forgot password → email → reset)
 
-### 1.2 Invoice Edit/Update
+### 1.2 Invoice Edit/Update ✅
 - **File:** `docs/features/invoicing.md`
-- Edit DRAFT invoices (add/remove lines, change amounts)
-- Duplicate invoice (copy existing as new DRAFT)
-- **Why first:** Typo in a draft invoice = void and recreate from scratch right now
+- ✅ Edit DRAFT invoices (add/remove lines, change amounts)
+- ✅ Duplicate invoice (copy existing as new DRAFT)
 
 ### 1.3 Email Notifications
 - **File:** `docs/features/email.md`
@@ -114,9 +112,9 @@ These become important as client count grows.
 | Area | Status | Notes |
 |------|--------|-------|
 | Auth (login/logout) | Working | Credentials only |
-| User CRUD | Partial | Missing name/email edit |
+| User CRUD | Working | Full CRUD + profile edit |
 | CRM/Clients | Working | Full CRUD + contacts + notes |
-| Invoicing | Working | Create, send, pay. No edit. |
+| Invoicing | Working | Create, edit, duplicate, send, pay |
 | Stripe Payments | Working | Payment links + webhook |
 | Booking/Scheduling | Working | Public booking, availability |
 | Support Tickets | Working | Public submit, staff manage |

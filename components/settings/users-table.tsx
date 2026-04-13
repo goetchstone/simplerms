@@ -20,11 +20,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Plus, UserCheck, UserX } from "lucide-react";
+import { Pencil, Plus, UserCheck, UserX } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type UserList = RouterOutputs["users"]["list"];
+type UserItem = UserList[number];
 
 const ROLES = ["ADMIN", "STAFF", "READONLY"] as const;
 
@@ -35,10 +36,18 @@ interface NewUserForm {
   role: typeof ROLES[number];
 }
 
+interface EditUserForm {
+  id: string;
+  name: string;
+  email: string;
+}
+
 const emptyForm = (): NewUserForm => ({ name: "", email: "", password: "", role: "STAFF" });
 
 export function UsersTable({ initialData }: { initialData: UserList }) {
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState<EditUserForm>({ id: "", name: "", email: "" });
   const [form, setForm] = useState<NewUserForm>(emptyForm());
 
   const utils = trpc.useUtils();
@@ -63,6 +72,23 @@ export function UsersTable({ initialData }: { initialData: UserList }) {
   const setActive = trpc.users.setActive.useMutation({
     onSuccess: () => utils.users.list.invalidate(),
   });
+
+  const updateUser = trpc.users.update.useMutation({
+    onSuccess: () => {
+      utils.users.list.invalidate();
+      setEditOpen(false);
+    },
+  });
+
+  function openEdit(user: UserItem) {
+    setEditForm({ id: user.id, name: user.name ?? "", email: user.email });
+    setEditOpen(true);
+  }
+
+  function submitEdit(e: React.FormEvent) {
+    e.preventDefault();
+    updateUser.mutate(editForm);
+  }
 
   function field(key: keyof NewUserForm) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
@@ -125,15 +151,24 @@ export function UsersTable({ initialData }: { initialData: UserList }) {
                   {formatDate(user.createdAt)}
                 </TableCell>
                 <TableCell>
-                  <button
-                    onClick={() => setActive.mutate({ id: user.id, isActive: !user.isActive })}
-                    className="text-muted-foreground hover:text-foreground"
-                    title={user.isActive ? "Deactivate" : "Activate"}
-                  >
-                    {user.isActive
-                      ? <UserX className="h-4 w-4" />
-                      : <UserCheck className="h-4 w-4" />}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => openEdit(user)}
+                      className="text-muted-foreground hover:text-foreground"
+                      title="Edit user"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => setActive.mutate({ id: user.id, isActive: !user.isActive })}
+                      className="text-muted-foreground hover:text-foreground"
+                      title={user.isActive ? "Deactivate" : "Activate"}
+                    >
+                      {user.isActive
+                        ? <UserX className="h-4 w-4" />
+                        : <UserCheck className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -179,6 +214,45 @@ export function UsersTable({ initialData }: { initialData: UserList }) {
               <Button type="button" variant="outline" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
               <Button type="submit" size="sm" disabled={create.isPending}>
                 {create.isPending ? "Creating…" : "Create user"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={editOpen} onOpenChange={(v) => { if (!v) setEditOpen(false); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Edit user</DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={submitEdit} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-name">Full name *</Label>
+              <Input
+                id="edit-name"
+                required
+                value={editForm.name}
+                onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-email">Email *</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                required
+                value={editForm.email}
+                onChange={(e) => setEditForm((f) => ({ ...f, email: e.target.value }))}
+              />
+            </div>
+
+            {updateUser.error && <p className="text-sm text-destructive">{updateUser.error.message}</p>}
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => setEditOpen(false)}>Cancel</Button>
+              <Button type="submit" size="sm" disabled={updateUser.isPending}>
+                {updateUser.isPending ? "Saving…" : "Save changes"}
               </Button>
             </div>
           </form>

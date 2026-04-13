@@ -1,4 +1,4 @@
-// components/invoices/invoice-create-form.tsx
+// components/invoices/invoice-edit-form.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select } from "@/components/ui/select";
 import { formatCurrency } from "@/lib/utils";
 import { Plus, Trash2 } from "lucide-react";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
+type InvoiceData = RouterOutputs["invoices"]["byId"];
 type Client = RouterOutputs["crm"]["listClients"]["items"][number];
 type TaxRate = RouterOutputs["tax"]["list"][number];
 
@@ -22,13 +22,6 @@ interface LineItem {
   unitPrice: string;
   taxRateIds: string[];
 }
-
-const emptyLine = (): LineItem => ({
-  description: "",
-  quantity: "1",
-  unitPrice: "",
-  taxRateIds: [],
-});
 
 function computePreview(lines: LineItem[], rates: TaxRate[]) {
   const rateMap = new Map(rates.map((r) => [r.id, r]));
@@ -58,24 +51,34 @@ function computePreview(lines: LineItem[], rates: TaxRate[]) {
 }
 
 interface Props {
+  invoice: InvoiceData;
   clients: Client[];
   taxRates: TaxRate[];
-  defaultClientId?: string;
 }
 
-export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props) {
+export function InvoiceEditForm({ invoice, clients, taxRates }: Props) {
   const router = useRouter();
 
-  const today = new Date().toISOString().slice(0, 10);
-  const [clientId, setClientId] = useState(defaultClientId ?? "");
-  const [currency, setCurrency] = useState("USD");
-  const [issueDate, setIssueDate] = useState(today);
-  const [dueDate, setDueDate] = useState("");
-  const [notes, setNotes] = useState("");
-  const [lines, setLines] = useState<LineItem[]>([emptyLine()]);
+  const [clientId, setClientId] = useState(invoice.clientId);
+  const [currency, setCurrency] = useState(invoice.currency);
+  const [issueDate, setIssueDate] = useState(
+    new Date(invoice.issueDate).toISOString().slice(0, 10)
+  );
+  const [dueDate, setDueDate] = useState(
+    invoice.dueDate ? new Date(invoice.dueDate).toISOString().slice(0, 10) : ""
+  );
+  const [notes, setNotes] = useState(invoice.notes ?? "");
+  const [lines, setLines] = useState<LineItem[]>(
+    invoice.lines.map((l) => ({
+      description: l.description,
+      quantity: String(Number(l.quantity)),
+      unitPrice: String(Number(l.unitPrice)),
+      taxRateIds: l.taxes.map((t) => t.taxRateId),
+    }))
+  );
 
-  const create = trpc.invoices.create.useMutation({
-    onSuccess: (inv) => router.push(`/dashboard/invoices/${inv.id}`),
+  const update = trpc.invoices.update.useMutation({
+    onSuccess: () => router.push(`/dashboard/invoices/${invoice.id}`),
   });
 
   const preview = computePreview(lines, taxRates);
@@ -99,18 +102,21 @@ export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props)
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    create.mutate({
-      clientId,
-      currency,
-      issueDate,
-      dueDate: dueDate || undefined,
-      notes: notes || undefined,
-      lines: lines.map((l) => ({
-        description: l.description,
-        quantity: parseFloat(l.quantity),
-        unitPrice: parseFloat(l.unitPrice),
-        taxRateIds: l.taxRateIds,
-      })),
+    update.mutate({
+      id: invoice.id,
+      data: {
+        clientId,
+        currency,
+        issueDate,
+        dueDate: dueDate || undefined,
+        notes: notes || undefined,
+        lines: lines.map((l) => ({
+          description: l.description,
+          quantity: parseFloat(l.quantity),
+          unitPrice: parseFloat(l.unitPrice),
+          taxRateIds: l.taxRateIds,
+        })),
+      },
     });
   }
 
@@ -144,7 +150,7 @@ export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props)
             onChange={(e) => setCurrency(e.target.value)}
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            {["CAD", "USD", "EUR", "GBP"].map((c) => (
+            {["USD", "CAD", "EUR", "GBP"].map((c) => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
@@ -217,7 +223,6 @@ export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props)
                 </div>
               </div>
 
-              {/* Tax checkboxes */}
               {taxRates.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-3">
                   {taxRates.map((rate) => (
@@ -243,7 +248,7 @@ export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props)
           variant="outline"
           size="sm"
           className="mt-3"
-          onClick={() => setLines((ls) => [...ls, emptyLine()])}
+          onClick={() => setLines((ls) => [...ls, { description: "", quantity: "1", unitPrice: "", taxRateIds: [] }])}
         >
           <Plus className="mr-1.5 h-4 w-4" /> Add line
         </Button>
@@ -273,16 +278,16 @@ export function InvoiceCreateForm({ clients, taxRates, defaultClientId }: Props)
         </div>
       </div>
 
-      {create.error && (
-        <p className="text-sm text-destructive">{create.error.message}</p>
+      {update.error && (
+        <p className="text-sm text-destructive">{update.error.message}</p>
       )}
 
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline" onClick={() => router.back()}>
           Cancel
         </Button>
-        <Button type="submit" disabled={create.isPending}>
-          {create.isPending ? "Creating…" : "Create invoice"}
+        <Button type="submit" disabled={update.isPending}>
+          {update.isPending ? "Saving…" : "Save changes"}
         </Button>
       </div>
     </form>

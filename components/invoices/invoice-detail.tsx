@@ -7,7 +7,7 @@ import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { ChevronLeft, ExternalLink, Send, Ban } from "lucide-react";
+import { ChevronLeft, Copy, ExternalLink, Pencil, Send, Ban } from "lucide-react";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type InvoiceData = RouterOutputs["invoices"]["byId"];
@@ -31,6 +31,13 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
     onSuccess: () => {
       utils.invoices.byId.invalidate(inv.id);
       utils.invoices.list.invalidate();
+    },
+  });
+
+  const duplicate = trpc.invoices.duplicate.useMutation({
+    onSuccess: (newInv) => {
+      utils.invoices.list.invalidate();
+      router.push(`/dashboard/invoices/${newInv.id}`);
     },
   });
 
@@ -65,6 +72,25 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {inv.status === "DRAFT" && (
+            <Link
+              href={`/dashboard/invoices/${inv.id}/edit`}
+              className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+            >
+              <Pencil className="h-4 w-4" /> Edit
+            </Link>
+          )}
+
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={duplicate.isPending}
+            onClick={() => duplicate.mutate(inv.id)}
+          >
+            <Copy className="mr-1.5 h-4 w-4" />
+            {duplicate.isPending ? "Duplicating…" : "Duplicate"}
+          </Button>
+
           {inv.stripePaymentLink && (
             <a
               href={inv.stripePaymentLink}

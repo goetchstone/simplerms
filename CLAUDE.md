@@ -39,6 +39,14 @@ Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is pr
 
 This is a combined RMS (Resource Management System) backend + marketing site for Akritos Technology Partners, LLC — an Apple/MDM IT consultancy based in Connecticut.
 
+### Business Context
+
+- **Niche:** Apple MDM & Mac management for SMBs with Windows-native IT teams
+- **Brand story:** "Akritos" = Ancient Greek ἄκριτος, meaning "unwatered" — full strength, undiluted wine. No watered-down IT.
+- **Founder:** Goetch Stone — 20+ years IT, Director of IT at multi-location retailer, PSU MacAdmins 2025 workshop instructor
+- **Business status:** LLC registered, EIN obtained, fully insured ($1M/$2M E&O+GL) — all as of April 2026
+- **Pre-revenue:** Zero clients. Site, brand, and platform are built. Next: bank account, Google Business Profile, first client outreach.
+
 ### Architecture
 
 - See `docs/ARCHITECTURE.md` for full stack details, directory structure, and design system
@@ -53,6 +61,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **All public pages:** use `export const dynamic = "force-dynamic"` and fetch company name with try/catch fallback
 - **Settings:** stored in DB as key/value (Setting model), fetched via `db.setting.findUnique`
 - **CMS blocks:** JSON array of { type, content, level, src, alt, ctaText, ctaHref } objects
+- **BlockRenderer:** uses bone/conviction color palette (not zinc) — headings text-bone, paragraphs text-bone/80, dividers border-bone/10, CTA bg-slate-brand/20 with conviction gold button
 - **Email:** Nodemailer singleton transport, configured via Settings table
 - **Auth:** NextAuth credentials provider, bcrypt hashed passwords, JWT sessions
 - **Stripe:** Payment Links per invoice, webhook at /api/webhooks/stripe
@@ -61,10 +70,12 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 ### Brand Rules
 
 - Entity name: "Akritos Technology Partners, LLC" (legal), "Akritos" (brand)
-- Never position as replacing internal IT teams — co-managed model
+- Never position as replacing internal IT teams — co-managed model ("we train your team to own it")
+- Voice is always "we" (partnership), never "I" (sole proprietor)
 - Never overclaim capabilities not done in production
 - Kandji is now Iru — use current branding
-- Design: midnight (#1C1F2E), conviction (#C8A96E), bone (#E8E4DC), 2px border-radius
+- Design: midnight (#1C1F2E), conviction (#C8A96E), bone (#E8E4DC), slate-brand (#4A5068), 2px border-radius
+- Body text: text-base (16px), opacity /60 on public pages (not text-sm or /50)
 - Copy voice: direct, honest, no filler, no AI tells
 
 ### Database
@@ -74,6 +85,20 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - Migrations via `prisma db push` (no migration files, push-based)
 - Seed scripts in prisma/ directory
 
+### Key Field Names (avoid mistakes)
+
+- InvoiceLine: `lineTotal` (not subtotal), `unitPrice`, `quantity`
+- InvoiceLineTax: `taxAmount` (not amount)
+- TaxRate: `rate` (Decimal, not rateDecimal)
+- Invoice: `stripePaymentLink` (not stripePaymentLinkUrl)
+- Contact: `role` (not title)
+
+### Known Issues
+
+- **CAD currency bug:** `app/book/page.tsx` uses `formatCurrency(Number(s.price), "CAD")` — should be USD
+- **Testimonials placeholder:** Homepage has "We're new. Testimonials are earned, not invented." — remove once real testimonials exist, or remove entirely (identified as liability in competitive review)
+- **Admin password:** Production still uses default `changeme123` — change before first client
+
 ### Testing & Deployment
 
 - Tests: `npx vitest run` (invoice tax + utils, must pass before commit)
@@ -81,3 +106,5 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - Deploy: SSH to VPS, `cd /opt/simplerms && git pull && bash deploy.sh`
 - Docker: app + db + migrator + mailpit services
 - Blog posts seeded via `docker compose --profile tools run --rm migrator npx tsx prisma/seed-blog-{name}.ts`
+- If seed script was added after last Docker build: `docker compose --profile tools build migrator` first
+- The `--profile` flag goes BEFORE the subcommand: `docker compose --profile tools run` (not `docker compose run --profile tools`)

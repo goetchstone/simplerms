@@ -10,11 +10,13 @@
 - `invoices.generatePaymentLink` (staff) — Stripe Payment Link
 - `invoices.send` (staff) — email invoice with payment link
 - `invoices.void` (staff) — cancel invoice, deactivate payment link
+- `invoices.update` (staff) — edit DRAFT invoices (replace lines, recalculate)
+- `invoices.duplicate` (staff) — copy invoice as new DRAFT with new number
+- Edit page at `/dashboard/invoices/[id]/edit` (DRAFT only)
+- Edit and Duplicate buttons on invoice detail page
 - Stripe webhook handles checkout.session.completed → records payment
 
 ### Missing
-- Edit/update DRAFT invoice (must void and recreate)
-- Duplicate invoice
 - PDF generation (template exists at server/pdf/invoice.tsx, no route)
 - Recurring invoices / templates
 - Manual payment recording via UI (model supports it, no mutation)
@@ -67,25 +69,7 @@ enum InvoiceStatus {
 
 ## What Needs to Be Built
 
-### 1. Update DRAFT Invoice
-Add `invoices.update` mutation:
-- Staff only, DRAFT status only
-- Update: client, issueDate, dueDate, currency, notes
-- Replace lines: delete existing, insert new (simpler than diffing)
-- Recalculate subtotal, taxTotal, total
-- Increment version
-- Audit log with before/after
-
-### 2. Duplicate Invoice
-Add `invoices.duplicate` mutation:
-- Staff only
-- Copy all lines from source invoice
-- New invoice number, DRAFT status
-- New publicToken
-- Clear sentAt, paidAt, stripePaymentLink
-- Set issueDate to now, dueDate to now + default_due_days
-
-### 3. Record Manual Payment
+### 1. Record Manual Payment
 Add `invoices.recordPayment` mutation:
 - Staff only
 - Amount, method (CASH/CHECK/BANK_TRANSFER/OTHER), reference, paidAt

@@ -8,13 +8,14 @@
 - `users.updateRole` (admin) — change ADMIN/STAFF/READONLY, guards last admin
 - `users.setActive` (admin) — enable/disable user
 - `users.changePassword` (protected) — user changes own password (requires current)
+- `users.updateProfile` (protected) — user edits own name/email with uniqueness check
+- `users.update` (admin) — admin edits any user's name/email
+- Account page with profile edit form + password change
+- Admin users table with edit dialog (name/email), role dropdown, activate/deactivate
 
 ### Missing
-- Edit user name (admin or self)
-- Edit user email (admin or self)
 - Delete user (only deactivation exists)
 - Password reset flow (forgot password → email → new password)
-- Profile page beyond password change
 
 ## Files
 
@@ -49,29 +50,7 @@ VerificationToken model exists but is unused — built for password reset.
 
 ## What Needs to Be Built
 
-### 1. Update Profile (name/email)
-Add `users.updateProfile` mutation:
-- Protected: user can edit own name/email
-- Admin: can edit any user's name/email
-- Email change requires uniqueness check
-- Audit log the change (before/after)
-- Update the session after email change (JWT contains email)
-
-### 2. Admin Edit User
-Add to UsersTable component:
-- Edit button per user row
-- Modal with name/email/role fields
-- Calls updateProfile + updateRole
-
-### 3. Account Page Enhancement
-Current: password change only.
-Add:
-- Name field (editable, save button)
-- Email field (editable, save button)
-- Show role (read-only)
-- Show created date
-
-### 4. Password Reset Flow
+### 1. Password Reset Flow
 - Add `users.requestPasswordReset` (public) — generates token, sends email
 - Add `users.resetPassword` (public) — validates token, sets new password
 - Add `/reset-password` page with token from URL
