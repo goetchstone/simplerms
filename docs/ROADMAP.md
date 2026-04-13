@@ -29,12 +29,11 @@ These are blockers. You cannot invoice a client or manage their account without 
 - **File:** `docs/features/crm.md`
 - ✅ Add/edit/delete contacts from client detail page
 
-### 1.4 Settings UI
+### 1.4 Settings UI ✅
 - **File:** `docs/features/settings.md`
-- Dashboard page to manage company details (name, email, phone, address)
-- SMTP configuration (host, port, user, password, from address)
-- Invoice defaults (prefix, currency, due days)
-- **Why first:** Currently requires direct database edits to change any setting
+- ✅ Dashboard page to manage company details (name, email, phone, address)
+- ✅ SMTP configuration (host, port, user, password, from address)
+- ✅ Invoice defaults (prefix, currency, due days)
 
 ---
 
@@ -42,24 +41,26 @@ These are blockers. You cannot invoice a client or manage their account without 
 
 These make the system usable day-to-day without workarounds.
 
-### 2.1 File Upload/Download
+### 2.1 File Upload/Download ✅
 - **File:** `docs/features/file-uploads.md`
-- Upload files to tickets, invoices, clients
-- Local storage backend (Docker volume)
-- Download via authenticated API route
-- **Why:** Clients attach screenshots to tickets, you attach receipts to invoices
+- ✅ Local storage backend (server/storage/local.ts)
+- ✅ Upload API route (POST /api/files/upload, 10MB, type whitelist)
+- ✅ Download API route (GET /api/files/[id], auth required)
+- ⬜ Upload UI component (drag-and-drop, progress)
 
-### 2.2 Appointment Reminders
-- **File:** `docs/features/scheduling.md`
-- Email reminder 24h before appointment
-- Background job to process reminder queue
-- **Why:** No-shows cost you billable hours
-
-### 2.4 Client Portal
+### 2.15 Client Portal ✅
 - **File:** `docs/features/client-portal.md`
-- Client views their invoices, tickets, and appointments via portal token
-- No login required (token-based, same pattern as ticket tracking)
-- **Why:** Clients asking "where's my invoice?" is overhead you don't need
+- ✅ Portal landing page at /portal/[token]
+- ✅ Invoice list → links to public invoice view
+- ✅ Ticket list → links to public ticket tracking
+- ✅ Appointment list with cancel links
+- ✅ Portal tRPC router with rate-limited token validation
+
+### 2.2 Appointment Reminders ✅
+- **File:** `docs/features/scheduling.md`
+- ✅ Email reminder 24h before appointment
+- ✅ Cron API route at /api/cron/reminders (CRON_SECRET protected)
+- ✅ Uses reminderSentAt field to prevent duplicates
 
 ---
 
@@ -125,8 +126,8 @@ These become important as client count grows.
 | Reports | Working | Revenue, aging, top clients |
 | Audit Log | Working | Auto-logged via middleware |
 | Email Sending | Working | Invoice, ticket, appointment, password reset |
-| File Uploads | Not Built | Model exists, no implementation |
+| File Uploads | Working | Local storage, upload/download routes |
 | PDF Generation | Working | API route, react-pdf template |
-| Settings UI | Not Built | DB-only configuration |
-| Background Jobs | Not Built | EmailQueue table, no processor |
-| Client Portal | Not Built | Routes exist, minimal |
+| Settings UI | Working | Company, SMTP, invoice defaults |
+| Background Jobs | Partial | Cron routes for reminders + overdue flagging |
+| Client Portal | Working | Token-based, invoices/tickets/appointments |
