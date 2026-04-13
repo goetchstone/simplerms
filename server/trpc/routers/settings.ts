@@ -15,8 +15,11 @@ const ALLOWED_KEYS = new Set([
   "smtp_host",
   "smtp_port",
   "smtp_user",
+  "smtp_pass",
   "email_from",
 ]);
+
+const SECRET_KEYS = new Set(["smtp_pass"]);
 
 export const settingsRouter = createTRPCRouter({
   // Admin-only: update one or many settings by key.
@@ -28,7 +31,7 @@ export const settingsRouter = createTRPCRouter({
         entries.map(([key, value]) =>
           ctx.db.setting.upsert({
             where: { key },
-            create: { key, value },
+            create: { key, value, isSecret: SECRET_KEYS.has(key) },
             update: { value },
           })
         )

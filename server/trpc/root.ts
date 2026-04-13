@@ -14,6 +14,7 @@ import { timeTrackingRouter } from "@/server/trpc/routers/timeTracking";
 import { usersRouter } from "@/server/trpc/routers/users";
 import { cmsRouter } from "@/server/trpc/routers/cms";
 import { reportsRouter } from "@/server/trpc/routers/reports";
+import { portalRouter } from "@/server/trpc/routers/portal";
 
 export const appRouter = createTRPCRouter({
   audit: auditRouter,
@@ -30,6 +31,7 @@ export const appRouter = createTRPCRouter({
   users: usersRouter,
   cms: cmsRouter,
   reports: reportsRouter,
+  portal: portalRouter,
 });
 
 export type AppRouter = typeof appRouter;

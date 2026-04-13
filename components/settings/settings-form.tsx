@@ -19,11 +19,12 @@ export function SettingsForm({ initialSettings }: Props) {
     company_phone: initialSettings.company_phone ?? "",
     company_address: initialSettings.company_address ?? "",
     invoice_prefix: initialSettings.invoice_prefix ?? "INV",
-    default_currency: initialSettings.default_currency ?? "CAD",
+    default_currency: initialSettings.default_currency ?? "USD",
     default_due_days: initialSettings.default_due_days ?? "30",
     smtp_host: initialSettings.smtp_host ?? "",
     smtp_port: initialSettings.smtp_port ?? "587",
     smtp_user: initialSettings.smtp_user ?? "",
+    smtp_pass: "",
     email_from: initialSettings.email_from ?? "",
   });
 
@@ -36,7 +37,10 @@ export function SettingsForm({ initialSettings }: Props) {
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
-    upsert.mutate(values);
+    // Don't send empty smtp_pass — it would clear the existing password.
+    const payload = { ...values };
+    if (!payload.smtp_pass) delete (payload as Record<string, string>).smtp_pass;
+    upsert.mutate(payload);
   }
 
   return (
@@ -104,6 +108,10 @@ export function SettingsForm({ initialSettings }: Props) {
             <Input id="smtp_user" value={values.smtp_user} onChange={field("smtp_user")} />
           </div>
           <div className="space-y-1.5">
+            <Label htmlFor="smtp_pass">SMTP password</Label>
+            <Input id="smtp_pass" type="password" value={values.smtp_pass} onChange={field("smtp_pass")} placeholder="Leave blank to keep current" />
+          </div>
+          <div className="space-y-1.5 sm:col-span-2">
             <Label htmlFor="email_from">From address</Label>
             <Input id="email_from" type="email" value={values.email_from} onChange={field("email_from")} placeholder="noreply@yourcompany.com" />
           </div>
