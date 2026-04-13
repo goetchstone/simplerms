@@ -3,6 +3,8 @@ import "server-only";
 
 import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure } from "@/server/trpc/trpc";
 import { rateLimit } from "@/server/rate-limit";
+import { sendEmail } from "@/server/email";
+import { ticketConfirmationHtml, ticketConfirmationText, ticketReplyHtml, ticketReplyText } from "@/server/email/templates/ticket";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -49,6 +51,18 @@ export const ticketsRouter = createTRPCRouter({
           },
         });
       });
+
+      // Fire-and-forget confirmation email — don't block the response.
+      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const trackUrl = `${baseUrl}/support/track?token=${ticket.publicToken}`;
+
+      sendEmail({
+        to: input.submitterEmail,
+        subject: `[${ticket.ticketNumber}] We received your request`,
+        html: ticketConfirmationHtml({ ticketNumber: ticket.ticketNumber, subject: input.subject, submitterName: input.submitterName, trackUrl, companyName }),
+        text: ticketConfirmationText({ ticketNumber: ticket.ticketNumber, subject: input.subject, submitterName: input.submitterName, trackUrl, companyName }),
+      }).catch(() => {});
 
       return { ticketNumber: ticket.ticketNumber, publicToken: ticket.publicToken };
     }),
@@ -183,6 +197,22 @@ export const ticketsRouter = createTRPCRouter({
           where: { id: input.ticketId, status: "WAITING_ON_CLIENT" },
           data: { status: "IN_PROGRESS" },
         });
+
+        // Notify the submitter of the reply (only if we have their email).
+        const ticket = await ctx.db.ticket.findUniqueOrThrow({ where: { id: input.ticketId } });
+        if (ticket.submitterEmail) {
+          const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
+          const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+          const trackUrl = `${baseUrl}/support/track?token=${ticket.publicToken}`;
+          const submitterName = ticket.submitterName ?? "there";
+
+          sendEmail({
+            to: ticket.submitterEmail,
+            subject: `Re: [${ticket.ticketNumber}] ${ticket.subject}`,
+            html: ticketReplyHtml({ ticketNumber: ticket.ticketNumber, subject: ticket.subject, submitterName, replyBody: input.body, replierName: ctx.session.user.name ?? "Support", trackUrl, companyName }),
+            text: ticketReplyText({ ticketNumber: ticket.ticketNumber, subject: ticket.subject, submitterName, replyBody: input.body, replierName: ctx.session.user.name ?? "Support", trackUrl, companyName }),
+          }).catch(() => {});
+        }
       }
 
       return message;

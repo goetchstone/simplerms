@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,7 +57,12 @@ export function LoginForm() {
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="password" className="text-bone/80">Password</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="password" className="text-bone/80">Password</Label>
+          <Link href="/forgot-password" className="text-xs text-slate-brand hover:text-bone">
+            Forgot password?
+          </Link>
+        </div>
         <Input
           id="password"
           type="password"

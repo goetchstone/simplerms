@@ -3,6 +3,8 @@ import "server-only";
 
 import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
 import { rateLimit } from "@/server/rate-limit";
+import { sendEmail } from "@/server/email";
+import { appointmentConfirmationHtml, appointmentConfirmationText, appointmentCancellationHtml, appointmentCancellationText } from "@/server/email/templates/appointment";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { addMinutes, startOfDay, endOfDay } from "date-fns";
@@ -247,6 +249,18 @@ export const schedulingRouter = createTRPCRouter({
         });
       });
 
+      // Send confirmation email.
+      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const cancelUrl = `${baseUrl}/book/cancel?token=${appointment.cancelToken}`;
+
+      sendEmail({
+        to: input.bookerEmail,
+        subject: `Appointment confirmed — ${service.name}`,
+        html: appointmentConfirmationHtml({ serviceName: service.name, bookerName: input.bookerName, startsAt: appointment.startsAt, duration: service.duration, timezone: input.timezone, cancelUrl, companyName, notes: input.notes }),
+        text: appointmentConfirmationText({ serviceName: service.name, bookerName: input.bookerName, startsAt: appointment.startsAt, duration: service.duration, timezone: input.timezone, cancelUrl, companyName }),
+      }).catch(() => {});
+
       return {
         publicToken: appointment.publicToken,
         cancelToken: appointment.cancelToken,
@@ -267,10 +281,24 @@ export const schedulingRouter = createTRPCRouter({
       if (appointment.status === "CANCELLED") throw new TRPCError({ code: "BAD_REQUEST", message: "Already cancelled" });
       if (appointment.startsAt < new Date()) throw new TRPCError({ code: "BAD_REQUEST", message: "Cannot cancel a past appointment" });
 
+      const service = await ctx.db.service.findUniqueOrThrow({ where: { id: appointment.serviceId } });
+
       await ctx.db.appointment.update({
         where: { id: appointment.id },
         data: { status: "CANCELLED" },
       });
+
+      // Notify the booker of cancellation.
+      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const bookUrl = `${baseUrl}/book`;
+
+      sendEmail({
+        to: appointment.bookerEmail,
+        subject: `Appointment cancelled — ${service.name}`,
+        html: appointmentCancellationHtml({ serviceName: service.name, bookerName: appointment.bookerName, startsAt: appointment.startsAt, timezone: appointment.timezone, bookUrl, companyName }),
+        text: appointmentCancellationText({ serviceName: service.name, bookerName: appointment.bookerName, startsAt: appointment.startsAt, timezone: appointment.timezone, bookUrl, companyName }),
+      }).catch(() => {});
 
       return { ok: true };
     }),

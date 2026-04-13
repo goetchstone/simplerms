@@ -1,10 +1,14 @@
 // server/trpc/routers/users.ts
 import "server-only";
 
-import { createTRPCRouter, adminProcedure, protectedProcedure } from "@/server/trpc/trpc";
+import { createTRPCRouter, adminProcedure, protectedProcedure, publicProcedure } from "@/server/trpc/trpc";
+import { rateLimit } from "@/server/rate-limit";
+import { sendEmail } from "@/server/email";
+import { passwordResetHtml, passwordResetText } from "@/server/email/templates/password-reset";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
 
 const roleEnum = z.enum(["ADMIN", "STAFF", "READONLY"]);
 
@@ -162,6 +166,65 @@ export const usersRouter = createTRPCRouter({
           after: { name: input.name, email: input.email },
         },
       };
+    }),
+
+  // Public — request a password reset email. Always returns success to prevent email enumeration.
+  requestPasswordReset: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .mutation(async ({ ctx, input }) => {
+      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const { allowed } = rateLimit(`pw-reset:${ip}`, 5, 900000);
+      if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please try again later." });
+
+      const user = await ctx.db.user.findUnique({ where: { email: input.email, isActive: true } });
+
+      // Always return success — don't reveal whether the email exists.
+      if (!user) return { ok: true };
+
+      const token = randomBytes(32).toString("hex");
+      const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+      // Remove any existing reset tokens for this user.
+      await ctx.db.verificationToken.deleteMany({ where: { identifier: user.email } });
+
+      await ctx.db.verificationToken.create({
+        data: { identifier: user.email, token, expires },
+      });
+
+      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const resetUrl = `${baseUrl}/reset-password?token=${token}`;
+
+      sendEmail({
+        to: user.email,
+        subject: `Reset your ${companyName} password`,
+        html: passwordResetHtml({ resetUrl, companyName, expiresInMinutes: 60 }),
+        text: passwordResetText({ resetUrl, companyName, expiresInMinutes: 60 }),
+      }).catch(() => {});
+
+      return { ok: true };
+    }),
+
+  // Public — reset password using a valid token.
+  resetPassword: publicProcedure
+    .input(z.object({ token: z.string().min(1), newPassword: z.string().min(8).max(128) }))
+    .mutation(async ({ ctx, input }) => {
+      const record = await ctx.db.verificationToken.findUnique({ where: { token: input.token } });
+      if (!record || record.expires < new Date()) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid or expired reset link. Please request a new one." });
+      }
+
+      const user = await ctx.db.user.findUnique({ where: { email: record.identifier, isActive: true } });
+      if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid or expired reset link." });
+
+      const passwordHash = await bcrypt.hash(input.newPassword, 12);
+
+      await ctx.db.$transaction([
+        ctx.db.user.update({ where: { id: user.id }, data: { passwordHash } }),
+        ctx.db.verificationToken.delete({ where: { token: input.token } }),
+      ]);
+
+      return { ok: true };
     }),
 
   // Staff can change their own password.
