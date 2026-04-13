@@ -13,12 +13,12 @@
 - `crm.deleteContact` (staff) — deletes contact
 - Dashboard list page with search and create modal
 - Dashboard detail page with edit dialog, notes, contacts, activity log, stats
+- Contact management UI on client detail — add, edit, delete with role and primary contact support
 
 ### Missing
 - Tag management UI (tags exist in schema but no CRUD for tags or client-tag assignment)
 - Client deactivation/archival from UI
 - Client merge (combine duplicate records)
-- Contact add/edit/delete from client detail page UI (backend works, no frontend)
 - Address management UI
 - Client import (CSV/bulk)
 - Portal token management (regenerate/revoke)
@@ -66,21 +66,14 @@ model Tag {
 
 ## What Needs to Be Built
 
-### 1. Contact Management UI
-In client detail page:
-- Add "New contact" button → modal with name/email/phone/role/isPrimary
-- Edit button per contact row → same modal
-- Delete button with confirmation
-- Uses existing `crm.createContact`, `crm.updateContact`, `crm.deleteContact`
-
-### 2. Tag Management
+### 1. Tag Management
 - Add `crm.listTags` query
 - Add `crm.createTag` / `crm.deleteTag` mutations
 - Add `crm.tagClient` / `crm.untagClient` mutations
 - Tag picker in client detail page
 - Tag filter on client list
 
-### 3. Client Archival
+### 2. Client Archival
 - Add archive/deactivate button to client detail
 - Filter inactive clients from default list view
 - Uses existing `isActive` field — just needs UI toggle

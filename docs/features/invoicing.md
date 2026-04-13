@@ -15,13 +15,15 @@
 - Edit page at `/dashboard/invoices/[id]/edit` (DRAFT only)
 - Edit and Duplicate buttons on invoice detail page
 - Stripe webhook handles checkout.session.completed → records payment
+- `invoices.recordPayment` (staff) — manual payment recording with method, reference, auto-status transition (PARTIAL/PAID)
+- Record payment dialog on invoice detail page with remaining balance display
+- PDF invoice generation via API route `/api/invoices/[id]/pdf` using react-pdf template
+- Download PDF button on invoice detail page
 
 ### Missing
-- PDF generation (template exists at server/pdf/invoice.tsx, no route)
 - Recurring invoices / templates
-- Manual payment recording via UI (model supports it, no mutation)
-- Partial payment handling improvements
 - Credit notes
+- PDF attachment on email send
 
 ## Files
 
@@ -33,6 +35,9 @@
   - `app/(dashboard)/dashboard/invoices/page.tsx` (list)
   - `app/(dashboard)/dashboard/invoices/new/page.tsx` (create)
   - `app/(dashboard)/dashboard/invoices/[id]/page.tsx` (detail)
+  - `app/(dashboard)/dashboard/invoices/[id]/edit/page.tsx` (edit DRAFT)
+- **PDF route:** `app/api/invoices/[id]/pdf/route.ts`
+- **PDF template:** `server/pdf/invoice.tsx`
 - **Public view:** `app/(site)/invoice/[token]/page.tsx` or similar
 - **Stripe webhook:** `app/api/webhooks/stripe/route.ts`
 
@@ -66,23 +71,6 @@ enum InvoiceStatus {
   DRAFT, SENT, VIEWED, PARTIAL, PAID, OVERDUE, VOID
 }
 ```
-
-## What Needs to Be Built
-
-### 1. Record Manual Payment
-Add `invoices.recordPayment` mutation:
-- Staff only
-- Amount, method (CASH/CHECK/BANK_TRANSFER/OTHER), reference, paidAt
-- Update invoice paidAmount
-- If paidAmount >= total → status = PAID, set paidAt
-- If paidAmount > 0 but < total → status = PARTIAL
-
-### 4. PDF Generation
-- Wire up server/pdf/invoice.tsx
-- Add `invoices.generatePdf` mutation
-- Store at uploads/invoices/{id}.pdf
-- Set pdfPath on invoice
-- Attach to email when sending
 
 ## Tax Calculation
 

@@ -12,10 +12,14 @@
 - `users.update` (admin) — admin edits any user's name/email
 - Account page with profile edit form + password change
 - Admin users table with edit dialog (name/email), role dropdown, activate/deactivate
+- `users.requestPasswordReset` (public) — rate-limited, anti-enumeration, generates token, sends email
+- `users.resetPassword` (public) — validates token, sets new password, deletes token
+- Forgot password page at `/forgot-password` with email form
+- Reset password page at `/reset-password` with token from URL, new password + confirm
+- "Forgot password?" link on login form
 
 ### Missing
 - Delete user (only deactivation exists)
-- Password reset flow (forgot password → email → new password)
 
 ## Files
 
@@ -23,6 +27,9 @@
 - **Dashboard page:** `app/(dashboard)/dashboard/settings/users/page.tsx`
 - **UI component:** `components/settings/users-table.tsx`
 - **Account page:** `app/(dashboard)/dashboard/account/page.tsx`
+- **Auth pages:** `app/(auth)/login/page.tsx`, `app/(auth)/forgot-password/page.tsx`, `app/(auth)/reset-password/page.tsx`
+- **Auth components:** `components/auth/login-form.tsx`, `components/auth/forgot-password-form.tsx`, `components/auth/reset-password-form.tsx`
+- **Email template:** `server/email/templates/password-reset.ts`
 - **Auth config:** `server/auth/index.ts`
 
 ## Schema
@@ -46,18 +53,7 @@ model VerificationToken {
 }
 ```
 
-VerificationToken model exists but is unused — built for password reset.
-
-## What Needs to Be Built
-
-### 1. Password Reset Flow
-- Add `users.requestPasswordReset` (public) — generates token, sends email
-- Add `users.resetPassword` (public) — validates token, sets new password
-- Add `/reset-password` page with token from URL
-- Add "Forgot password?" link on login page
-- Uses existing VerificationToken model
-- Token expires after 1 hour
-- Rate limit: 3 requests per 15 minutes
+VerificationToken model stores password reset tokens (identifier=email, 1-hour expiry).
 
 ## Dependencies
 - Email sending (SMTP must be configured)

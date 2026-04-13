@@ -8,19 +8,26 @@ These are blockers. You cannot invoice a client or manage their account without 
 - **File:** `docs/features/user-management.md`
 - ✅ Admin can edit any user's name and email
 - ✅ User can edit their own name and email
-- ⬜ Password reset flow (forgot password → email → reset)
+- ✅ Password reset flow (forgot password → email → reset)
 
 ### 1.2 Invoice Edit/Update ✅
 - **File:** `docs/features/invoicing.md`
 - ✅ Edit DRAFT invoices (add/remove lines, change amounts)
 - ✅ Duplicate invoice (copy existing as new DRAFT)
+- ✅ Manual payment recording (PARTIAL/PAID auto-transition)
+- ✅ PDF invoice generation via API route
 
-### 1.3 Email Notifications
+### 1.3 Email Notifications ✅
 - **File:** `docs/features/email.md`
-- Ticket reply notification to submitter
-- Appointment confirmation email on booking
-- Appointment cancellation email
-- **Why first:** Clients submit tickets or book consultations and hear nothing back
+- ✅ Ticket confirmation email on submit
+- ✅ Ticket reply notification to submitter
+- ✅ Appointment confirmation email on booking
+- ✅ Appointment cancellation email
+- ✅ Password reset email
+
+### 1.35 CRM Contact Management ✅
+- **File:** `docs/features/crm.md`
+- ✅ Add/edit/delete contacts from client detail page
 
 ### 1.4 Settings UI
 - **File:** `docs/features/settings.md`
@@ -42,14 +49,7 @@ These make the system usable day-to-day without workarounds.
 - Download via authenticated API route
 - **Why:** Clients attach screenshots to tickets, you attach receipts to invoices
 
-### 2.2 PDF Invoice Generation
-- **File:** `docs/features/pdf-generation.md`
-- Generate PDF from invoice data
-- Attach to invoice email
-- Download from dashboard
-- **Why:** Clients need printable invoices for their records
-
-### 2.3 Appointment Reminders
+### 2.2 Appointment Reminders
 - **File:** `docs/features/scheduling.md`
 - Email reminder 24h before appointment
 - Background job to process reminder queue
@@ -114,7 +114,7 @@ These become important as client count grows.
 | Auth (login/logout) | Working | Credentials only |
 | User CRUD | Working | Full CRUD + profile edit |
 | CRM/Clients | Working | Full CRUD + contacts + notes |
-| Invoicing | Working | Create, edit, duplicate, send, pay |
+| Invoicing | Working | Create, edit, duplicate, send, pay, manual payment, PDF |
 | Stripe Payments | Working | Payment links + webhook |
 | Booking/Scheduling | Working | Public booking, availability |
 | Support Tickets | Working | Public submit, staff manage |
@@ -124,9 +124,9 @@ These become important as client count grows.
 | Orders | Working | CRUD + link to invoice |
 | Reports | Working | Revenue, aging, top clients |
 | Audit Log | Working | Auto-logged via middleware |
-| Email Sending | Partial | Invoice only, no notifications |
+| Email Sending | Working | Invoice, ticket, appointment, password reset |
 | File Uploads | Not Built | Model exists, no implementation |
-| PDF Generation | Not Built | Template exists, no route |
+| PDF Generation | Working | API route, react-pdf template |
 | Settings UI | Not Built | DB-only configuration |
 | Background Jobs | Not Built | EmailQueue table, no processor |
 | Client Portal | Not Built | Routes exist, minimal |

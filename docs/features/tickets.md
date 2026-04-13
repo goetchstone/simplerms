@@ -12,10 +12,11 @@
 - `tickets.reply` (staff) — creates message, supports internal notes, auto-moves WAITING_ON_CLIENT back to IN_PROGRESS
 - Dashboard list page with status filter buttons and clickable rows
 - Dashboard detail page with reply form, status/priority/assignee controls, message thread
+- Email confirmation to submitter on ticket creation (fire-and-forget, includes tracking link)
+- Email notification to submitter on staff reply (non-internal, guards nullable email)
+- Email templates: `server/email/templates/ticket.ts` (confirmation + reply, HTML + text)
 
 ### Missing
-- Email notification to submitter on ticket creation (confirmation)
-- Email notification to submitter on staff reply (non-internal)
 - Email notification to assigned staff on new reply from client
 - Client reply via email (inbound email parsing)
 - Client reply via public token page
@@ -28,6 +29,7 @@
 - **Detail page:** `app/(dashboard)/dashboard/tickets/[id]/page.tsx`
 - **List component:** `components/tickets/ticket-list.tsx`
 - **Detail component:** `components/tickets/ticket-detail.tsx`
+- **Email templates:** `server/email/templates/ticket.ts`
 - **Public tracking:** Uses `byPublicToken` query
 
 ## Schema
@@ -62,25 +64,13 @@ model TicketMessage {
 
 ## What Needs to Be Built
 
-### 1. Ticket Confirmation Email
-In `tickets.submit` mutation, after creating ticket:
-- Queue email to submitterEmail
-- Include: ticket number, subject, link to track (publicToken URL)
-- Template: ticket-confirmed
-
-### 2. Reply Notification Email
-In `tickets.reply` mutation, when `isInternal: false`:
-- Queue email to ticket's submitterEmail
-- Include: ticket number, reply body, link to track
-- Template: ticket-reply
-
-### 3. Client Reply via Public Page
+### 1. Client Reply via Public Page
 Extend `byPublicToken` page:
 - Add reply form (name + body) below messages
 - Create `tickets.publicReply` mutation (public, rate-limited)
 - Notify assigned staff via email
 
-### 4. File Attachments
+### 2. File Attachments
 - Upload files when replying
 - Store via File model (ticketMessageId relation)
 - Display file links in message thread
