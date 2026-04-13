@@ -57,5 +57,58 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  if (event.type === "charge.refunded") {
+    const charge = event.data.object as Stripe.Charge;
+    const invoiceId = charge.metadata?.invoiceId;
+
+    if (invoiceId) {
+      const refundAmount = (charge.amount_refunded ?? 0) / 100;
+
+      const invoice = await db.invoice.findUnique({ where: { id: invoiceId } });
+      if (invoice) {
+        const newPaidAmount = Math.max(0, Number(invoice.paidAmount) - refundAmount);
+        const newStatus = newPaidAmount <= 0 ? "SENT" : "PARTIAL";
+
+        await db.invoice.update({
+          where: { id: invoiceId },
+          data: {
+            paidAmount: newPaidAmount,
+            status: newStatus,
+            paidAt: null,
+          },
+        });
+
+        await db.payment.create({
+          data: {
+            invoiceId,
+            amount: -refundAmount,
+            method: "OTHER",
+            reference: charge.id,
+            notes: "Stripe refund",
+            paidAt: new Date(),
+          },
+        });
+      }
+    }
+  }
+
+  if (event.type === "payment_intent.payment_failed") {
+    const intent = event.data.object as Stripe.PaymentIntent;
+    const invoiceId = intent.metadata?.invoiceId;
+    const reason = intent.last_payment_error?.message ?? "Unknown failure reason";
+
+    // Log the failure for audit trail — no invoice status change needed.
+    if (invoiceId) {
+      await db.auditLog.create({
+        data: {
+          action: "STRIPE_PAYMENT_FAILED",
+          entityType: "Invoice",
+          entityId: invoiceId,
+          after: { reason, paymentIntentId: intent.id },
+        },
+      });
+    }
+  }
+
   return NextResponse.json({ received: true });
 }

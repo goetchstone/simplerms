@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ChevronLeft, Copy, Download, ExternalLink, Pencil, Send, Ban, DollarSign } from "lucide-react";
+import { FileUpload } from "@/components/ui/file-upload";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type InvoiceData = RouterOutputs["invoices"]["byId"];
@@ -290,6 +291,21 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
           </div>
         </div>
       )}
+
+      {/* Files */}
+      <div>
+        <h2 className="mb-3 text-sm font-semibold">Attachments</h2>
+        <FileUpload
+          entityType="invoiceId"
+          entityId={inv.id}
+          existingFiles={(inv.files ?? []).map((f) => ({
+            id: f.id,
+            originalName: f.originalName,
+            mimeType: f.mimeType,
+            sizeBytes: f.sizeBytes,
+          }))}
+        />
+      </div>
 
       {/* Notes */}
       {inv.notes && (

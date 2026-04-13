@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { formatDate } from "@/lib/utils";
 import { ChevronLeft, Lock, Send } from "lucide-react";
+import { FileUpload } from "@/components/ui/file-upload";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type TicketData = RouterOutputs["tickets"]["byId"];
@@ -232,6 +233,21 @@ export function TicketDetail({ initialData, staffUsers }: Props) {
                   </option>
                 ))}
             </select>
+          </div>
+
+          {/* Files */}
+          <div className="rounded-lg border p-4">
+            <h3 className="mb-2 text-xs font-semibold uppercase text-muted-foreground">Files</h3>
+            <FileUpload
+              entityType="ticketId"
+              entityId={t.id}
+              existingFiles={(t.files ?? []).map((f) => ({
+                id: f.id,
+                originalName: f.originalName,
+                mimeType: f.mimeType,
+                sizeBytes: f.sizeBytes,
+              }))}
+            />
           </div>
 
           {/* Dates */}

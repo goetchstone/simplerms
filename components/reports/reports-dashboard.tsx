@@ -54,7 +54,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
           <div>
             <h2 className="font-semibold">Revenue (last 12 months)</h2>
             <p className="mt-1 text-2xl font-semibold tabular-nums">
-              {formatCurrency(totalRevenue, "CAD")}
+              {formatCurrency(totalRevenue, "USD")}
             </p>
           </div>
           <TrendingUp className="h-5 w-5 text-green-500" />
@@ -74,7 +74,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
                 </span>
                 {/* Tooltip */}
                 <div className="absolute -top-8 left-1/2 hidden -translate-x-1/2 rounded bg-zinc-900 px-2 py-1 text-xs text-white group-hover:block whitespace-nowrap">
-                  {formatCurrency(r.revenue, "CAD")}
+                  {formatCurrency(r.revenue, "USD")}
                 </div>
               </div>
             );
@@ -90,7 +90,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
             <AlertTriangle className={`h-5 w-5 ${totalOutstanding > 0 ? "text-amber-500" : "text-muted-foreground"}`} />
           </div>
           <p className="mb-4 text-2xl font-semibold tabular-nums">
-            {formatCurrency(totalOutstanding, "CAD")}
+            {formatCurrency(totalOutstanding, "USD")}
             <span className="ml-2 text-sm font-normal text-muted-foreground">outstanding</span>
           </p>
           <div className="space-y-2">
@@ -100,7 +100,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
                 <div className="flex items-center gap-4">
                   <span className="text-xs text-muted-foreground">{b.count} invoice{b.count !== 1 ? "s" : ""}</span>
                   <span className={`font-mono font-medium tabular-nums ${bucketColor[b.bucket]}`}>
-                    {formatCurrency(b.total, "CAD")}
+                    {formatCurrency(b.total, "USD")}
                   </span>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
                   <div key={tc.client.id} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">{tc.client.name}</span>
-                      <span className="font-mono tabular-nums">{formatCurrency(tc.revenue, "CAD")}</span>
+                      <span className="font-mono tabular-nums">{formatCurrency(tc.revenue, "USD")}</span>
                     </div>
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-100">
                       <div

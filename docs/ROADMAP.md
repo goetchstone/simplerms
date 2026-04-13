@@ -68,28 +68,39 @@ These make the system usable day-to-day without workarounds.
 
 These become important as client count grows.
 
-### 3.1 Background Job Processor
+### 3.1 Background Job Processor ✅
 - **File:** `docs/features/background-jobs.md`
-- Process EmailQueue table
-- Run scheduled tasks (reminders, overdue invoice flagging)
+- ✅ Process EmailQueue table (cron route at /api/cron/process-emails)
+- ✅ Appointment reminders (cron route at /api/cron/reminders)
+- ✅ Overdue invoice flagging (cron route at /api/cron/overdue)
 - Simple cron-based, no Redis/Bull dependency
-- **Why:** Email queue exists but nothing processes it
 
 ### 3.2 Invoice Recurring/Templates
 - Invoice templates for managed service clients ($50/user/mo)
 - Auto-generate monthly invoices from template
 - **Why:** Manual invoice creation for recurring clients doesn't scale
 
-### 3.3 Stripe Webhook Expansion
-- Handle charge.refunded
-- Handle payment_intent.payment_failed
-- **Why:** Currently only handles successful payments
+### 3.3 Stripe Webhook Expansion ✅
+- ✅ Handle charge.refunded (adjusts paidAmount, creates negative payment)
+- ✅ Handle payment_intent.payment_failed (audit log entry)
 
-### 3.4 Report Export
-- CSV export for revenue, aging, time tracking
-- **Why:** Accountant needs data, can't log into your dashboard
+### 3.4 Report Export ✅
+- ✅ CSV export for invoices, clients, and time entries (/api/reports/export)
+- ✅ Download links on reports dashboard page
 
-### 3.5 Client API Key Management
+### 3.5 Public Ticket Tracking ✅
+- ✅ Public tracking page at /support/track?token=...
+- ✅ Message thread view (non-internal messages)
+- ✅ Client reply form with rate limiting
+- ✅ Auto-reopen ticket on client reply (WAITING_ON_CLIENT → OPEN)
+
+### 3.6 File Upload UI ✅
+- ✅ Drag-and-drop upload component (components/ui/file-upload.tsx)
+- ✅ Integrated into ticket detail sidebar
+- ✅ Integrated into invoice detail page
+- ✅ Client-side type + size validation
+
+### 3.7 Client API Key Management
 - CRUD for client API keys (model exists with AES-256-GCM encryption)
 - UI in client detail page
 - **Why:** Future integrations, webhook auth
@@ -116,18 +127,18 @@ These become important as client count grows.
 | User CRUD | Working | Full CRUD + profile edit |
 | CRM/Clients | Working | Full CRUD + contacts + notes |
 | Invoicing | Working | Create, edit, duplicate, send, pay, manual payment, PDF |
-| Stripe Payments | Working | Payment links + webhook |
+| Stripe Payments | Working | Payment links + webhook + refunds + failed payment logging |
 | Booking/Scheduling | Working | Public booking, availability |
-| Support Tickets | Working | Public submit, staff manage |
+| Support Tickets | Working | Public submit, staff manage, public tracking + client reply |
 | CMS (Pages/Posts) | Working | Block-based content |
 | Time Tracking | Working | Full CRUD + reports |
 | Catalog/Inventory | Working | CRUD + stock movements |
 | Orders | Working | CRUD + link to invoice |
-| Reports | Working | Revenue, aging, top clients |
+| Reports | Working | Revenue, aging, top clients, CSV export |
 | Audit Log | Working | Auto-logged via middleware |
 | Email Sending | Working | Invoice, ticket, appointment, password reset |
-| File Uploads | Working | Local storage, upload/download routes |
+| File Uploads | Working | Local storage, upload/download routes, drag-and-drop UI |
 | PDF Generation | Working | API route, react-pdf template |
 | Settings UI | Working | Company, SMTP, invoice defaults |
-| Background Jobs | Partial | Cron routes for reminders + overdue flagging |
+| Background Jobs | Working | Email queue processor + reminders + overdue flagging |
 | Client Portal | Working | Token-based, invoices/tickets/appointments |
