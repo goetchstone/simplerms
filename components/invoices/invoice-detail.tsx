@@ -1,13 +1,22 @@
 // components/invoices/invoice-detail.tsx
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { StatusBadge } from "@/components/ui/status-badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { ChevronLeft, Copy, ExternalLink, Pencil, Send, Ban } from "lucide-react";
+import { ChevronLeft, Copy, Download, ExternalLink, Pencil, Send, Ban, DollarSign } from "lucide-react";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type InvoiceData = RouterOutputs["invoices"]["byId"];
@@ -41,7 +50,21 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
     },
   });
 
+  const recordPayment = trpc.invoices.recordPayment.useMutation({
+    onSuccess: () => {
+      utils.invoices.byId.invalidate(inv.id);
+      utils.invoices.list.invalidate();
+      setPaymentOpen(false);
+      setPaymentForm({ amount: "", method: "BANK_TRANSFER" as const, reference: "" });
+    },
+  });
+
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [paymentForm, setPaymentForm] = useState({ amount: "", method: "BANK_TRANSFER" as const, reference: "" });
+
   const canVoid = !["PAID", "VOID"].includes(inv.status);
+  const canRecordPayment = !["VOID", "DRAFT", "PAID"].includes(inv.status);
+  const remaining = Number(inv.total) - Number(inv.paidAmount);
   const canSend = !["VOID"].includes(inv.status) && !!inv.client.email;
 
   const subtotal = inv.lines.reduce((sum, l) => sum + Number(l.lineTotal), 0);
@@ -80,6 +103,15 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
               <Pencil className="h-4 w-4" /> Edit
             </Link>
           )}
+
+          <a
+            href={`/api/invoices/${inv.id}/pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+          >
+            <Download className="h-4 w-4" /> PDF
+          </a>
 
           <Button
             size="sm"
@@ -122,6 +154,20 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
             >
               <Send className="mr-1.5 h-4 w-4" />
               {send.isPending ? "Sending…" : "Send to client"}
+            </Button>
+          )}
+
+          {canRecordPayment && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                setPaymentForm({ amount: String(remaining > 0 ? remaining : ""), method: "BANK_TRANSFER", reference: "" });
+                setPaymentOpen(true);
+              }}
+            >
+              <DollarSign className="mr-1.5 h-4 w-4" />
+              Record payment
             </Button>
           )}
 
@@ -252,6 +298,84 @@ export function InvoiceDetail({ initialData }: { initialData: InvoiceData }) {
           <p className="leading-relaxed">{inv.notes}</p>
         </div>
       )}
+
+      {/* Record payment dialog */}
+      <Dialog open={paymentOpen} onOpenChange={(v) => { if (!v) setPaymentOpen(false); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Record payment</DialogTitle>
+          </DialogHeader>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const amount = parseFloat(paymentForm.amount);
+              if (isNaN(amount) || amount <= 0) return;
+              recordPayment.mutate({
+                invoiceId: inv.id,
+                amount,
+                method: paymentForm.method,
+                reference: paymentForm.reference || null,
+              });
+            }}
+            className="space-y-4"
+          >
+            <div className="space-y-1.5">
+              <Label htmlFor="pay-amount">Amount ({inv.currency})</Label>
+              <Input
+                id="pay-amount"
+                type="number"
+                step="0.01"
+                min="0.01"
+                required
+                value={paymentForm.amount}
+                onChange={(e) => setPaymentForm((f) => ({ ...f, amount: e.target.value }))}
+              />
+              {remaining > 0 && (
+                <p className="text-xs text-muted-foreground">
+                  Remaining balance: {formatCurrency(remaining, inv.currency)}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="pay-method">Method</Label>
+              <select
+                id="pay-method"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                value={paymentForm.method}
+                onChange={(e) => setPaymentForm((f) => ({ ...f, method: e.target.value as typeof f.method }))}
+              >
+                <option value="BANK_TRANSFER">Bank transfer</option>
+                <option value="CHECK">Check</option>
+                <option value="CASH">Cash</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="pay-ref">Reference (optional)</Label>
+              <Input
+                id="pay-ref"
+                placeholder="e.g. check #1234"
+                value={paymentForm.reference}
+                onChange={(e) => setPaymentForm((f) => ({ ...f, reference: e.target.value }))}
+              />
+            </div>
+
+            {recordPayment.error && (
+              <p className="text-sm text-destructive">{recordPayment.error.message}</p>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => setPaymentOpen(false)}>Cancel</Button>
+              <Button type="submit" size="sm" disabled={recordPayment.isPending}>
+                {recordPayment.isPending ? "Recording…" : "Record payment"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

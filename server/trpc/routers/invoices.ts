@@ -482,6 +482,55 @@ export const invoicesRouter = createTRPCRouter({
       };
     }),
 
+  recordPayment: staffProcedure
+    .input(
+      z.object({
+        invoiceId: z.string().cuid(),
+        amount: z.number().positive(),
+        method: z.enum(["CASH", "CHECK", "BANK_TRANSFER", "OTHER"]),
+        reference: z.string().max(255).optional().nullable(),
+        notes: z.string().max(2000).optional().nullable(),
+        paidAt: z.coerce.date().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const invoice = await ctx.db.invoice.findUniqueOrThrow({ where: { id: input.invoiceId } });
+
+      if (["VOID", "DRAFT"].includes(invoice.status)) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: `Cannot record payment on a ${invoice.status.toLowerCase()} invoice` });
+      }
+
+      const newPaidAmount = toNum(invoice.paidAmount) + input.amount;
+      const total = toNum(invoice.total);
+      const fullyPaid = newPaidAmount >= total;
+
+      const [payment] = await ctx.db.$transaction([
+        ctx.db.payment.create({
+          data: {
+            invoiceId: input.invoiceId,
+            amount: input.amount,
+            method: input.method,
+            reference: input.reference ?? null,
+            notes: input.notes ?? null,
+            paidAt: input.paidAt ?? new Date(),
+          },
+        }),
+        ctx.db.invoice.update({
+          where: { id: input.invoiceId },
+          data: {
+            paidAmount: newPaidAmount,
+            status: fullyPaid ? "PAID" : "PARTIAL",
+            ...(fullyPaid && { paidAt: input.paidAt ?? new Date() }),
+          },
+        }),
+      ]);
+
+      return {
+        ...payment,
+        _audit: { action: "invoice.recordPayment", entityType: "Invoice", entityId: input.invoiceId },
+      };
+    }),
+
   void: staffProcedure
     .input(z.string().cuid())
     .mutation(async ({ ctx, input }) => {

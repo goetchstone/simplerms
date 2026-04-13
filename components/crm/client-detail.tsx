@@ -16,7 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { formatDate } from "@/lib/utils";
-import { ChevronLeft, Pencil, Plus, MessageSquare } from "lucide-react";
+import { ChevronLeft, Pencil, Plus, MessageSquare, Trash2, UserPlus } from "lucide-react";
 import type { RouterOutputs } from "@/lib/trpc/client";
 
 type ClientData = RouterOutputs["crm"]["clientById"];
@@ -29,10 +29,23 @@ interface EditForm {
   notes: string;
 }
 
+interface ContactForm {
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  isPrimary: boolean;
+}
+
+const emptyContactForm: ContactForm = { name: "", email: "", phone: "", role: "", isPrimary: false };
+
 export function ClientDetail({ initialData }: { initialData: ClientData }) {
   const [noteContent, setNoteContent] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState<EditForm>({ name: "", email: "", phone: "", company: "", notes: "" });
+  const [contactOpen, setContactOpen] = useState(false);
+  const [contactEditId, setContactEditId] = useState<string | null>(null);
+  const [contactForm, setContactForm] = useState<ContactForm>(emptyContactForm);
 
   const { data: client } = trpc.crm.clientById.useQuery(initialData.id, { initialData });
   const utils = trpc.useUtils();
@@ -50,6 +63,24 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
       utils.crm.listClients.invalidate();
       setEditOpen(false);
     },
+  });
+
+  const createContact = trpc.crm.createContact.useMutation({
+    onSuccess: () => {
+      utils.crm.clientById.invalidate(initialData.id);
+      closeContactDialog();
+    },
+  });
+
+  const updateContact = trpc.crm.updateContact.useMutation({
+    onSuccess: () => {
+      utils.crm.clientById.invalidate(initialData.id);
+      closeContactDialog();
+    },
+  });
+
+  const deleteContact = trpc.crm.deleteContact.useMutation({
+    onSuccess: () => utils.crm.clientById.invalidate(initialData.id),
   });
 
   function openEdit() {
@@ -75,6 +106,47 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
         notes: editForm.notes || null,
       },
     });
+  }
+
+  function openAddContact() {
+    setContactEditId(null);
+    setContactForm(emptyContactForm);
+    setContactOpen(true);
+  }
+
+  function openEditContact(contact: ClientData["contacts"][number]) {
+    setContactEditId(contact.id);
+    setContactForm({
+      name: contact.name,
+      email: contact.email ?? "",
+      phone: contact.phone ?? "",
+      role: contact.role ?? "",
+      isPrimary: contact.isPrimary,
+    });
+    setContactOpen(true);
+  }
+
+  function closeContactDialog() {
+    setContactOpen(false);
+    setContactEditId(null);
+    setContactForm(emptyContactForm);
+  }
+
+  function submitContact(e: React.FormEvent) {
+    e.preventDefault();
+    const data = {
+      name: contactForm.name,
+      email: contactForm.email || null,
+      phone: contactForm.phone || null,
+      role: contactForm.role || null,
+      isPrimary: contactForm.isPrimary,
+    };
+
+    if (contactEditId) {
+      updateContact.mutate({ id: contactEditId, data });
+    } else {
+      createContact.mutate({ clientId: c.id, ...data });
+    }
   }
 
   const c = client ?? initialData;
@@ -137,32 +209,55 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
           </div>
 
           {/* Contacts */}
-          {c.contacts.length > 0 && (
-            <div className="rounded-lg border p-5">
-              <h2 className="mb-4 text-sm font-semibold">Contacts</h2>
+          <div className="rounded-lg border p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-semibold">Contacts</h2>
+              <Button variant="outline" size="sm" onClick={openAddContact}>
+                <UserPlus className="mr-1.5 h-3.5 w-3.5" /> Add
+              </Button>
+            </div>
+            {c.contacts.length === 0 ? (
+              <p className="text-xs text-muted-foreground">No contacts yet.</p>
+            ) : (
               <div className="divide-y">
                 {c.contacts.map((contact) => (
-                  <div key={contact.id} className="py-3 first:pt-0 last:pb-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-sm">{contact.name}</span>
-                      {contact.isPrimary && (
-                        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500">
-                          Primary
-                        </span>
+                  <div key={contact.id} className="flex items-start justify-between py-3 first:pt-0 last:pb-0">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{contact.name}</span>
+                        {contact.isPrimary && (
+                          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500">
+                            Primary
+                          </span>
+                        )}
+                      </div>
+                      {contact.role && (
+                        <p className="text-xs text-muted-foreground">{contact.role}</p>
                       )}
+                      <div className="mt-1 flex gap-4 text-xs text-muted-foreground">
+                        {contact.email && <span>{contact.email}</span>}
+                        {contact.phone && <span>{contact.phone}</span>}
+                      </div>
                     </div>
-                    {contact.role && (
-                      <p className="text-xs text-muted-foreground">{contact.role}</p>
-                    )}
-                    <div className="mt-1 flex gap-4 text-xs text-muted-foreground">
-                      {contact.email && <span>{contact.email}</span>}
-                      {contact.phone && <span>{contact.phone}</span>}
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0" onClick={() => openEditContact(contact)}>
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0 text-destructive hover:text-destructive"
+                        onClick={() => deleteContact.mutate(contact.id)}
+                        disabled={deleteContact.isPending}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Activity log */}
           {c.activityLog.length > 0 && (
@@ -293,6 +388,78 @@ export function ClientDetail({ initialData }: { initialData: ClientData }) {
               <Button type="button" variant="outline" size="sm" onClick={() => setEditOpen(false)}>Cancel</Button>
               <Button type="submit" size="sm" disabled={updateClient.isPending}>
                 {updateClient.isPending ? "Saving…" : "Save changes"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Add/Edit contact dialog */}
+      <Dialog open={contactOpen} onOpenChange={(v) => { if (!v) closeContactDialog(); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{contactEditId ? "Edit contact" : "Add contact"}</DialogTitle>
+          </DialogHeader>
+
+          <form onSubmit={submitContact} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="contact-name">Name *</Label>
+              <Input
+                id="contact-name"
+                required
+                value={contactForm.name}
+                onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="contact-role">Role</Label>
+              <Input
+                id="contact-role"
+                placeholder="e.g. Office Manager"
+                value={contactForm.role}
+                onChange={(e) => setContactForm((f) => ({ ...f, role: e.target.value }))}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="contact-email">Email</Label>
+                <Input
+                  id="contact-email"
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="contact-phone">Phone</Label>
+                <Input
+                  id="contact-phone"
+                  type="tel"
+                  value={contactForm.phone}
+                  onChange={(e) => setContactForm((f) => ({ ...f, phone: e.target.value }))}
+                />
+              </div>
+            </div>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={contactForm.isPrimary}
+                onChange={(e) => setContactForm((f) => ({ ...f, isPrimary: e.target.checked }))}
+                className="rounded border-zinc-300"
+              />
+              Primary contact
+            </label>
+
+            {(createContact.error || updateContact.error) && (
+              <p className="text-sm text-destructive">
+                {(createContact.error ?? updateContact.error)?.message}
+              </p>
+            )}
+
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" size="sm" onClick={closeContactDialog}>Cancel</Button>
+              <Button type="submit" size="sm" disabled={createContact.isPending || updateContact.isPending}>
+                {(createContact.isPending || updateContact.isPending) ? "Saving…" : contactEditId ? "Save changes" : "Add contact"}
               </Button>
             </div>
           </form>
