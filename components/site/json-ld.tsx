@@ -37,6 +37,7 @@ export function localBusinessSchema() {
       "PCI Scope Reduction",
       "Payment Processing Consulting",
       "Executive IT Support",
+      "Digital Legacy and Account Recovery",
       "IT Advisory",
     ],
     knowsAbout: [
@@ -51,6 +52,10 @@ export function localBusinessSchema() {
       "MDM",
       "macOS Management",
       "Zero-Touch Deployment",
+      "Apple Legacy Contact",
+      "Account Recovery",
+      "Password Management",
+      "Digital Estate Planning",
     ],
     slogan: "Your IT team knows Windows. We teach them Apple.",
     founder: {

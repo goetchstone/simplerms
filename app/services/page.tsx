@@ -23,6 +23,7 @@ import {
   Crown,
   Wrench,
   GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -99,6 +100,19 @@ const advisoryServices = [
       "Security hardening for high-profile targets",
       "Seamless integration with corporate environment",
       "Priority response and direct access",
+    ],
+  },
+  {
+    icon: ShieldCheck,
+    title: "Digital Legacy & Account Recovery",
+    description: "Your Apple ID, your passwords, your accounts — what happens to them if you get locked out, or if you die? Most people have no plan. We set up Apple Legacy Contact, configure account recovery options, build a password manager that actually works, and document everything so the right people can access the right things when it matters.",
+    details: [
+      "Apple Legacy Contact and Account Recovery Contact setup",
+      "Recovery key generation and secure storage planning",
+      "Password manager setup — iCloud Keychain, 1Password, or both",
+      "Shared family vault configuration and emergency access",
+      "Digital estate documentation — accounts, access, instructions",
+      "Ongoing review as accounts and services change",
     ],
   },
   {
