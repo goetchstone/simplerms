@@ -27,6 +27,21 @@ Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is pr
 - Logging that tells you what happened, not that something happened
 - Name things precisely — if you can't name it clearly, you don't understand it
 
+## Security
+
+Security is not optional. No shortcuts, no "fix it later." Every commit must be defensible.
+
+- Sanitize all user input at system boundaries (tRPC input schemas, API route bodies, query params)
+- Rate limit all public endpoints — no exceptions
+- Never trust client-side validation alone — always validate server-side
+- No IDOR — verify ownership/authorization before returning or mutating any resource
+- Auth on every protected route — `auth()` or tRPC `protectedProcedure` minimum
+- File uploads: whitelist types (not blacklist), validate size, randomize filenames, serve via authenticated route
+- Stripe webhooks: always verify signatures before processing
+- Tokens: cryptographically random, enforce expiry, delete after use
+- XSS: escape HTML in email templates, rely on React's built-in escaping for UI
+- When you see an attack surface: stop and protect it before moving on. Document the protection in a comment explaining the attack vector.
+
 ## Process
 
 - Small, focused commits with clear messages
@@ -34,6 +49,17 @@ Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is pr
 - Delete more code than you add when possible
 - If a fix is ugly, the design is wrong — fix the design
 - Measure before optimizing — no speculative performance work
+
+## Session Discipline
+
+- Run `/boot` at the start of every session. No exceptions.
+- Update docs as you work, not at the end — sessions die mid-context, so batched updates never happen.
+- After completing a feature: update `docs/ROADMAP.md` status table
+- After making a non-obvious design choice: append to `docs/DECISIONS.md`
+- After hitting a bug or gotcha: add to Known Issues below
+- After touching a feature: update its `docs/features/*.md` spec if "Current State" is wrong
+- Before committing, ask: "Did I learn anything that the next session needs to know?" If yes, write it down.
+- See `docs/DECISIONS.md` for architectural rationale — read before questioning existing design choices
 
 ## Project: SimpleRMS / Akritos
 
@@ -92,12 +118,17 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - TaxRate: `rate` (Decimal, not rateDecimal)
 - Invoice: `stripePaymentLink` (not stripePaymentLinkUrl)
 - Contact: `role` (not title)
+- TimeEntry: `minutes` (Int, not hours — divide by 60 for display)
 
 ### Known Issues
 
 - **CAD currency bug:** `app/book/page.tsx` uses `formatCurrency(Number(s.price), "CAD")` — should be USD
 - **Testimonials placeholder:** Homepage has "We're new. Testimonials are earned, not invented." — remove once real testimonials exist, or remove entirely (identified as liability in competitive review)
 - **Admin password:** Production still uses default `changeme123` — change before first client
+- **No CSRF on public API routes:** `/api/tickets/reply` and `/api/files/upload` use POST but no CSRF token — relies on SameSite cookies which is sufficient for browser clients but not for API-style access
+- **Rate limiting is in-memory:** `server/rate-limit.ts` uses a Map — resets on server restart, doesn't work across multiple instances. Acceptable for single-instance VPS deployment.
+- **No email queue retry backoff:** `app/api/cron/process-emails/route.ts` retries failed emails up to 3 times with no delay between attempts — should add exponential backoff if email failures become common
+- **Portal token is permanent:** Client portal tokens (cuid) never expire and can't be rotated without DB manual intervention — add rotation mechanism before handling sensitive client data
 
 ### Testing & Deployment
 
