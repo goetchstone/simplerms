@@ -11,7 +11,7 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
-const RESERVED = new Set(["about", "book", "contact", "privacy", "terms", "support", "blog", "portal", "dashboard", "api", "pricing", "services", "nonprofits"]);
+const RESERVED = new Set(["about", "book", "contact", "privacy", "terms", "support", "blog", "portal", "dashboard", "api", "pricing", "services", "nonprofits", "careers"]);
 
 async function getData(slug: string) {
   const [setting, page] = await Promise.all([

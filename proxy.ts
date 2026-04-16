@@ -15,6 +15,7 @@ const PUBLIC_PATHS = [
   "/terms",
   "/blog",
   "/nonprofits",
+  "/careers",
   "/portal",
   "/api/auth",
   "/api/trpc",
