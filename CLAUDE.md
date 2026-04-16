@@ -20,6 +20,7 @@ Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is pr
 - Never break the build — run tests before committing
 - Handle errors explicitly — no silent failures, no swallowed exceptions
 - Validate at system boundaries, trust internals
+- **Callers must respect callee constraints.** Before calling any tRPC procedure, read its Zod input schema — check `.min()`, `.max()`, `.regex()`, enums, and optionality. TypeScript erases Zod runtime constraints (e.g., `z.number().max(100)` types as `number`), so the compiler won't save you. This caused a production crash (limit: 200 vs max: 100).
 - No premature abstraction — earn complexity through repetition
 - Minimal dependencies — every dependency is a liability
 - Security by default — no hardcoded secrets, no injection vectors, sanitize inputs
@@ -82,6 +83,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 ### Key Patterns
 
 - **tRPC hierarchy:** publicProcedure → protectedProcedure → staffProcedure → adminProcedure
+- **tRPC caller constraint:** When calling procedures from server components, always verify the Zod input schema's runtime constraints (min, max, regex, enum). TypeScript only checks the base type (`number`, `string`), not Zod refinements. Open the router file and read the `.input()` block before writing the call.
 - **Audit logging:** mutations use `withAudit` middleware — do not bypass
 - **Public pages:** require 3 additions: proxy.ts PUBLIC_PATHS, [slug]/page.tsx RESERVED, sitemap.ts
 - **All public pages:** use `export const dynamic = "force-dynamic"` and fetch company name with try/catch fallback

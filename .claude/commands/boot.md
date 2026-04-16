@@ -17,6 +17,9 @@ You are starting a new session on the SimpleRMS / Akritos project. Run through t
 - Run `npx vitest run` — if tests fail, note the failures.
 - Report any issues to the user before proceeding.
 
+## Lessons to enforce while coding
+- **Zod runtime constraints:** Before calling ANY tRPC procedure, open the router file and verify `.input()` schema constraints (min, max, regex, enums). TypeScript does NOT catch Zod refinement violations — `z.number().max(100)` types as `number`, so `limit: 200` compiles clean but crashes at runtime. This has caused production crashes. See `docs/DECISIONS.md` entry 2026-04-16.
+
 ## Step 4: Check for stale docs
 - Compare `docs/ROADMAP.md` status table against what the memory files claim. If stale, update memory.
 - Check if any `docs/features/*.md` specs you might touch today have outdated "Current State" sections. If so, update them as you work (not all at once).

@@ -58,7 +58,7 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 
 **Decision:** Client portal access via `/portal/[token]` where token is a cuid stored on the Client model. No login required.
 
-**Why:** Clients shouldn't need accounts to view their invoices or tickets. The token is sent in emails (portal link). Middleware validates the token format (UUID regex) to reject junk, but actual authorization happens in the tRPC procedure (byPublicToken).
+**Why:** Clients shouldn't need accounts to view their invoices or tickets. The token is sent in emails (portal link). Authorization happens in each portal page's server component — DB lookup by token with `notFound()` on miss. Middleware no longer validates tokens (the UUID regex check was removed in 2026-04-14 because tokens are CUIDs, not UUIDs).
 
 **Known issue:** Tokens never expire and can't be rotated without DB intervention. This is documented in Known Issues. Rotation mechanism needed before handling sensitive data.
 
@@ -97,3 +97,17 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 **Decision:** Created `/boot` skill, session discipline rules in CLAUDE.md, decision log (this file), expanded known issues, and memory files for security posture and session behavior.
 
 **Why:** Context loss between Claude sessions was causing repeated re-discovery of the same information, stale memory files contradicting reality, and design decisions evaporating. The `/boot` checklist forces context loading. The decision log preserves "why." The session discipline rules enforce doc updates inline with work, not as a separate step that gets skipped when context runs out.
+
+---
+
+### 2026-04-16: Post-mortem — Zod runtime constraints not caught by TypeScript
+
+**What happened:** Time tracking and Orders pages both crashed with a server error. Both called `crm.listClients({ page: 1, limit: 200 })`. The `listClients` Zod schema has `limit: z.number().int().min(1).max(100)`. Zod rejected `200` at runtime, throwing a validation error.
+
+**Why TypeScript didn't catch it:** tRPC infers Zod schema types as their base TypeScript type. `z.number().max(100)` infers as `number`, not `number & { max: 100 }`. TypeScript sees `limit: 200` as valid `number` — no error. The constraint only exists at runtime in Zod's validation.
+
+**Root cause:** The page was written without reading the router's input schema. The caller assumed a higher limit was fine.
+
+**Lesson:** Before calling any tRPC procedure from a server component, open the router file and read the `.input()` block. Check every `.min()`, `.max()`, `.regex()`, enum constraint, and optionality. This is now an engineering standard in CLAUDE.md.
+
+**Broader pattern:** Any boundary between two systems where one side has stricter validation than the type system can express is a bug factory. tRPC callers + Zod schemas is the specific instance here, but the principle applies to API routes, form submissions, and anything with runtime validation.
