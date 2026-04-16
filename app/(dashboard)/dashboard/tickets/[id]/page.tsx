@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/tickets/[id]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { createCachedCaller } from "@/lib/trpc/server";
 import { TicketDetail } from "@/components/tickets/ticket-detail";

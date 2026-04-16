@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/orders/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { OrdersTable } from "@/components/orders/orders-table";
 

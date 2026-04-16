@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/crm/clients/[id]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { createCachedCaller } from "@/lib/trpc/server";
 import { ClientDetail } from "@/components/crm/client-detail";

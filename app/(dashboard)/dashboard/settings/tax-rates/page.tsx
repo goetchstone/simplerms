@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/settings/tax-rates/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { TaxRatesPanel } from "@/components/settings/tax-rates-panel";
 

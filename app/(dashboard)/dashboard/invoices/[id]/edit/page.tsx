@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/invoices/[id]/edit/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound, redirect } from "next/navigation";
 import { createCachedCaller } from "@/lib/trpc/server";
 import { InvoiceEditForm } from "@/components/invoices/invoice-edit-form";

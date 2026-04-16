@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/catalog/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { CatalogTable } from "@/components/catalog/catalog-table";
 

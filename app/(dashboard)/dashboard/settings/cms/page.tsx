@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/settings/cms/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { CmsManager } from "@/components/cms/cms-manager";
 

@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/invoices/new/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { InvoiceCreateForm } from "@/components/invoices/invoice-create-form";
 

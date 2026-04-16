@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/audit-log/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { AuditLogTable } from "@/components/audit/audit-log-table";
 

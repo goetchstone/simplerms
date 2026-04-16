@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/settings/users/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { UsersTable } from "@/components/settings/users-table";
 

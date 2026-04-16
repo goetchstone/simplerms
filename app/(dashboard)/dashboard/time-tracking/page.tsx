@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/time-tracking/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { TimeTracker } from "@/components/time-tracking/time-tracker";
 

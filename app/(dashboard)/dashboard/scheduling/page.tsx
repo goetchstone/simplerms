@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/scheduling/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { AppointmentList } from "@/components/scheduling/appointment-list";
 

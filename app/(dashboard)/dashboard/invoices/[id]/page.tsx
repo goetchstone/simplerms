@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/invoices/[id]/page.tsx
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { createCachedCaller } from "@/lib/trpc/server";
 import { InvoiceDetail } from "@/components/invoices/invoice-detail";

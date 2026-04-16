@@ -1,4 +1,6 @@
 // app/(dashboard)/dashboard/inventory/page.tsx
+export const dynamic = "force-dynamic";
+
 import { createCachedCaller } from "@/lib/trpc/server";
 import { InventoryTable } from "@/components/inventory/inventory-table";
 
