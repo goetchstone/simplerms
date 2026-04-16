@@ -85,7 +85,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **tRPC hierarchy:** publicProcedure → protectedProcedure → staffProcedure → adminProcedure
 - **tRPC caller constraint:** When calling procedures from server components, always verify the Zod input schema's runtime constraints (min, max, regex, enum). TypeScript only checks the base type (`number`, `string`), not Zod refinements. Open the router file and read the `.input()` block before writing the call.
 - **Audit logging:** mutations use `withAudit` middleware — do not bypass
-- **Public pages:** require 3 additions: proxy.ts PUBLIC_PATHS, [slug]/page.tsx RESERVED, sitemap.ts
+- **Public pages:** require 4 additions: proxy.ts PUBLIC_PATHS, [slug]/page.tsx RESERVED, sitemap.ts, footer link in site-footer.tsx
 - **All public pages:** use `export const dynamic = "force-dynamic"` and fetch company name with try/catch fallback
 - **Settings:** stored in DB as key/value (Setting model), fetched via `db.setting.findUnique`
 - **CMS blocks:** JSON array of { type, content, level, src, alt, ctaText, ctaHref } objects
