@@ -53,7 +53,7 @@ export default async function BookServicePage({ params }: Props) {
                 {service.duration} min
               </span>
               {service.price !== null && (
-                <span className="text-conviction">{formatCurrency(Number(service.price), "CAD")}</span>
+                <span className="text-conviction">{formatCurrency(Number(service.price))}</span>
               )}
             </div>
           </div>

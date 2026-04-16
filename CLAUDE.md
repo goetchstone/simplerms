@@ -124,7 +124,6 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 
 ### Known Issues
 
-- **CAD currency bug:** `app/book/page.tsx` uses `formatCurrency(Number(s.price), "CAD")` — should be USD
 - **Testimonials placeholder:** Homepage has "We're new. Testimonials are earned, not invented." — remove once real testimonials exist, or remove entirely (identified as liability in competitive review)
 - **Admin password:** Production still uses default `changeme123` — change before first client
 - **No CSRF on public API routes:** `/api/tickets/reply` and `/api/files/upload` use POST but no CSRF token — relies on SameSite cookies which is sufficient for browser clients but not for API-style access

@@ -59,7 +59,7 @@ export default async function BookPage() {
                     <h2 className="font-medium text-bone">{s.name}</h2>
                     {s.price !== null && (
                       <span className="ml-3 shrink-0 text-sm text-conviction">
-                        {formatCurrency(Number(s.price), "CAD")}
+                        {formatCurrency(Number(s.price))}
                       </span>
                     )}
                   </div>
