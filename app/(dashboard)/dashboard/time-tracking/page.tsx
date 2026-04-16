@@ -8,7 +8,7 @@ export default async function TimeTrackingPage() {
   const caller = await createCachedCaller();
   const [result, clients] = await Promise.all([
     caller.time.list({ page: 1, limit: 50 }),
-    caller.crm.listClients({ page: 1, limit: 200 }),
+    caller.crm.listClients({ page: 1, limit: 100 }),
   ]);
 
   return (
