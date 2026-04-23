@@ -139,6 +139,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - Type check: `npx tsc --noEmit` (must pass before commit)
 - Deploy: SSH to VPS, `cd /opt/simplerms && git pull && bash deploy.sh`
 - Docker: app + db + migrator + mailpit services
-- Blog posts seeded via `docker compose --profile tools run --rm migrator npx tsx prisma/seed-blog-{name}.ts`
+- Blog posts seed automatically via `deploy.sh` — it loops over `prisma/seed-blog-*.ts` after every deploy. All blog seeds use upsert, so this is idempotent and picks up new posts and edits without manual steps
+- Manual seed (dev or one-off): `docker compose --profile tools run --rm migrator npx tsx prisma/seed-blog-{name}.ts`
 - If seed script was added after last Docker build: `docker compose --profile tools build migrator` first
 - The `--profile` flag goes BEFORE the subcommand: `docker compose --profile tools run` (not `docker compose run --profile tools`)

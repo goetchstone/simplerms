@@ -70,6 +70,17 @@ else
   echo "    Database already seeded (${USER_COUNT// /} users, ${SERVICE_COUNT// /} services)"
 fi
 
+echo "==> Seeding blog content (idempotent via upsert)"
+# Every seed-blog-*.ts uses upsert, so running these on every deploy safely
+# creates new posts and updates edits to existing ones. No flags, no drift.
+shopt -s nullglob
+for seed_file in prisma/seed-blog-*.ts; do
+  seed_name=$(basename "$seed_file" .ts)
+  echo "    Running $seed_name"
+  $COMPOSE run --rm migrator npx tsx "$seed_file"
+done
+shopt -u nullglob
+
 echo "==> Swapping to new container"
 $COMPOSE up -d --no-deps --remove-orphans app
 
