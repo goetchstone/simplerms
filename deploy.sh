@@ -53,7 +53,12 @@ done
 echo "    Database ready"
 
 echo "==> Building new image (old app keeps serving traffic)"
-$COMPOSE build --no-cache
+# --profile tools includes the migrator service (used for prisma + blog seeds).
+# Without it, only app/db/mailpit rebuild, and the migrator image goes stale —
+# silently missing new prisma/seed-blog-*.ts files from every deploy after it
+# was first built. Learned that the hard way: prompt-jockeys seed couldn't find
+# its own file because the migrator image was two commits out of date.
+$COMPOSE --profile tools build --no-cache
 
 echo "==> Pushing schema to database"
 $COMPOSE run --rm migrator npx prisma db push --skip-generate
