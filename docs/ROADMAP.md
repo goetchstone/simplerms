@@ -142,4 +142,4 @@ These become important as client count grows.
 | Settings UI | Working | Company, SMTP, invoice defaults |
 | Background Jobs | Working | Email queue processor + reminders + overdue flagging |
 | Client Portal | Working | Token-based, invoices/tickets/appointments |
-| Public Pages | Working | Homepage, about, services, pricing, contact, careers, nonprofits, privacy, terms, blog, book, support |
+| Public Pages | Working | Homepage, about, services, pricing, contact, careers, nonprofits, apple-business, privacy, terms, blog, book, support |

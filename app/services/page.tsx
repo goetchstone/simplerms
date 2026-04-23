@@ -11,7 +11,7 @@ import { db } from "@/server/db";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Apple Business setup, MDM deployment & migration, Google Workspace, and Mac management training for Windows-native IT teams. We set it up, train your team, you own it.",
+    "Apple Business setup and management, enterprise MDM when you need it, Google Workspace, and Mac management training. We keep it simple — no unnecessary tools, no enterprise complexity where it doesn't belong.",
   alternates: { canonical: "https://akritos.com/services" },
 };
 import {
@@ -38,38 +38,40 @@ async function getCompanyName() {
 const coreServices = [
   {
     icon: MonitorSmartphone,
-    title: "Apple Business Setup",
-    description: "Apple Business Manager is the foundation everything else builds on. We handle registration, verification, managed Apple ID provisioning, and Automated Device Enrollment so every device your team opens is enrolled and secured before they touch it. Identity federation with Google Workspace or Azure AD means one login, everywhere.",
+    title: "Apple Business Setup & Management",
+    description: "Apple's new all-in-one platform for device management, business email, and local presence — free, and for most small businesses running Apple devices, enough on its own. We handle DUNS registration, account verification, managed Apple account provisioning, Automated Device Enrollment, and identity federation with Google Workspace or Microsoft 365. Then we manage it alongside your team.",
     details: [
-      "Apple Business Manager registration and verification",
-      "Managed Apple ID provisioning",
-      "Identity federation with Google Workspace or Azure AD",
+      "Apple Business account registration and verification",
+      "Managed Apple account provisioning",
+      "Identity federation with Google Workspace or Microsoft 365",
       "Automated Device Enrollment (ADE) configuration",
       "Volume purchasing and app distribution",
-      "APNS certificate and token management",
+      "Built-in MDM setup — no separate platform required",
+      "Business email with your custom domain",
+      "Local presence (Apple Maps, Spotlight, Siri, Wallet)",
     ],
   },
   {
     icon: Laptop,
-    title: "MDM Setup & Migration",
-    description: "Mosyle, Jamf, Iru, Addigy — we evaluate each for your environment and deploy the right one. Not whatever pays us the most. Already running Intune? Keep it for Windows — it's great at that. We deploy a purpose-built Apple MDM alongside it so the right tool manages the right platform.",
+    title: "Enterprise MDM — When You Actually Need It",
+    description: "For most small businesses, Apple Business's built-in MDM is enough. When it isn't — regulated industries, complex deployments, large fleets — we deploy Mosyle, Jamf, Iru, or Addigy based on fit, not kickbacks. We'll tell you which path makes sense for you. Already running Intune? Keep it for Windows; purpose-built Apple MDM alongside.",
     details: [
-      "MDM platform evaluation — fit, not kickbacks",
+      "Honest evaluation: Apple Business or something more?",
+      "Mosyle, Jamf, Iru, Addigy — chosen for fit, not markup",
       "Zero-touch deployment for new hires",
       "Apple MDM deployed alongside Intune for Windows",
       "Migration from existing MDM or from no MDM",
       "App deployment, patching, and security policy configuration",
-      "Profile and configuration management",
     ],
   },
   {
     icon: Globe,
     title: "Google Workspace Setup",
-    description: "Google Workspace, domain, email, SSO, and directory — configured correctly from day one and federated with Apple Business Manager for seamless identity. You own the domain, you own the accounts, you hold the keys. We handle SPF, DKIM, DMARC so your email actually arrives.",
+    description: "Google Workspace, domain, email, SSO, and directory — configured correctly from day one and federated with Apple Business for seamless identity. You own the domain, you own the accounts, you hold the keys. We handle SPF, DKIM, DMARC so your email actually arrives.",
     details: [
       "Google Workspace deployment and domain configuration",
       "SSO and identity provider setup",
-      "Identity federation with Apple Business Manager",
+      "Identity federation with Apple Business",
       "DNS and email authentication (SPF, DKIM, DMARC)",
       "User lifecycle automation",
       "Domain registration and management",
@@ -155,12 +157,13 @@ export default async function ServicesPage() {
           Services
         </p>
         <h1 className="text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl">
-          Apple device management, done right
+          Apple device management, done simply
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Apple Business, MDM, Google Workspace — set up right and handed off to
-          your team. We train Windows-native IT teams to own their Apple
-          environment.
+          Apple Business is free and — for most small businesses — enough on
+          its own. When it&apos;s not, we deploy the right MDM. Either way, we
+          manage it alongside your team. No unnecessary tools. No enterprise
+          complexity where it doesn&apos;t belong.
         </p>
       </section>
 
@@ -228,7 +231,7 @@ export default async function ServicesPage() {
               <ul className="space-y-3">
                 {[
                   "How MDM works vs. Group Policy — the mental model shift",
-                  "Apple Business Manager and device enrollment workflows",
+                  "Apple Business and device enrollment workflows",
                   "MDM console operation — profiles, policies, app deployment",
                   "macOS security model vs. Windows security model",
                   "Troubleshooting Mac-specific issues your team will actually hit",

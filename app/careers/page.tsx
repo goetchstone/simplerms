@@ -48,7 +48,7 @@ const futureRoles = [
     title: "Senior Apple/MDM Technician",
     range: "$70–85K",
     when: "First hire — when managed client count exceeds what one person can deliver well",
-    what: "Apple Business Manager, MDM deployment and migration (Mosyle, Jamf, Iru), Google Workspace, macOS security baselines, client-facing work. You'd own delivery for a subset of managed clients.",
+    what: "Apple Business setup and management, enterprise MDM deployment and migration (Mosyle, Jamf, Iru), Google Workspace, macOS security baselines, client-facing work. You'd own delivery for a subset of managed clients.",
   },
   {
     title: "Operations / Admin",

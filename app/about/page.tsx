@@ -55,11 +55,11 @@ const projects = [
       "Migrated POS data between platforms without data loss. Secured Clover terminals on dedicated VLANs to meet PCI compliance requirements. Built custom reporting using existing tools — no unnecessary vendor spend. Negotiated payment processing rates multiple times, saving the business thousands annually.",
   },
   {
-    title: "Apple Business Manager & managed identity",
+    title: "Apple Business & managed identity",
     duration: "End-to-end",
     context: "Multi-location regional retailer",
     narrative:
-      "Deployed Apple Business Manager, federated identity with Google Workspace, and rolled out managed Apple IDs across the organization. This is the exact stack Akritos offers to clients — it was built in production first, not learned from a demo.",
+      "Deployed Apple Business (then called Apple Business Manager), federated identity with Google Workspace, and rolled out managed Apple accounts across the organization. This is the exact stack Akritos offers to clients — it was built in production first, not learned from a demo.",
   },
 ];
 
@@ -194,7 +194,7 @@ export default async function AboutPage() {
               </a>{" "}
               at Penn State — the premier conference for Apple enterprise and
               education IT professionals. Covering everything from DUNS
-              registration through ABM setup, MDM selection, and zero-touch
+              registration through Apple Business setup, MDM selection, and zero-touch
               deployment. Donor to the{" "}
               <a
                 href="https://www.macadmins.org"

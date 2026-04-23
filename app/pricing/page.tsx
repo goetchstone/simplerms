@@ -12,7 +12,7 @@ import { ArrowRight, Check, X } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Published rates, no surprises. Apple Business & MDM setup quoted flat. Managed Apple device management at $50/user/month. Advisory and training at $225/hr. Vendor costs pass through at cost — zero markup.",
+    "Published rates, no surprises. Apple Business setup from $1,500. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Advisory at $225/hr. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -28,41 +28,66 @@ async function getCompanyName() {
 const tiers = [
   {
     name: "Get Set Up",
-    price: "Quoted",
+    price: "From $1,500",
     unit: "per project",
     description:
-      "Apple Business, MDM, Google Workspace — scoped, quoted, and delivered at a fixed price. Includes hands-on training for your IT team. You know the number before we start.",
+      "Apple Business setup, Google Workspace, optional enterprise MDM — scoped, quoted, and delivered at a fixed price. Includes hands-on training for your team. You know the number before we start.",
     features: [
-      "Apple Business Manager setup and configuration",
-      "MDM deployment — Mosyle, Jamf, Iru, Addigy",
+      "Apple Business account setup and configuration",
+      "Built-in MDM deployment — no separate platform required",
+      "Enterprise MDM when needed (Mosyle, Jamf, Iru, Addigy)",
       "MDM migration from Intune or other platforms",
       "Google Workspace + domain + email + SSO",
-      "Identity federation (Apple Business ↔ Google/Azure)",
-      "Mac management training for your IT team",
-      "Full documentation and knowledge transfer",
+      "Identity federation (Apple Business ↔ Google/Microsoft 365)",
+      "Team training and documentation",
     ],
     examples: [
-      { label: "Apple Business + MDM (10 users)", range: "$4,000 – 5,000" },
-      { label: "Google Workspace + domain", range: "$1,200 – 1,500" },
-      { label: "Full stack + team training (10 users)", range: "$7,000 – 9,000" },
+      { label: "Apple Business only (10 users)", range: "$1,500 – 2,500" },
+      { label: "Apple Business + Google Workspace", range: "$2,500 – 4,000" },
+      { label: "Full enterprise MDM stack (10 users)", range: "$5,000 – 7,500" },
     ],
     cta: "Book a free consultation",
     href: "/book",
     featured: false,
   },
   {
-    name: "Stay Managed",
-    price: "$50",
+    name: "Apple Business Managed",
+    price: "$35",
     unit: "/ user / month",
     description:
-      "Ongoing Apple Business and MDM management. Device enrollment, app deployment, security policies, quarterly reviews. Your IT team handles day-to-day with our backup. No RMM agents — we manage through MDM, no extra attack surface.",
+      "Ongoing management on Apple Business alone — no separate MDM, no extra tool sprawl. Device enrollment, app deployment, security policies, quarterly reviews. Your team handles day-to-day; we back them up. For small businesses where Apple Business is the right fit.",
     features: [
       "Device enrollment and offboarding",
       "App deployment and updates",
-      "Security policy management",
+      "Security policy management via built-in MDM",
       "Quarterly environment reviews",
-      "Escalation support for your IT team",
+      "Escalation support for your team",
       "Priority response for managed clients",
+      "No MDM licensing — Apple Business is free",
+      "Minimum 5 users",
+      "Month-to-month after 3-month onboarding",
+    ],
+    examples: [
+      { label: "10-person team", range: "$350 /month" },
+      { label: "25-person team", range: "$875 /month" },
+      { label: "50-person team", range: "$1,750 /month" },
+    ],
+    cta: "Book a free consultation",
+    href: "/book",
+    featured: true,
+  },
+  {
+    name: "Enterprise MDM Managed",
+    price: "$50",
+    unit: "/ user / month",
+    description:
+      "When Apple Business alone isn't enough — regulated industries, complex deployments, larger fleets. Full management on Mosyle, Jamf, Iru, or Addigy. Your team handles day-to-day; we back them up.",
+    features: [
+      "Everything in Apple Business Managed, plus:",
+      "Enterprise MDM operation (Mosyle, Jamf, Iru, Addigy)",
+      "Advanced scripting and configuration profiles",
+      "Compliance-oriented policy management",
+      "Multi-site and complex deployment support",
       "MDM license billed separately at cost",
       "Minimum 5 users",
       "Month-to-month after 3-month onboarding",
@@ -74,7 +99,7 @@ const tiers = [
     ],
     cta: "Book a free consultation",
     href: "/book",
-    featured: true,
+    featured: false,
   },
   {
     name: "Advisory",
@@ -90,7 +115,7 @@ const tiers = [
       "Contract review and negotiation",
       "Architecture and infrastructure planning",
       "Executive IT support",
-      "Remote and on-site available",
+      "Remote delivery nationwide",
     ],
     examples: null,
     cta: "Book a session",
@@ -109,8 +134,12 @@ const faqs = [
     a: "No. We never accept partnership revenue, referral fees, or volume incentives from vendors we recommend. Our recommendations are based on what's right for you, not what pays us the most.",
   },
   {
+    q: "What's the difference between Apple Business Managed and Enterprise MDM Managed?",
+    a: "Apple Business Managed ($35/user/month) uses the built-in MDM that comes free with Apple Business. No separate license, no extra tools. Right for most small businesses. Enterprise MDM Managed ($50/user/month) adds a dedicated MDM platform (Mosyle, Jamf, Iru, or Addigy) for environments that need advanced scripting, complex configurations, or compliance-specific policy management. We'll tell you which one fits — often it's the cheaper one.",
+  },
+  {
     q: "What's the difference between managed and advisory?",
-    a: "Managed is ongoing Apple & MDM management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, payment processor negotiation, or project. Many clients use both.",
+    a: "Managed is ongoing Apple device management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, payment processor negotiation, or project. Many clients use both.",
   },
   {
     q: "Why no RMM agents?",
@@ -122,7 +151,7 @@ const faqs = [
   },
   {
     q: "What does a typical monthly bill look like?",
-    a: "A 15-person company on managed services: $750 for management (15 × $50), plus ~$60 for MDM licensing at cost, plus any advisory hours used. Every line item is visible and verifiable.",
+    a: "A 15-person company on Apple Business Managed: $525 for management (15 × $35), plus any advisory hours used. That's it — Apple Business is free. On Enterprise MDM Managed: $750 for management (15 × $50), plus ~$60 for MDM licensing at cost. Every line item is visible and verifiable.",
   },
   {
     q: "Do you charge for initial consultations?",
@@ -130,11 +159,11 @@ const faqs = [
   },
   {
     q: "Do you replace our IT team?",
-    a: "No. We train them. Most clients have competent Windows-native IT teams that just lack Apple experience. We set up the infrastructure, train the team on MDM and Apple Business Manager, and make sure they can run it independently within 60–90 days. After that, you can keep us on a managed plan for backup and escalation — or run it yourself. Either way, you own everything.",
+    a: "No. We train them. Most clients have competent teams that just lack Apple experience. We set up the infrastructure, train the team on Apple Business, and make sure they can run it independently within 60–90 days. After that, you can keep us on a managed plan for backup and escalation — or run it yourself. Either way, you own everything.",
   },
   {
     q: "We already use Intune. Do we have to get rid of it?",
-    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its ABM integration is shallow. As the Mac fleet grows, the gap widens. Right tool for the right platform.",
+    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM (or Apple Business's built-in MDM) alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its Apple Business integration is shallow. As the Mac fleet grows, the gap widens. Right tool for the right platform.",
   },
   {
     q: "What does PCI scope reduction actually save?",
@@ -170,7 +199,7 @@ export default async function PricingPage() {
 
       {/* Tiers */}
       <section className="px-6 pb-24">
-        <div className="mx-auto grid max-w-[1200px] gap-px bg-bone/5 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-[1400px] gap-px bg-bone/5 md:grid-cols-2 xl:grid-cols-4">
           {tiers.map((tier) => (
             <div
               key={tier.name}
@@ -253,16 +282,16 @@ export default async function PricingPage() {
           </div>
           <div className="space-y-1 border border-bone/10 bg-midnight p-6" style={{ borderRadius: "2px" }}>
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
-              Sample monthly invoice — 15-person managed client
+              Sample monthly invoice — 15-person Apple Business Managed client
             </p>
             <div className="space-y-2 text-base">
               <div className="flex justify-between text-bone/60">
-                <span>Managed services — 15 users × $50</span>
-                <span className="text-bone">$750.00</span>
+                <span>Apple Business Managed — 15 users × $35</span>
+                <span className="text-bone">$525.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
-                <span>Mosyle MDM licensing <span className="text-bone/30">(pass-through)</span></span>
-                <span className="text-bone">$60.00</span>
+                <span>Apple Business license <span className="text-bone/30">(free from Apple)</span></span>
+                <span className="text-bone">$0.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
                 <span>Advisory — payment processor rate negotiation, 2 hrs</span>
@@ -270,11 +299,10 @@ export default async function PricingPage() {
               </div>
               <div className="mt-3 flex justify-between border-t border-bone/10 pt-3 font-medium">
                 <span className="text-bone/60">Total</span>
-                <span className="text-bone">$1,260.00</span>
+                <span className="text-bone">$975.00</span>
               </div>
               <div className="pt-2 text-bone/30 text-xs">
-                Vendor line items link to the vendor&apos;s own invoice.
-                Zero markup. You verify every dollar.
+                No MDM markup. No hidden vendor fees. Apple Business is free — that savings goes to you, not us.
               </div>
             </div>
           </div>

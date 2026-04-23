@@ -28,7 +28,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "The iPads were automatically assigned to the MDM through Apple Business Manager. We'd already added the new employees to the identity provider. Federation between the workspace and MDM synced users to both the MDM and ABM automatically.",
+      "The iPads were automatically assigned to the MDM through Apple Business. We'd already added the new employees to the identity provider. Federation between the workspace and MDM synced users to both the MDM and Apple Business automatically.",
   },
   {
     type: "paragraph",
@@ -93,7 +93,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "That's what infrastructure does. When ABM and an MDM are in place, changing hardware is a Tuesday. When they're not, it's a two-day disaster.",
+      "That's what infrastructure does. When Apple Business and an MDM are in place, changing hardware is a Tuesday. When they're not, it's a two-day disaster.",
   },
   {
     type: "paragraph",
@@ -106,7 +106,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "We set up Apple Business Manager, deploy the right MDM, and train your team to run it. So the next deployment looks like this one — not the last one.",
+      "We set up Apple Business, deploy the right MDM, and train your team to run it. So the next deployment looks like this one — not the last one.",
   },
   {
     type: "cta",
@@ -123,7 +123,7 @@ async function main() {
     update: {
       title: "Two iPads, One Hour, Zero Site Visits. Then We Switched to iMacs.",
       excerpt:
-        "What deployment looks like when Apple Business Manager and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
+        "What deployment looks like when Apple Business and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
       content: content as never,
       status: "PUBLISHED",
       publishedAt: new Date(),
@@ -132,7 +132,7 @@ async function main() {
       title: "Two iPads, One Hour, Zero Site Visits. Then We Switched to iMacs.",
       slug: "apple-device-deployment-done-right",
       excerpt:
-        "What deployment looks like when Apple Business Manager and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
+        "What deployment looks like when Apple Business and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
       content: content as never,
       status: "PUBLISHED",
       publishedAt: new Date(),

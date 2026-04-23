@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/services`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/apple-business`, lastModified: now, changeFrequency: "weekly", priority: 0.95 },
     { url: `${base}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/book`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${base}/support`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },

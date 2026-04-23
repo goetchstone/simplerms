@@ -39,17 +39,17 @@ const services = [
   {
     icon: MonitorSmartphone,
     title: "Apple Business Setup",
-    body: "Apple Business Manager, managed Apple IDs, Automated Device Enrollment, identity federation. The foundation everything else builds on. We handle registration through deployment.",
+    body: "Apple's new all-in-one platform for device management, email, and local presence. Free. For most small businesses, it's all the IT management you need — no separate MDM required.",
   },
   {
     icon: Laptop,
-    title: "MDM Setup & Migration",
-    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. Already running Intune? Keep it for Windows. We deploy Apple MDM alongside it.",
+    title: "Enterprise MDM When You Need It",
+    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. When Apple Business alone isn't enough, we deploy the right tool. Already running Intune? Keep it for Windows; Apple MDM alongside it.",
   },
   {
     icon: Globe,
     title: "Google Workspace Setup",
-    body: "Domain, email, SSO, identity federation with Apple Business Manager. SPF, DKIM, DMARC. You own the domain, you own the accounts, you hold the keys.",
+    body: "Domain, email, SSO, identity federation with Apple Business. SPF, DKIM, DMARC. You own the domain, you own the accounts, you hold the keys.",
   },
   {
     icon: GraduationCap,
@@ -102,15 +102,16 @@ export default async function HomePage() {
           Technology Partners
         </p>
         <h1 className="max-w-3xl text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl lg:text-[56px] lg:leading-tight">
-          Your business is living in confusion.
+          Apple device management,
           <br />
-          <span className="text-conviction">We end it.</span>
+          <span className="text-conviction">simplified.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/60">
-          Your IT team knows Windows. Then the company buys Macs and everything
-          they know stops applying. We set up Apple Business, deploy the right
-          MDM, configure Google Workspace, and train your team to own it
-          all — so you can run it yourself, even if you choose not to.
+          Apple Business is Apple&apos;s new all-in-one platform for device
+          management, business email, and local presence. It&apos;s free. For
+          most small businesses, it&apos;s all the IT management you need. We
+          help you set it up and manage it alongside your team — so you can
+          run it yourself, even if you choose not to.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -149,7 +150,7 @@ export default async function HomePage() {
           <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
             Goetch Stone
           </Link>
-          {" "}· 20+ years in IT · Based in Connecticut ·{" "}
+          {" "}· 20+ years in IT · Remote-first, serving businesses nationwide ·{" "}
           <a
             href="https://macadmins.psu.edu/conference/resources/"
             target="_blank"
@@ -196,9 +197,10 @@ export default async function HomePage() {
               Apple device management, done right and handed off
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
-              We set up Apple Business, deploy MDM, configure Google Workspace,
-              and train your Windows-native IT team to run it all. You decide
-              what happens after that.
+              We set up Apple Business, deploy enterprise MDM when it&apos;s
+              actually needed, configure Google Workspace, and manage it
+              alongside your team. Keep it simple. You decide what happens
+              after that.
             </p>
           </div>
           <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">

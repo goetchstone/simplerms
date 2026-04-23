@@ -47,7 +47,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "Assuming they had Apple Business Manager and an MDM in place, I sent over the certificates needed to join the network. I even sent generic configuration profiles they should have been able to deploy if they had the right tools.",
+      "Assuming they had Apple Business and an MDM in place, I sent over the certificates needed to join the network. I even sent generic configuration profiles they should have been able to deploy if they had the right tools.",
   },
   {
     type: "heading",
@@ -97,12 +97,12 @@ const content = [
   {
     type: "paragraph",
     content:
-      "What I assumed they had: Apple Business Manager. An MDM platform. Managed Apple IDs. Configuration profiles. A basic understanding of device management.",
+      "What I assumed they had: Apple Business. An MDM platform. Managed Apple IDs. Configuration profiles. A basic understanding of device management.",
   },
   {
     type: "paragraph",
     content:
-      "What they actually had: every iPad logged into the same personal Apple ID. No Apple Business Manager. No MDM — not Jamf, not Mosyle, not anything. No way to deploy network profiles. No way to push apps. No concept of what any of this meant.",
+      "What they actually had: every iPad logged into the same personal Apple ID. No Apple Business. No MDM — not Jamf, not Mosyle, not anything. No way to deploy network profiles. No way to push apps. No concept of what any of this meant.",
   },
   {
     type: "paragraph",
@@ -127,12 +127,12 @@ const content = [
   {
     type: "paragraph",
     content:
-      "Then came the manual work: adding Wi-Fi settings to their unmanaged iPads one by one. Updating POS systems. Manually installing the POS app on every single iPad using a shared Apple ID — because without Apple Business Manager, there was no way to push apps. Without an MDM, there was no way to push anything at all.",
+      "Then came the manual work: adding Wi-Fi settings to their unmanaged iPads one by one. Updating POS systems. Manually installing the POS app on every single iPad using a shared Apple ID — because without Apple Business, there was no way to push apps. Without an MDM, there was no way to push anything at all.",
   },
   {
     type: "paragraph",
     content:
-      "Every manual step, every security compromise, every hour of firefighting — all because they didn't have Apple Business Manager and they didn't have an MDM.",
+      "Every manual step, every security compromise, every hour of firefighting — all because they didn't have Apple Business and they didn't have an MDM.",
   },
   {
     type: "heading",
@@ -152,12 +152,12 @@ const content = [
   {
     type: "paragraph",
     content:
-      "Most businesses we talk to are in some version of this situation. Maybe not as dramatic, but the fundamentals are the same: devices purchased without Apple Business Manager enrollment. No MDM, or Intune being stretched across both Windows and Apple (which introduces its own problems). Personal Apple IDs on company devices. No way to remotely manage, update, or wipe anything. No zero-touch deployment — every device hand-configured.",
+      "Most businesses we talk to are in some version of this situation. Maybe not as dramatic, but the fundamentals are the same: devices purchased without Apple Business enrollment. No MDM, or Intune being stretched across both Windows and Apple (which introduces its own problems). Personal Apple IDs on company devices. No way to remotely manage, update, or wipe anything. No zero-touch deployment — every device hand-configured.",
   },
   {
     type: "paragraph",
     content:
-      "The fix isn't complicated. Apple Business Manager is free. MDM platforms cost a few dollars per device per month. Zero-touch deployment means a new hire opens their device and it's ready to go — no IT visit, no manual setup.",
+      "The fix isn't complicated. Apple Business is free. MDM platforms cost a few dollars per device per month. Zero-touch deployment means a new hire opens their device and it's ready to go — no IT visit, no manual setup.",
   },
   {
     type: "paragraph",
@@ -170,7 +170,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "We set up Apple Business Manager, deploy the right MDM for your environment, and train your IT team to manage it all. So the next time someone shows up with iPads on changeover day, every device enrolls itself — and your team knows exactly what to do.",
+      "We set up Apple Business, deploy the right MDM for your environment, and train your IT team to manage it all. So the next time someone shows up with iPads on changeover day, every device enrolls itself — and your team knows exactly what to do.",
   },
   {
     type: "cta",
@@ -185,7 +185,7 @@ async function main() {
   const post = await db.cmsPost.upsert({
     where: { slug: "ipad-deployment-without-apple-business-manager" },
     update: {
-      title: "No ABM. No MDM. No Plan. A Real iPad Deployment Story.",
+      title: "No Apple Business. No MDM. No Plan. A Real iPad Deployment Story.",
       excerpt:
         "A multi-store retailer shows up on changeover day with unmanaged iPads, a shared personal Apple ID, and no idea what MDM stands for. Here's what happened — and what should have been in place.",
       content: content as never,
@@ -193,7 +193,7 @@ async function main() {
       publishedAt: new Date(),
     },
     create: {
-      title: "No ABM. No MDM. No Plan. A Real iPad Deployment Story.",
+      title: "No Apple Business. No MDM. No Plan. A Real iPad Deployment Story.",
       slug: "ipad-deployment-without-apple-business-manager",
       excerpt:
         "A multi-store retailer shows up on changeover day with unmanaged iPads, a shared personal Apple ID, and no idea what MDM stands for. Here's what happened — and what should have been in place.",

@@ -19,19 +19,18 @@ export function localBusinessSchema() {
     name: "Akritos Technology Partners LLC",
     alternateName: "Akritos",
     description:
-      "Apple Business setup, MDM deployment, Google Workspace, and Mac management training for Windows-native IT teams. Published rates, zero vendor markup, no lock-in.",
+      "Apple Business setup and management, enterprise MDM when you need it, Google Workspace, and Mac management training. Published rates, zero vendor markup, no lock-in. Remote-first, serving small businesses nationwide.",
     url: "https://akritos.com",
     telephone: "+18609343410",
     priceRange: "$225/hr",
-    areaServed: [
-      { "@type": "State", name: "Connecticut" },
-      { "@type": "State", name: "Massachusetts" },
-      { "@type": "State", name: "Rhode Island" },
-      { "@type": "City", name: "New York City" },
-    ],
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
     serviceType: [
-      "Apple Business Manager Setup",
-      "MDM Deployment and Migration",
+      "Apple Business Setup",
+      "Apple Business Management",
+      "Enterprise MDM Deployment and Migration",
       "Google Workspace Setup",
       "Mac Management Training",
       "PCI Scope Reduction",
@@ -41,7 +40,10 @@ export function localBusinessSchema() {
       "IT Advisory",
     ],
     knowsAbout: [
+      "Apple Business",
       "Apple Business Manager",
+      "Apple Business Essentials",
+      "Apple Business Connect",
       "Mosyle",
       "Jamf",
       "Iru",
@@ -57,7 +59,7 @@ export function localBusinessSchema() {
       "Password Management",
       "Digital Estate Planning",
     ],
-    slogan: "Your IT team knows Windows. We teach them Apple.",
+    slogan: "Apple device management, simplified.",
     founder: {
       "@type": "Person",
       name: "Goetch Stone",

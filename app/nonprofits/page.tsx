@@ -108,7 +108,7 @@ export default async function NonprofitsPage() {
           </div>
           <div className="space-y-4">
             {[
-              "Apple Business Manager and MDM — so your devices are managed and recoverable",
+              "Apple Business setup — free platform to manage your Apple devices and keep them recoverable",
               "Google Workspace — so your org owns its email, files, and contacts",
               "Device management training for your staff or IT volunteer",
               "Payment processing audit — better donation rates, smaller PCI scope",

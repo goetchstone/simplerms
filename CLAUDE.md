@@ -102,6 +102,8 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - Voice is always "we" (partnership), never "I" (sole proprietor)
 - Never overclaim capabilities not done in production
 - Kandji is now Iru — use current branding
+- Apple Business Manager is now Apple Business (as of April 2026) — consolidated with Apple Business Essentials and Apple Business Connect into one free platform. Use "Apple Business" in new copy. Historical project descriptions may note the prior name in parentheses.
+- Geographic positioning: "Remote-first · Serving businesses nationwide" — not Connecticut-only. Founded in CT, serving everywhere. Update `areaServed` in JSON-LD to Country: United States.
 - Design: midnight (#1C1F2E), conviction (#C8A96E), bone (#E8E4DC), slate-brand (#4A5068), 2px border-radius
 - Body text: text-base (16px), opacity /60 on public pages (not text-sm or /50)
 - Copy voice: direct, honest, no filler, no AI tells
