@@ -139,7 +139,9 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - Type check: `npx tsc --noEmit` (must pass before commit)
 - Deploy: SSH to VPS, `cd /opt/simplerms && git pull && bash deploy.sh`
 - Docker: app + db + migrator + mailpit services
-- Blog posts seed automatically via `deploy.sh` — it loops over `prisma/seed-blog-*.ts` after every deploy. All blog seeds use upsert, so this is idempotent and picks up new posts and edits without manual steps
+- Blog posts seed automatically via `deploy.sh` — it loops over `prisma/seed-blog-*.ts` after every deploy. All blog seeds use upsert with pinned `publishedAt` dates, so this is idempotent — no drift, picks up new posts and edits without manual steps
+- **Blog seed dates:** pin `publishedAt` in both `update` and `create` blocks to a hardcoded ISO string. Never use `new Date()` — it resets the date to "now" on every deploy
 - Manual seed (dev or one-off): `docker compose --profile tools run --rm migrator npx tsx prisma/seed-blog-{name}.ts`
 - If seed script was added after last Docker build: `docker compose --profile tools build migrator` first
 - The `--profile` flag goes BEFORE the subcommand: `docker compose --profile tools run` (not `docker compose run --profile tools`)
+- **Migrator is behind `profiles: [tools]`** — `docker compose build` alone does NOT rebuild it. `deploy.sh` uses `$COMPOSE --profile tools build --no-cache` to ensure the migrator image stays in sync with prisma/ changes. Without `--profile tools`, new seed files silently 404 inside the container because they're not in the stale image
