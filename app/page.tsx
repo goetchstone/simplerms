@@ -150,7 +150,7 @@ export default async function HomePage() {
           <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
             Goetch Stone
           </Link>
-          {" "}· 20+ years in IT · Remote-first, serving businesses nationwide ·{" "}
+          {" "}· 20+ years in IT · Remote nationwide · In-person in CT, MA, RI, NYC ·{" "}
           <a
             href="https://macadmins.psu.edu/conference/resources/"
             target="_blank"

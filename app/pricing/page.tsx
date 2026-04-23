@@ -12,7 +12,7 @@ import { ArrowRight, Check, X } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Published rates, no surprises. Apple Business setup from $1,500. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Advisory at $225/hr. Vendor costs pass through at cost — zero markup.",
+    "Published rates, no surprises. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Advisory at $225/hr. Setup quoted flat after a free consultation. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -28,10 +28,10 @@ async function getCompanyName() {
 const tiers = [
   {
     name: "Get Set Up",
-    price: "From $1,500",
-    unit: "per project",
+    price: "Quoted",
+    unit: "one flat number",
     description:
-      "Apple Business setup, Google Workspace, optional enterprise MDM — scoped, quoted, and delivered at a fixed price. Includes hands-on training for your team. You know the number before we start.",
+      "Apple Business setup, Google Workspace, optional enterprise MDM — scoped during a free consultation and quoted at one flat number. No fake ranges, no bait-and-switch. We learn your environment first, then tell you exactly what it costs.",
     features: [
       "Apple Business account setup and configuration",
       "Built-in MDM deployment — no separate platform required",
@@ -40,12 +40,9 @@ const tiers = [
       "Google Workspace + domain + email + SSO",
       "Identity federation (Apple Business ↔ Google/Microsoft 365)",
       "Team training and documentation",
+      "Hourly ($225/hr) also available for smaller scopes",
     ],
-    examples: [
-      { label: "Apple Business only (10 users)", range: "$1,500 – 2,500" },
-      { label: "Apple Business + Google Workspace", range: "$2,500 – 4,000" },
-      { label: "Full enterprise MDM stack (10 users)", range: "$5,000 – 7,500" },
-    ],
+    examples: null,
     cta: "Book a free consultation",
     href: "/book",
     featured: false,
@@ -192,9 +189,20 @@ export default async function PricingPage() {
           Published rates. No surprises.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Setup projects are quoted flat. Managed services are per-user.
-          Advisory is hourly. Vendor costs pass through at cost — zero markup, ever.
+          Managed services are per-user. Advisory is hourly. Setup is quoted
+          flat after a free consultation — because every environment is
+          different and fake ranges help no one. Vendor costs pass through at
+          cost — zero markup, ever.
         </p>
+        <div className="mt-8">
+          <Link
+            href="/book"
+            className="inline-flex items-center gap-2 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
+            style={{ borderRadius: "2px" }}
+          >
+            Book your free consultation <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </section>
 
       {/* Tiers */}

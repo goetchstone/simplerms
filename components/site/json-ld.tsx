@@ -23,10 +23,13 @@ export function localBusinessSchema() {
     url: "https://akritos.com",
     telephone: "+18609343410",
     priceRange: "$225/hr",
-    areaServed: {
-      "@type": "Country",
-      name: "United States",
-    },
+    areaServed: [
+      { "@type": "Country", name: "United States" },
+      { "@type": "State", name: "Connecticut" },
+      { "@type": "State", name: "Massachusetts" },
+      { "@type": "State", name: "Rhode Island" },
+      { "@type": "City", name: "New York City" },
+    ],
     serviceType: [
       "Apple Business Setup",
       "Apple Business Management",

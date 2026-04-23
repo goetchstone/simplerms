@@ -25,7 +25,10 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
               </a>
             </div>
             <p className="text-xs text-bone/30">
-              Remote-first · Serving businesses nationwide
+              Remote-first · Nationwide
+            </p>
+            <p className="text-xs text-bone/20">
+              In-person: CT · MA · RI · NYC
             </p>
           </div>
 
