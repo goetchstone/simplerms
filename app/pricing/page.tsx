@@ -12,7 +12,7 @@ import { ArrowRight, Check, X } from "lucide-react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Published rates, no surprises. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Advisory at $225/hr. Setup quoted flat after a free consultation. Vendor costs pass through at cost — zero markup.",
+    "Published rates, no surprises. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Setup and advisory at $225/hr. Typical setups: ~5 hours for small businesses, 20+ for enterprise migrations. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -28,10 +28,10 @@ async function getCompanyName() {
 const tiers = [
   {
     name: "Get Set Up",
-    price: "Quoted",
-    unit: "one flat number",
+    price: "$225",
+    unit: "/ hour",
     description:
-      "Apple Business setup, Google Workspace, optional enterprise MDM — scoped during a free consultation and quoted at one flat number. No fake ranges, no bait-and-switch. We learn your environment first, then tell you exactly what it costs.",
+      "Apple Business setup, Google Workspace, optional enterprise MDM. Scoped during a free consultation and delivered as one flat number based on our hourly rate. You see the math before we start.",
     features: [
       "Apple Business account setup and configuration",
       "Built-in MDM deployment — no separate platform required",
@@ -40,9 +40,12 @@ const tiers = [
       "Google Workspace + domain + email + SSO",
       "Identity federation (Apple Business ↔ Google/Microsoft 365)",
       "Team training and documentation",
-      "Hourly ($225/hr) also available for smaller scopes",
     ],
-    examples: null,
+    examples: [
+      { label: "Small team, Apple Business basics (~5 hrs)", range: "~$1,125" },
+      { label: "Apple Business + Google Workspace (~10 hrs)", range: "~$2,250" },
+      { label: "Enterprise MDM or Intune migration (20+ hrs)", range: "$4,500+" },
+    ],
     cta: "Book a free consultation",
     href: "/book",
     featured: false,
@@ -313,6 +316,32 @@ export default async function PricingPage() {
                 No MDM markup. No hidden vendor fees. Apple Business is free — that savings goes to you, not us.
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Mid-page consult CTA — risk reversal, low commitment, promised takeaway */}
+      <section className="border-t border-bone/10 px-6 py-20">
+        <div className="mx-auto max-w-[720px] text-center">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Not Sure Which Tier Fits?
+          </p>
+          <h2 className="text-[28px] font-medium text-bone">
+            Tell us about your setup.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
+            30 minutes, free, and you walk away with a real number — even if
+            you never hire us. We&apos;ll tell you which tier fits, what the
+            project would actually cost, and whether you need us at all.
+          </p>
+          <div className="mt-8">
+            <Link
+              href="/book"
+              className="inline-flex items-center gap-2 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
+              style={{ borderRadius: "2px" }}
+            >
+              Book your free consultation <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
