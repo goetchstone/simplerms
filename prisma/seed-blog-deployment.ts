@@ -126,7 +126,7 @@ async function main() {
         "What deployment looks like when Apple Business and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      publishedAt: new Date("2026-04-07T06:53:49-04:00"),
     },
     create: {
       title: "Two iPads, One Hour, Zero Site Visits. Then We Switched to iMacs.",
@@ -135,7 +135,7 @@ async function main() {
         "What deployment looks like when Apple Business and an MDM are already in place. Order, enroll, deploy — and pivot to different hardware without breaking a sweat.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      publishedAt: new Date("2026-04-07T06:53:49-04:00"),
     },
   });
 

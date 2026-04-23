@@ -190,7 +190,9 @@ async function main() {
         "A multi-store retailer shows up on changeover day with unmanaged iPads, a shared personal Apple ID, and no idea what MDM stands for. Here's what happened — and what should have been in place.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      // Canonical publish date — fixed, not new Date(). Setting in both update
+      // and create keeps the seed idempotent and restores any prior drift.
+      publishedAt: new Date("2026-04-04T10:26:26-04:00"),
     },
     create: {
       title: "No Apple Business. No MDM. No Plan. A Real iPad Deployment Story.",
@@ -199,7 +201,7 @@ async function main() {
         "A multi-store retailer shows up on changeover day with unmanaged iPads, a shared personal Apple ID, and no idea what MDM stands for. Here's what happened — and what should have been in place.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      publishedAt: new Date("2026-04-04T10:26:26-04:00"),
     },
   });
 

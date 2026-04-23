@@ -186,7 +186,7 @@ async function main() {
         "AI produces confidently wrong documents that can look more credible than the SME correcting them. A scenario every business will face — and what subject matter experts have to do differently now.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      publishedAt: new Date("2026-04-23T09:30:00-04:00"),
     },
     create: {
       title: "Prompt Jockeys and the PCI Nightmare: When AI Output Beats Expert Judgment",
@@ -195,7 +195,7 @@ async function main() {
         "AI produces confidently wrong documents that can look more credible than the SME correcting them. A scenario every business will face — and what subject matter experts have to do differently now.",
       content: content as never,
       status: "PUBLISHED",
-      publishedAt: new Date(),
+      publishedAt: new Date("2026-04-23T09:30:00-04:00"),
     },
   });
 

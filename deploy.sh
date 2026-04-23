@@ -71,14 +71,28 @@ else
 fi
 
 echo "==> Seeding blog content (idempotent via upsert)"
-# Every seed-blog-*.ts uses upsert, so running these on every deploy safely
-# creates new posts and updates edits to existing ones. No flags, no drift.
+# Every seed-blog-*.ts uses upsert with a pinned publishedAt, so running these
+# on every deploy is safe: no date drift, no duplicates. Edits to content/title
+# flow to prod automatically on the next deploy.
 shopt -s nullglob
-for seed_file in prisma/seed-blog-*.ts; do
-  seed_name=$(basename "$seed_file" .ts)
-  echo "    Running $seed_name"
-  $COMPOSE run --rm migrator npx tsx "$seed_file"
-done
+BLOG_SEEDS=(prisma/seed-blog-*.ts)
+if [ ${#BLOG_SEEDS[@]} -eq 0 ]; then
+  echo "    No blog seed files found"
+else
+  echo "    Found ${#BLOG_SEEDS[@]} blog seed file(s):"
+  for f in "${BLOG_SEEDS[@]}"; do echo "      - $f"; done
+
+  for seed_file in "${BLOG_SEEDS[@]}"; do
+    seed_name=$(basename "$seed_file" .ts)
+    echo "    → Running $seed_name"
+    if $COMPOSE run --rm migrator npx tsx "$seed_file"; then
+      echo "      ✓ $seed_name ok"
+    else
+      echo "      ✗ $seed_name FAILED (exit $?)"
+      echo "      Continuing with remaining seeds — check DB for this post"
+    fi
+  done
+fi
 shopt -u nullglob
 
 echo "==> Swapping to new container"
