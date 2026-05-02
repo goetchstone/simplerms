@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Akritos
 
-## Getting Started
+Combined marketing site and consulting platform (SimpleRMS) for **Akritos Technology Partners, LLC** — Apple device management and AI risk consulting for small businesses.
 
-First, run the development server:
+**Public site:** https://akritos.com
+
+## Repository scope
+
+- **What's public (this repo):** the application code, technical architecture, decisions log, lessons log, framework practices, deployment guidance
+- **What's not public:** strategic growth playbook, pricing experiments, customer artifacts, internal hiring plans
+
+The platform code is open source because the brand is built on transparency. Business strategy is not, because that's competitive.
+
+## Stack
+
+- Next.js 16 (App Router) · PostgreSQL 16 · Prisma 6
+- Auth.js v5 · tRPC v11 · Tailwind 4
+- Stripe (Payment Links + webhooks) · Nodemailer (SMTP)
+- Docker Compose · DreamCompute VPS · Nginx · Let's Encrypt
+
+## Documentation
+
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Operating constraints + project context. Read first. |
+| `docs/FRAMEWORK.md` | The disciplines that prevent prompt jockeying. |
+| `docs/ARCHITECTURE.md` | Stack, structure, design patterns. |
+| `docs/DECISIONS.md` | Append-only architectural decisions with rationale. |
+| `docs/LESSONS.md` | Append-only small lessons from sessions. |
+| `docs/ROADMAP.md` | Build status (what works, what's queued). |
+| `docs/features/*.md` | Per-feature specs. |
+| `DREAMHOST.md` | VPS deployment guide. |
+| `SECURITY.md` | Vulnerability reporting policy. |
+
+## Development
 
 ```bash
+npm install
+docker compose up -d db mailpit
+npx prisma db push
+npx prisma db seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Sign in at http://localhost:3000/login. The seed creates an admin account; the password is generated and printed once during the seed run.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+ssh your-vps
+cd /opt/simplerms && git pull && bash deploy.sh
+```
 
-## Learn More
+The deploy script handles: build, schema push, idempotent seed, health-check, container swap, nginx config, Let's Encrypt cert. Blog post seeds in `prisma/seed-blog-*.ts` are idempotent and run on every deploy.
 
-To learn more about Next.js, take a look at the following resources:
+## Security
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [`SECURITY.md`](./SECURITY.md). CI runs Dependabot, CodeQL, Semgrep, gitleaks, and `npm audit` on every push and PR.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT.

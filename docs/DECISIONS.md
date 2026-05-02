@@ -111,3 +111,15 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 **Lesson:** Before calling any tRPC procedure from a server component, open the router file and read the `.input()` block. Check every `.min()`, `.max()`, `.regex()`, enum constraint, and optionality. This is now an engineering standard in CLAUDE.md.
 
 **Broader pattern:** Any boundary between two systems where one side has stricter validation than the type system can express is a bug factory. tRPC callers + Zod schemas is the specific instance here, but the principle applies to API routes, form submissions, and anything with runtime validation.
+
+---
+
+### 2026-04-23: Repo stays public; strategic playbook lives in `~/.claude/plans/`
+
+**Decision:** Repository remains public on GitHub. SECURITY.md added at root. README rewritten to clarify what's in this repo vs. what isn't.
+
+**Why:** The brand promise is transparency. Going private contradicts it. Audit confirmed no committed secrets, no customer data in seeds, no real client info anywhere. The strategic growth playbook (pricing experiments, hiring sequence, customer segmentation, market sizing) lives in `~/.claude/plans/async-foraging-quill.md` outside the repo.
+
+**Audit finding:** `docs/ROADMAP.md` was originally flagged for moving private. Review showed it's a build status table (which features are working) — not strategic content. Kept public.
+
+**Doc classification rule:** Technical (architecture, decisions, lessons, build status, deployment): public. Strategic (growth playbook, pricing experiments, hiring sequence, customer artifacts): private, lives outside the repo.
