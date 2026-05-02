@@ -23,25 +23,35 @@ Settings → Code security & analysis → enable:
 
 ## Branch protection on `main` (must-pass gating)
 
-The scans are running. To make them gate (block merge on failure):
+**Currently enabled:** PR required, admin bypass allowed, three required checks:
+- `Lint, type-check, test`
+- `Secret scan (gitleaks)`
+- `Dependency audit (npm)`
 
-1. Settings → Branches → Add branch protection rule
-2. Branch name pattern: `main`
-3. Enable:
-   - Require a pull request before merging
-   - Require status checks to pass before merging
-   - Require branches to be up to date before merging
-4. Required checks (add these by name as they appear after the first CI run):
-   - `Lint, type-check, test`
-   - `Build` (part of test job)
-   - `Secret scan (gitleaks)`
-   - `Dependency audit (npm)`
-   - `Analyze (javascript-typescript)` (CodeQL)
-   - `Scan` (Semgrep)
-5. Enable: Do not allow bypassing the above settings (no admin override)
-6. Save
+Direct push to `main` is blocked. Force push and branch deletion are blocked.
 
-**Don't enable until the first run of each scanner has been triaged** — otherwise pre-existing findings will block your first PR after enforcement.
+### Adding CodeQL + Semgrep to required checks (next step)
+
+Both run on every PR but aren't required-to-pass yet. Once each has completed a clean first run on `main`, add them via:
+
+```bash
+# Re-fetch current protection
+gh api repos/goetchstone/simplerms/branches/main/protection > /tmp/current.json
+
+# Edit the required_status_checks.contexts array to add:
+#   "Analyze (javascript-typescript)"  (CodeQL)
+#   "Scan"                              (Semgrep)
+# Then PUT it back:
+gh api -X PUT repos/goetchstone/simplerms/branches/main/protection --input /tmp/edited.json
+```
+
+Or via the GitHub UI: Settings → Branches → main → Edit → add to required checks list.
+
+### When to remove `enforce_admins: false` (admin bypass)
+
+Right now you (admin) can push past failing checks in an emergency. Remove the bypass — set `enforce_admins: true` — when:
+- You have at least one collaborator (so admin bypass becomes a unilateral risk)
+- OR the CI has been stable for 3+ months without needing emergency overrides
 
 ## Triage workflow when a scan fires
 
