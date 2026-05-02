@@ -11,12 +11,10 @@ import { db } from "@/server/db";
 import {
   ArrowRight,
   MonitorSmartphone,
-  Laptop,
-  CreditCard,
-  Globe,
   GraduationCap,
-  Crown,
   CheckCircle,
+  Key,
+  ShieldAlert,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -37,34 +35,28 @@ async function getCompanyName() {
 
 const services = [
   {
+    icon: Key,
+    title: "Vendor Independence Audit",
+    body: "Find out what you don't actually own. Get a written plan to take it back. Yours to keep, whether you hire us or not.",
+    href: "/ownership",
+  },
+  {
     icon: MonitorSmartphone,
     title: "Apple Business Setup",
-    body: "Apple's new all-in-one platform for device management, email, and local presence. Free. For most small businesses, it's all the IT management you need — no separate MDM required.",
-  },
-  {
-    icon: Laptop,
-    title: "Enterprise MDM When You Need It",
-    body: "Mosyle, Jamf, Iru, Addigy — chosen for fit, not kickbacks. When Apple Business alone isn't enough, we deploy the right tool. Already running Intune? Keep it for Windows; Apple MDM alongside it.",
-  },
-  {
-    icon: Globe,
-    title: "Google Workspace Setup",
-    body: "Domain, email, SSO, identity federation with Apple Business. SPF, DKIM, DMARC. You own the domain, you own the accounts, you hold the keys.",
+    body: "Apple's free all-in-one platform for device management, email, and local presence. For most small businesses, it's all the IT you need.",
+    href: "/apple-business",
   },
   {
     icon: GraduationCap,
     title: "Mac Training for Windows Teams",
-    body: "Your IT team knows Windows. We teach them Apple. MDM vs. Group Policy, Apple IDs vs. AD, the whole mental model shift. We set it up, train your people, you own it.",
+    body: "Internal IT knows Windows. We teach them Apple. MDM vs. Group Policy, Apple IDs vs. AD — your team operates the stack independently.",
+    href: "/services",
   },
   {
-    icon: CreditCard,
-    title: "PCI & Payment Processing",
-    body: "Better card rates, smaller PCI compliance surface. Most businesses are in a broader scope than necessary and paying more than they should. We fix both.",
-  },
-  {
-    icon: Crown,
-    title: "Executive IT",
-    body: "C-suite runs on Apple. Home office, devices, network, security — discreet, thorough, and available when they need it. Not when the help desk gets around to it.",
+    icon: ShieldAlert,
+    title: "AI Risk & Guardrails",
+    body: "Polished AI documents that beat your SME's veto in the conference room. We help you put guardrails on AI use without becoming anti-AI.",
+    href: "/ai-risk",
   },
 ];
 
@@ -102,16 +94,15 @@ export default async function HomePage() {
           Technology Partners
         </p>
         <h1 className="max-w-3xl text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl lg:text-[56px] lg:leading-tight">
-          Apple device management,
+          You don&apos;t need to own your whole tech stack.
           <br />
-          <span className="text-conviction">simplified.</span>
+          <span className="text-conviction">You need to own the keys to move.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/60">
-          Apple Business is Apple&apos;s new all-in-one platform for device
-          management, business email, and local presence. It&apos;s free. For
-          most small businesses, it&apos;s all the IT management you need. We
-          help you set it up and manage it alongside your team — so you can
-          run it yourself, even if you choose not to.
+          Most business owners don&apos;t realize they&apos;re missing the
+          keys — until the day they try to leave a vendor and can&apos;t.
+          We find what you&apos;re missing, help you take it back, and
+          document it so you can walk away from any vendor on your timeline.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
@@ -146,11 +137,7 @@ export default async function HomePage() {
         </div>
 
         <p className="mt-8 text-xs text-bone/25">
-          Founded by{" "}
-          <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
-            Goetch Stone
-          </Link>
-          {" "}· 20+ years in IT · Remote nationwide · In-person in CT, MA, RI, NYC ·{" "}
+          20+ years in IT · Remote nationwide · In-person in CT, MA, RI, NYC ·{" "}
           <a
             href="https://macadmins.psu.edu/conference/resources/"
             target="_blank"
@@ -159,7 +146,10 @@ export default async function HomePage() {
           >
             PSU MacAdmins
           </a>
-          {" "}workshop instructor · Fully insured
+          {" "}workshop instructor · Fully insured ·{" "}
+          <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
+            About us
+          </Link>
         </p>
       </section>
 
@@ -191,30 +181,33 @@ export default async function HomePage() {
         <div className="mx-auto max-w-[1200px]">
           <div className="mb-16 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-              What We Do
+              Where Do You Need Help?
             </p>
             <h2 className="text-[28px] font-medium text-bone">
-              Apple device management, done right and handed off
+              Four ways to take ownership back
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
-              We set up Apple Business, deploy enterprise MDM when it&apos;s
-              actually needed, configure Google Workspace, and manage it
-              alongside your team. Keep it simple. You decide what happens
-              after that.
+              Whether you came in with a specific problem or just know
+              something feels off, here are the four most common starting
+              points.
             </p>
           </div>
-          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-px bg-bone/5 sm:grid-cols-2 lg:grid-cols-4">
             {services.map((s) => {
               const Icon = s.icon;
               return (
-                <div
+                <Link
                   key={s.title}
-                  className="bg-midnight p-8 transition-colors hover:bg-slate-brand/20"
+                  href={s.href}
+                  className="group bg-midnight p-8 transition-colors hover:bg-slate-brand/20"
                 >
                   <Icon className="mb-4 h-5 w-5 text-conviction" strokeWidth={1.5} />
                   <h3 className="mb-2 text-base font-medium text-bone">{s.title}</h3>
                   <p className="text-base leading-relaxed text-bone/60">{s.body}</p>
-                </div>
+                  <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-conviction group-hover:gap-2 transition-[gap]">
+                    Learn more <ArrowRight className="h-3.5 w-3.5" />
+                  </span>
+                </Link>
               );
             })}
           </div>

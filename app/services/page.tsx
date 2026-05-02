@@ -25,6 +25,7 @@ import {
   GraduationCap,
   ShieldCheck,
   ShieldAlert,
+  Key,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -37,6 +38,19 @@ async function getCompanyName() {
 }
 
 const coreServices = [
+  {
+    icon: Key,
+    title: "Vendor Independence Audit",
+    description: "You don't need to own your whole tech stack. You need to own the keys to move. We work through a checklist of common gotchas — domain registration, DNS console, cloud account root, Workspace owner role, backups, password vaults — and identify what's in your name vs. someone else's. You leave with a written plan you can keep, hand to your existing IT, or hire us to execute. Most owners can't answer the whole list off the top of their head; that's normal, and exactly what the audit fixes.",
+    details: [
+      "Checklist of vendor lock-in gotchas tailored to your business",
+      "Identification of who currently controls each piece",
+      "Facilitated conversations with your IT, MSP, or vendors",
+      "Written summary: what you own, what you don't, what to take back",
+      "Prioritized plan of action — DIY-able or implementable by us",
+      "No ongoing engagement gating the document",
+    ],
+  },
   {
     icon: MonitorSmartphone,
     title: "Apple Business Setup & Management",
@@ -171,13 +185,13 @@ export default async function ServicesPage() {
           Services
         </p>
         <h1 className="text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl">
-          Apple device management, done simply
+          Services
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Apple Business is free and — for most small businesses — enough on
-          its own. When it&apos;s not, we deploy the right MDM. Either way, we
-          manage it alongside your team. No unnecessary tools. No enterprise
-          complexity where it doesn&apos;t belong.
+          Lead with the audit so you know what you own. Then pick what you
+          actually need help with — Apple Business, MDM, Google Workspace,
+          training, or something specific. No bundled lock-ins. Each service
+          is independently scoped.
         </p>
       </section>
 
