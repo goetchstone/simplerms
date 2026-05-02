@@ -26,6 +26,10 @@ export function SettingsForm({ initialSettings }: Props) {
     smtp_user: initialSettings.smtp_user ?? "",
     smtp_pass: "",
     email_from: initialSettings.email_from ?? "",
+    google_site_verification: initialSettings.google_site_verification ?? "",
+    bing_site_verification: initialSettings.bing_site_verification ?? "",
+    analytics_provider: initialSettings.analytics_provider ?? "",
+    analytics_site_id: initialSettings.analytics_site_id ?? "",
   });
 
   const upsert = trpc.settings.upsert.useMutation();
@@ -114,6 +118,65 @@ export function SettingsForm({ initialSettings }: Props) {
           <div className="space-y-1.5 sm:col-span-2">
             <Label htmlFor="email_from">From address</Label>
             <Input id="email_from" type="email" value={values.email_from} onChange={field("email_from")} placeholder="noreply@yourcompany.com" />
+          </div>
+        </div>
+      </section>
+
+      {/* Search & Analytics — values render in HTML head, never marked secret */}
+      <section className="space-y-4">
+        <h2 className="text-sm font-semibold">Search &amp; analytics</h2>
+        <p className="text-xs text-muted-foreground">
+          Verification codes go in <code>&lt;meta&gt;</code> tags. Analytics provider can be swapped without a code change.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="google_site_verification">Google Search Console verification</Label>
+            <Input
+              id="google_site_verification"
+              value={values.google_site_verification}
+              onChange={field("google_site_verification")}
+              placeholder="abc123_xxxxxxxxxxxx"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="bing_site_verification">Bing Webmaster verification</Label>
+            <Input
+              id="bing_site_verification"
+              value={values.bing_site_verification}
+              onChange={field("bing_site_verification")}
+              placeholder="0123456789ABCDEF"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="analytics_provider">Analytics provider</Label>
+            <select
+              id="analytics_provider"
+              value={values.analytics_provider}
+              onChange={(e) => setValues((v) => ({ ...v, analytics_provider: e.target.value }))}
+              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
+            >
+              <option value="">None (disabled)</option>
+              <option value="ga4">Google Analytics 4</option>
+              <option value="plausible">Plausible</option>
+              <option value="umami">Umami</option>
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="analytics_site_id">Site ID / measurement ID</Label>
+            <Input
+              id="analytics_site_id"
+              value={values.analytics_site_id}
+              onChange={field("analytics_site_id")}
+              placeholder={
+                values.analytics_provider === "ga4"
+                  ? "G-XXXXXXXXXX"
+                  : values.analytics_provider === "plausible"
+                  ? "akritos.com"
+                  : values.analytics_provider === "umami"
+                  ? "uuid from Umami dashboard"
+                  : "Set provider above first"
+              }
+            />
           </div>
         </div>
       </section>

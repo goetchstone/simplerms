@@ -17,6 +17,11 @@ const ALLOWED_KEYS = new Set([
   "smtp_user",
   "smtp_pass",
   "email_from",
+  // Search & analytics — designed to render in HTML head, never secret
+  "google_site_verification",
+  "bing_site_verification",
+  "analytics_provider",
+  "analytics_site_id",
 ]);
 
 const SECRET_KEYS = new Set(["smtp_pass"]);
