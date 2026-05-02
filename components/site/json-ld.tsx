@@ -4,11 +4,14 @@
 type JsonLdProps = { data: Record<string, unknown> };
 
 export function JsonLd({ data }: JsonLdProps) {
+  // JSON-LD requires raw inline JSON; this is the canonical Next.js pattern.
+  // `data` is always server-built from controlled inputs (schema generators in this
+  // file plus DB content we own), never from user input. JSON.stringify inside a
+  // <script type="application/ld+json"> is parsed as data, not HTML.
+  const inner = { __html: JSON.stringify(data) };
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
+    <script type="application/ld+json" dangerouslySetInnerHTML={inner} />
   );
 }
 
