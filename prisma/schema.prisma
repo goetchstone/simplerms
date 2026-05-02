@@ -586,6 +586,29 @@ enum CommentStatus {
   SPAM
 }
 
+// ─── LEAD MAGNETS ────────────────────────────────────────────────────────────
+
+model Lead {
+  id           String    @id @default(cuid())
+  email        String
+  name         String?
+  company      String?
+  source       String    // Which lead magnet / page (e.g., "ownership-checklist")
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime  @default(now())
+  // Track engagement so we can see which leads actually read what they asked for
+  downloadedAt DateTime?
+  followUpAt   DateTime? // Filled when the 7-day follow-up email goes out
+  // Soft-delete pattern — preserve audit trail when a lead asks to be removed
+  unsubscribedAt DateTime?
+  notes        String?   @db.Text  // Admin notes — internal only
+
+  @@index([email])
+  @@index([source, createdAt])
+  @@index([createdAt])
+}
+
 // ─── AUDIT LOG ───────────────────────────────────────────────────────────────
 
 model AuditLog {
