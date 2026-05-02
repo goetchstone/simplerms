@@ -87,6 +87,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-04-23 — SDK bumps with API version contracts can't auto-merge
+
+**What happened:** Dependabot bumped Stripe v21 → v22 in a prod-deps group. The bump itself was clean, but the SDK enforces a typed `apiVersion` string at the call site (`new Stripe(key, { apiVersion: "2026-03-25.dahlia" })`). The new SDK requires `"2026-04-22.dahlia"` — a string Dependabot doesn't know to update. Type check failed; PR was misleadingly labeled "type-check failure."
+
+**Lesson:** Major-version bumps on SDKs that pin API version strings (Stripe, Twilio, AWS SDKs, Auth0, Anthropic) need a paired manual code change. Dependabot is invisible to that. Either pin major bumps and do them manually, or push the version-string fix directly onto Dependabot's branch when the bump happens.
+
+**Where it applies:** Any `dependabot.yml` covering SDKs with versioned APIs. Consider adding `ignore` rules for major bumps on these specifically.
+
+---
+
 ## 2026-04-23 — Iterate the framing before building, not after
 
 **What happened:** User asked to "promote ownership over Apple Business." Took 4 exchanges to land on the actual sharp version: "own the keys to move." Drafts in between ranged from too broad ("own your stack" — sounded like self-hosting) to too combative ("MSPs are parasites" — overstates the case).
