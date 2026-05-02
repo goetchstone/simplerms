@@ -551,12 +551,39 @@ model CmsPost {
   status      CmsStatus @default(DRAFT)
   publishedAt DateTime?
   updatedAt   DateTime  @updatedAt
+
+  comments    BlogComment[]
 }
 
 enum CmsStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+model BlogComment {
+  id          String        @id @default(cuid())
+  postId      String
+  post        CmsPost       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorName  String
+  authorEmail String
+  content     String        @db.Text
+  status      CommentStatus @default(PENDING)
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime      @default(now())
+  approvedAt  DateTime?
+  approvedBy  String?
+
+  @@index([postId, status])
+  @@index([status, createdAt])
+}
+
+enum CommentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SPAM
 }
 
 // ─── AUDIT LOG ───────────────────────────────────────────────────────────────
