@@ -54,6 +54,8 @@ If any one of the three stops learning, the loop breaks: the repo goes stale, Cl
 
 **Read before write.** Open the file before changing it. Open the router before calling its procedure. The cost of one extra read is always less than the cost of guessing wrong.
 
+**Ask when ambiguous.** Neither party can read the other's mind. When the user's intent has more than one reasonable interpretation — scope, depth, ordering, trade-offs — ask before building. One clarifying question costs ~30 seconds; building the wrong thing and reversing it costs an hour. Use AskUserQuestion (in plan mode) or a direct question (during execution). Two reasonable readings = one clarification.
+
 **Append, don't rewrite.** Decisions and lessons are append-only. Old entries stay even when superseded — the history is the value.
 
 **Document the why, never the what.** Code shows the what. Comments explain why a non-obvious choice was made. If the choice is obvious, no comment.
