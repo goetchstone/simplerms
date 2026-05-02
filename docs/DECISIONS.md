@@ -123,3 +123,24 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 **Audit finding:** `docs/ROADMAP.md` was originally flagged for moving private. Review showed it's a build status table (which features are working) — not strategic content. Kept public.
 
 **Doc classification rule:** Technical (architecture, decisions, lessons, build status, deployment): public. Strategic (growth playbook, pricing experiments, hiring sequence, customer artifacts): private, lives outside the repo.
+
+---
+
+### 2026-04-23: Branch protection on `main` enabled (Option 2 — moderate)
+
+**Decision:** Branch protection rule applied to `main` via the GitHub REST API.
+
+**Settings:**
+- Require pull request before merging (admin can bypass)
+- Required status checks: `Lint, type-check, test`, `Secret scan (gitleaks)`, `Dependency audit (npm)`
+- Strict mode (branch must be up-to-date with main before merging)
+- No force pushes, no branch deletion
+- Require conversation resolution before merge
+- 0 required reviews (solo developer; raise to 1 when collaborators join)
+- `enforce_admins: false` — admin can override in emergencies
+
+**Why not Option 3 (full strict, all five scanners required):** CodeQL and Semgrep haven't completed a first run yet. Adding them as required before the contexts exist would block PRs without recourse. Add them once their first run is clean and any pre-existing findings are triaged.
+
+**Update (same day):** First runs completed clean (after fixing 2 Semgrep findings — Dockerfile root user + json-ld nosemgrep with rationale). Added `Analyze (javascript-typescript)` (CodeQL) and `Scan` (Semgrep) to required checks. Now five required checks total. Admin bypass still allowed.
+
+**Workflow change:** direct pushes to `main` will be blocked; future work uses PRs. Hotfixes can use admin-bypass when truly time-critical.

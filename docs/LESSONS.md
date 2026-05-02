@@ -87,6 +87,34 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-04-23 — Don't use `status` as a bash variable name
+
+**What happened:** Built a Monitor script polling CI runs; used `status` as a local variable. Failed with `read-only variable: status` because zsh treats it as reserved.
+
+**Lesson:** When writing bash/zsh scripts (especially in Monitor and deploy.sh), avoid these reserved-or-magic names: `status`, `path`, `cdpath`, `argv`, `signals`, `pipestatus`. Use `state`, `result`, `cur`, etc. Quick portable test before running: `bash -n script.sh && zsh -n script.sh`.
+
+---
+
+## 2026-04-23 — Tool parameter mixing (Write vs Edit)
+
+**What happened:** Tried to combine `Write` with `replace_all`/`old_string`/`new_string` in a single call. Each Write failed entirely with InputValidationError. Lost time to the back-and-forth before realizing.
+
+**Lesson:** `Write` only takes `file_path` + `content`. `Edit` takes `file_path` + `old_string` + `new_string` + optional `replace_all`. Don't mix. When tempted to chain operations into one tool call, split them.
+
+---
+
+## 2026-04-23 — Day 1 of Semgrep caught 2 real signals, both addressable
+
+**What happened:** First Semgrep run on `main` blocked with 2 findings: (1) Dockerfile `development` stage ran as root, (2) `dangerouslySetInnerHTML` in `components/site/json-ld.tsx`.
+
+**Triage:**
+- Dockerfile root: real but low-impact (dev stage isn't used in prod). Fixed by adding `USER node`.
+- json-ld dangerouslySetInnerHTML: false positive for our use case. JSON-LD is the canonical Next.js pattern; data is server-built from controlled inputs, not user input. Suppressed with `// nosemgrep` and inline rationale on the line above.
+
+**Lesson:** Semgrep's default rules earn their keep on day one. False positives exist but are rare; suppress with a documented reason on the violating line, never repo-wide. Keep the suppression specific (rule ID, not blanket).
+
+---
+
 ## 2026-04-23 — Triage before enforce (CI security scanners)
 
 **What happened:** Wired up Dependabot/CodeQL/Semgrep/gitleaks/npm audit and was about to enable required-status-checks. Ran `npm audit --audit-level=high --omit=dev` first — caught a high-severity Next.js DoS advisory (GHSA-q4gf-8mx6-v5v3). Bumped Next 16.2.1 → 16.2.4, audit cleared. Only then committed the workflows.
