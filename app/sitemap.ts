@@ -10,6 +10,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/contact`, changeFrequency: "monthly", priority: 0.7 },
   { url: `${BASE}/services`, changeFrequency: "weekly", priority: 0.9 },
   { url: `${BASE}/apple-business`, changeFrequency: "weekly", priority: 0.95 },
+  { url: `${BASE}/ai-risk`, changeFrequency: "weekly", priority: 0.9 },
   { url: `${BASE}/pricing`, changeFrequency: "monthly", priority: 0.9 },
   { url: `${BASE}/book`, changeFrequency: "weekly", priority: 0.8 },
   { url: `${BASE}/support`, changeFrequency: "monthly", priority: 0.5 },

@@ -24,6 +24,7 @@ import {
   Wrench,
   GraduationCap,
   ShieldCheck,
+  ShieldAlert,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -127,6 +128,19 @@ const advisoryServices = [
       "Architecture and infrastructure planning",
       "Technology strategy and roadmap",
       "RFP development and vendor selection",
+    ],
+  },
+  {
+    icon: ShieldAlert,
+    title: "AI Risk & Guardrails for SMBs",
+    description: "Your team uses AI. Most aren't AI experts. We help leadership put guardrails on AI use — what's safe to delegate, what isn't, and how to spot polished-and-wrong output before it ships. Pro-judgment, not anti-AI. Read the prompt jockey post for the full framing.",
+    details: [
+      "AI use policy — short, real, enforceable",
+      "Workflow review — where AI helps vs. where it adds risk",
+      "Vendor evaluation — data terms, audit trail, exit risk",
+      "Team training — spotting confidently-wrong output",
+      "SME workflow design — keeping the human as decision-maker",
+      "Linked: detailed page at /ai-risk",
     ],
   },
 ];

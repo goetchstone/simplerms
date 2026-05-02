@@ -171,6 +171,13 @@ const content = [
   {
     type: "cta",
     content:
+      "Need help putting AI guardrails in place for your business? We work with leadership teams to design AI policy, review high-risk workflows, and train people who weren't hired to be AI evaluators.",
+    ctaText: "AI Risk & Guardrails",
+    ctaHref: "/ai-risk",
+  },
+  {
+    type: "cta",
+    content:
       "Want an honest read on your current tech stack — including whether the AI-generated documents on your desk are pointing you somewhere you don't want to go?",
     ctaText: "Book a free consultation",
     ctaHref: "/book",

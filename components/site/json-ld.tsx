@@ -41,6 +41,9 @@ export function localBusinessSchema() {
       "Executive IT Support",
       "Digital Legacy and Account Recovery",
       "IT Advisory",
+      "AI Risk Assessment",
+      "AI Governance Advisory",
+      "AI Policy Development",
     ],
     knowsAbout: [
       "Apple Business",
@@ -61,6 +64,10 @@ export function localBusinessSchema() {
       "Account Recovery",
       "Password Management",
       "Digital Estate Planning",
+      "AI Risk Management",
+      "AI Governance",
+      "Responsible AI Adoption",
+      "Prompt Engineering Best Practices",
     ],
     slogan: "Apple device management, simplified.",
     founder: {

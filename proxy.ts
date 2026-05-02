@@ -17,6 +17,7 @@ const PUBLIC_PATHS = [
   "/nonprofits",
   "/careers",
   "/apple-business",
+  "/ai-risk",
   "/portal",
   "/api/auth",
   "/api/trpc",
