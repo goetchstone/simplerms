@@ -87,6 +87,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-04-23 — Iterate the framing before building, not after
+
+**What happened:** User asked to "promote ownership over Apple Business." Took 4 exchanges to land on the actual sharp version: "own the keys to move." Drafts in between ranged from too broad ("own your stack" — sounded like self-hosting) to too combative ("MSPs are parasites" — overstates the case).
+
+**Lesson:** When the user gives a strategic-direction instruction, the first phrasing is rarely the final phrasing. Iterate copy/framing with them BEFORE writing files. Three or four exchanges that sharpen the language cost minutes; the wrong copy in production costs days to undo. Use AskUserQuestion early to surface the alternatives, then refine the chosen one in plain conversation.
+
+**Where it applies:** Any positioning, copy, naming, or strategic-deliverable conversation. Especially when the first idea sounds powerful but might overstate or under-specify.
+
+---
+
 ## 2026-04-23 — Dependabot doesn't know about peer-dep conflicts
 
 **What happened:** Dependabot opened PRs to bump nodemailer 7 → 8 (and a prod-deps group containing the same bump). Both failed `npm ci` with ERESOLVE: next-auth 5 peer-deps `nodemailer@^7.0.7`. CI showed it as "Lint, type-check, test failed" — misleading; the failure was at install, not at type-check.
