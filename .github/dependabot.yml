@@ -21,6 +21,12 @@ updates:
     ignore:
       - dependency-name: "nodemailer"
         update-types: ["version-update:semver-major"]
+      # Prisma 7 moves datasource URL out of schema.prisma into prisma.config.ts.
+      # Migration is non-trivial; pin until we explicitly do it.
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
     labels:
       - dependencies
       - npm
