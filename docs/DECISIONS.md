@@ -141,4 +141,6 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 
 **Why not Option 3 (full strict, all five scanners required):** CodeQL and Semgrep haven't completed a first run yet. Adding them as required before the contexts exist would block PRs without recourse. Add them once their first run is clean and any pre-existing findings are triaged.
 
+**Update (same day):** First runs completed clean (after fixing 2 Semgrep findings — Dockerfile root user + json-ld nosemgrep with rationale). Added `Analyze (javascript-typescript)` (CodeQL) and `Scan` (Semgrep) to required checks. Now five required checks total. Admin bypass still allowed.
+
 **Workflow change:** direct pushes to `main` will be blocked; future work uses PRs. Hotfixes can use admin-bypass when truly time-critical.

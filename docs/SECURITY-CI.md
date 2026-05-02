@@ -23,10 +23,12 @@ Settings → Code security & analysis → enable:
 
 ## Branch protection on `main` (must-pass gating)
 
-**Currently enabled:** PR required, admin bypass allowed, three required checks:
+**Currently enabled:** PR required, admin bypass allowed, five required checks:
 - `Lint, type-check, test`
 - `Secret scan (gitleaks)`
 - `Dependency audit (npm)`
+- `Analyze (javascript-typescript)` (CodeQL)
+- `Scan` (Semgrep)
 
 Direct push to `main` is blocked. Force push and branch deletion are blocked.
 
