@@ -166,4 +166,6 @@ curl https://yourdomain.com/api/health
 docker compose logs -f app
 ```
 
-The seed creates an admin account: `admin@example.com` / `changeme123` — **change this immediately** in Settings → Users after first login.
+On first deploy the seed creates an admin account at `admin@akritos.com` (or `SEED_ADMIN_EMAIL` if set) with a randomly-generated 24-character password. The password is written to `.first-admin-credentials` in the repo root with mode 0600. **Read it once, log in, change the password in Settings → Users, then delete the file.** Subsequent deploys never overwrite an existing admin.
+
+If you need a known initial password, set `SEED_ADMIN_PASSWORD` in `.env.local` before the first deploy. Never commit it.

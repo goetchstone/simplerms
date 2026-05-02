@@ -215,9 +215,23 @@ fi
 echo ""
 echo "============================================"
 echo " Akritos is running"
-echo " http://$(curl -sf ifconfig.me 2>/dev/null || echo 'YOUR_IP')"
+PUBLIC_URL=$(grep -E '^NEXT_PUBLIC_APP_URL=' .env.local 2>/dev/null | cut -d= -f2- | tr -d '"' || echo "")
+echo " ${PUBLIC_URL:-http://$(curl -sf ifconfig.me 2>/dev/null || echo 'YOUR_IP')}"
 echo ""
-echo " Admin login: admin@example.com"
-echo " Password:    changeme123"
-echo " CHANGE THIS PASSWORD IMMEDIATELY"
+
+# If the seed generated a fresh admin password, surface the credentials file path.
+# The file lives inside the migrator container; copy it to the host for the operator.
+CRED_HOST_PATH="$REPO_DIR/.first-admin-credentials"
+if $COMPOSE --profile tools run --rm -T migrator test -f /app/.first-admin-credentials 2>/dev/null; then
+  $COMPOSE --profile tools run --rm -T migrator cat /app/.first-admin-credentials > "$CRED_HOST_PATH" 2>/dev/null
+  chmod 600 "$CRED_HOST_PATH"
+  echo " FIRST-RUN ADMIN CREDENTIALS:"
+  echo "   $CRED_HOST_PATH"
+  echo "   (mode 0600 — read once, change password, then delete)"
+  echo ""
+  echo "   cat $CRED_HOST_PATH"
+else
+  echo " Admin already exists. To reset password:"
+  echo "   docker compose --profile tools run --rm migrator npx tsx scripts/reset-admin-password.ts"
+fi
 echo "============================================"
