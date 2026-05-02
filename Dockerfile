@@ -7,6 +7,7 @@ COPY package.json package-lock.json ./
 FROM base AS development
 RUN npm ci
 COPY . .
+USER node
 CMD ["npm", "run", "dev"]
 
 FROM base AS builder
