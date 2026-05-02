@@ -65,10 +65,16 @@ If any one of the three stops learning, the loop breaks.
 **Action:** ask one specific question. Don't proceed.
 **Anti-pattern:** "They probably meant X" — then build X, then have to revert.
 
-### Plan before code on anything that touches more than one file
-**Trigger:** the change spans 2+ files, or adds/removes a route, or changes a schema.
-**Action:** enter plan mode (`ExitPlanMode` after writing plan). Get approval. Then execute.
+### Plan mode is the default at session start
+**Trigger:** new session begins; user describes a multi-step task; scope is anything beyond a single trivial edit.
+**Action:** enter plan mode. Write the plan to the plan file. Use `AskUserQuestion` for ambiguities. Use `ExitPlanMode` for approval. Then execute the approved plan.
 **Anti-pattern:** start editing files based on a verbal request, ship the wrong shape, then rewrite.
+**Skip plan mode only when:** single-file edit with obvious intent, fixing a one-line typo, or the user explicitly says "just do X."
+
+### Interrupts are first-class — capture, don't lose
+**Trigger:** user pivots mid-flight — adds new requirement, asks for a fix while you're working on something else, or surfaces a bug they just spotted.
+**Action:** acknowledge the interrupt explicitly. Add it to the todo list (or update the plan file). Decide with the user: handle now (interrupt the current task) or queue (finish current task first). Never silently drop an interrupt — it always becomes a future bug.
+**Anti-pattern:** user says "and also fix X" while you're on Y. You finish Y, ship it, never touch X. Three messages later: "what about X?"
 
 ### Tests are required where they earn their keep
 **Trigger:** writing or changing code that touches money, security, data integrity, public API, or non-obvious math.
