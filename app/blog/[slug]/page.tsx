@@ -10,6 +10,8 @@ import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { BlockRenderer } from "@/components/cms/block-renderer";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/components/site/json-ld";
+import { ShareButtons } from "@/components/blog/share-buttons";
+import { CommentsSection } from "@/components/blog/comments-section";
 import { db } from "@/server/db";
 import { formatDate } from "@/lib/utils";
 
@@ -111,6 +113,10 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="prose-invert prose prose-base max-w-none prose-headings:text-bone prose-p:text-bone/80 prose-a:text-conviction">
             <BlockRenderer blocks={post.content as unknown as Parameters<typeof BlockRenderer>[0]["blocks"]} />
           </div>
+
+          <ShareButtons url={`${SITE_URL}/blog/${slug}`} title={post.title} />
+
+          <CommentsSection postId={post.id} />
         </article>
       </main>
 

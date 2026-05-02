@@ -14,6 +14,7 @@ import {
   ScrollText,
   UserCog,
   UsersRound,
+  MessageSquare,
 } from "lucide-react";
 
 export const navItems = [
@@ -27,6 +28,7 @@ export const navItems = [
   { label: "Inventory", href: "/dashboard/inventory", icon: Warehouse },
   { label: "Time", href: "/dashboard/time-tracking", icon: Clock },
   { label: "Reports", href: "/dashboard/reports", icon: BarChart2 },
+  { label: "Comments", href: "/dashboard/cms/comments", icon: MessageSquare, adminOnly: true },
   { label: "Audit Log", href: "/dashboard/audit-log", icon: ScrollText, adminOnly: true },
   { label: "Team", href: "/dashboard/settings/users", icon: UsersRound, adminOnly: true },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
