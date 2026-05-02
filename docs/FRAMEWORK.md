@@ -35,6 +35,10 @@ If any one of the three stops learning, the loop breaks: the repo goes stale, Cl
 
 **KISS is the default.** Add complexity only when a real signal demands it. Every additional service, scanner, dependency, or layer is a liability the next session has to understand. Boring code beats clever code.
 
+**Tests are required where they earn their keep.** Anything that touches money, security, data integrity, public API surfaces, or non-obvious math gets a test in the same commit as the feature. The bar is "this will fail when the code is wrong" — not "this exercises the code." Tests that always pass, or that mock every dependency until only the test framework runs, are theater. Skip tests on trivial code that's obviously correct (a one-line getter); err on the side of writing the test when in doubt.
+
+**Scans must gate, not narrate.** A scan that produces a report nobody reads is theater. Required-status-checks turn scans into gates. Triage findings once; from then on, the gate either passes or merge is blocked. Same applies to coverage — a regression check on coverage prevents drift without forcing a sprint of low-value tests.
+
 **Measure, then decide.** Once analytics, email engagement, or any other data source is wired up, decisions about what to build next come from the data — not from intuition. Reviewed at the cadence that matches the data velocity (weekly for traffic, monthly for revenue, quarterly for strategy). Successful experiments and failed ones get equal time.
 
 **Read before write.** Open the file before changing it. Open the router before calling its procedure. The cost of one extra read is always less than the cost of guessing wrong.
