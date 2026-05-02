@@ -15,6 +15,39 @@ Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is pr
 - No dead code, no commented-out code, no TODOs left behind
 - Consistent formatting — follow existing patterns exactly
 
+## Comment & Commit Discipline
+
+Comments and commits are for the next reader, not the current author. Strip everything that isn't relevant.
+
+**Code comments:**
+- Explain why a non-obvious choice was made — not what the code does
+- One sentence. Two if the why is genuinely two-part.
+- No conversation context. No "we tried X then Y." If that history matters, it goes in `docs/LESSONS.md`.
+- No "TODO" without a tracking issue. Either fix it or open an issue.
+
+**Commit messages:**
+- Subject line: ≤50 chars, imperative ("fix login redirect" not "fixed login redirect")
+- Body (only when needed): the WHY in 1–3 short lines, ≤72 char wrap
+- No paragraphs explaining the change in detail — `git diff` shows the change
+- No "Co-Authored-By" attribution unless the user asks for it
+
+**Anti-pattern (don't do this):**
+```
+fix: portal middleware UUID/CUID mismatch causing all unauthenticated portal access to redirect
+
+Root cause: proxy.ts validated tokens as UUID format (`8-4-4-4-12` hex) but
+`portalToken` uses `@default(cuid())` which produces alphanumeric strings.
+Also checked query params but portal uses path segments. Fixed by adding
+`/portal` to PUBLIC_PATHS and removing the broken middleware block entirely.
+```
+
+**Right pattern:**
+```
+fix: allow public portal access (CUID, not UUID)
+
+Middleware regex blocked all CUID tokens; tokens are CUIDs, not UUIDs.
+```
+
 ## Engineering Standards
 
 - Never break the build — run tests before committing
@@ -127,7 +160,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 ### Known Issues
 
 - **Testimonials placeholder:** Homepage has "We're new. Testimonials are earned, not invented." — remove once real testimonials exist, or remove entirely (identified as liability in competitive review)
-- **Admin password:** Production still uses default `changeme123` — change before first client
+- **Admin password:** seed now generates a random 24-char password on first run, writes to `.first-admin-credentials` (0600). No more hardcoded `changeme123`. Founder rotated production password manually — confirm by reading the file or by attempting login with the old default (should fail)
 - **No CSRF on public API routes:** `/api/tickets/reply` and `/api/files/upload` use POST but no CSRF token — relies on SameSite cookies which is sufficient for browser clients but not for API-style access
 - **Rate limiting is in-memory:** `server/rate-limit.ts` uses a Map — resets on server restart, doesn't work across multiple instances. Acceptable for single-instance VPS deployment.
 - **No email queue retry backoff:** `app/api/cron/process-emails/route.ts` retries failed emails up to 3 times with no delay between attempts — should add exponential backoff if email failures become common
