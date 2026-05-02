@@ -125,11 +125,18 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
-## 2026-04-23 — Tool parameter mixing (Write vs Edit)
+## 2026-04-23 — Tool parameter mixing (Write vs Edit) — RECURRING
 
-**What happened:** Tried to combine `Write` with `replace_all`/`old_string`/`new_string` in a single call. Each Write failed entirely with InputValidationError. Lost time to the back-and-forth before realizing.
+**What happened (3 times today):** Tried to combine `Write` with `replace_all`/`old_string`/`new_string` in single calls. Worst case: I wrote a route handler's CONTENT to `proxy.ts` (overwriting it) because the Write was at proxy.ts's path with Edit-style intent. Restored from git.
 
-**Lesson:** `Write` only takes `file_path` + `content`. `Edit` takes `file_path` + `old_string` + `new_string` + optional `replace_all`. Don't mix. When tempted to chain operations into one tool call, split them.
+**The rule, sharper:**
+- `Write` = `file_path` + `content`. Always overwrites the WHOLE file. Nothing else allowed.
+- `Edit` = `file_path` + `old_string` + `new_string` (+ optional `replace_all`). Patches a region.
+- **Never both in one call.** When tempted to "create a file AND patch another in the same tool call" — that's two tool calls, not one.
+
+**Trigger before every Write call:** ask "is the path I'm writing to a file I want to OVERWRITE entirely?" If no, use Edit. If the file exists with content I want to preserve, use Edit.
+
+**Where it applies:** Every Write call in every session. The cost of getting this wrong is silently destroying a file. `git checkout <file>` recovers IF the file was committed; if it was uncommitted work, it's gone.
 
 ---
 
