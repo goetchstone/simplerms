@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { JsonLd, serviceSchema } from "@/components/site/json-ld";
+import { ChecklistForm } from "@/components/leads/checklist-form";
 import { db } from "@/server/db";
 import {
   ArrowRight,
@@ -259,6 +260,19 @@ export default async function OwnershipPage() {
               </li>
             ))}
           </ul>
+
+          <div className="mt-12 border-t border-bone/10 pt-10">
+            <h3 className="mb-3 text-lg font-medium text-bone">
+              Get the full 23-question checklist as a PDF.
+            </h3>
+            <p className="mb-6 max-w-2xl text-base leading-relaxed text-bone/60">
+              Six categories. Twenty-three questions. Each one with a
+              one-sentence &quot;why this matters&quot; so you know what
+              you&apos;re looking for. Take it home, work through it, and
+              come back with the gaps if you want help.
+            </p>
+            <ChecklistForm source="ownership-page" />
+          </div>
         </div>
       </section>
 

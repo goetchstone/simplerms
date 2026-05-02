@@ -15,6 +15,7 @@ import {
   UserCog,
   UsersRound,
   MessageSquare,
+  Mail,
 } from "lucide-react";
 
 export const navItems = [
@@ -29,6 +30,7 @@ export const navItems = [
   { label: "Time", href: "/dashboard/time-tracking", icon: Clock },
   { label: "Reports", href: "/dashboard/reports", icon: BarChart2 },
   { label: "Comments", href: "/dashboard/cms/comments", icon: MessageSquare, adminOnly: true },
+  { label: "Leads", href: "/dashboard/cms/leads", icon: Mail, adminOnly: true },
   { label: "Audit Log", href: "/dashboard/audit-log", icon: ScrollText, adminOnly: true },
   { label: "Team", href: "/dashboard/settings/users", icon: UsersRound, adminOnly: true },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },

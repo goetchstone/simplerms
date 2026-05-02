@@ -14,6 +14,7 @@ import { timeTrackingRouter } from "@/server/trpc/routers/timeTracking";
 import { usersRouter } from "@/server/trpc/routers/users";
 import { cmsRouter } from "@/server/trpc/routers/cms";
 import { commentsRouter } from "@/server/trpc/routers/comments";
+import { leadsRouter } from "@/server/trpc/routers/leads";
 import { reportsRouter } from "@/server/trpc/routers/reports";
 import { portalRouter } from "@/server/trpc/routers/portal";
 
@@ -32,6 +33,7 @@ export const appRouter = createTRPCRouter({
   users: usersRouter,
   cms: cmsRouter,
   comments: commentsRouter,
+  leads: leadsRouter,
   reports: reportsRouter,
   portal: portalRouter,
 });

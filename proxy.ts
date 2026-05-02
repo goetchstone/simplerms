@@ -25,6 +25,7 @@ const PUBLIC_PATHS = [
   "/api/webhooks",
   "/api/health",
   "/api/tickets/reply",
+  "/api/leads/checklist",
 ];
 
 export default auth((req: NextRequest & { auth: unknown }) => {
