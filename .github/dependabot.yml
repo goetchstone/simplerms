@@ -12,8 +12,15 @@ updates:
     groups:
       prod-deps:
         dependency-type: production
+        # Pin nodemailer to its current major while next-auth's peer-dep catches up.
+        # Re-evaluate when next-auth 5 stable lists nodemailer@^8 as supported.
+        exclude-patterns:
+          - "nodemailer"
       dev-deps:
         dependency-type: development
+    ignore:
+      - dependency-name: "nodemailer"
+        update-types: ["version-update:semver-major"]
     labels:
       - dependencies
       - npm

@@ -87,6 +87,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-04-23 — Dependabot doesn't know about peer-dep conflicts
+
+**What happened:** Dependabot opened PRs to bump nodemailer 7 → 8 (and a prod-deps group containing the same bump). Both failed `npm ci` with ERESOLVE: next-auth 5 peer-deps `nodemailer@^7.0.7`. CI showed it as "Lint, type-check, test failed" — misleading; the failure was at install, not at type-check.
+
+**Lesson:** When a Dependabot PR fails at install with ERESOLVE on a major bump, don't force it through (`--legacy-peer-deps` hides real breakage). Pin the dep at its current major in `dependabot.yml` until the peer/dependent catches up. Document the pin so the next session knows when to revisit.
+
+**When to revisit:** when next-auth 5 stable lists nodemailer@^8 as supported. Check at https://github.com/nextauthjs/next-auth/blob/main/packages/next-auth/package.json
+
+---
+
 ## 2026-04-23 — Don't use `status` as a bash variable name
 
 **What happened:** Built a Monitor script polling CI runs; used `status` as a local variable. Failed with `read-only variable: status` because zsh treats it as reserved.
