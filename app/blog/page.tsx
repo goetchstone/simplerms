@@ -2,6 +2,7 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import Image from "next/image";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { db } from "@/server/db";
@@ -47,12 +48,15 @@ export default async function BlogPage() {
                 <article key={post.slug} className="py-8 first:pt-0">
                   <Link href={`/blog/${post.slug}`} className="group block space-y-2">
                     {post.coverImage && (
-                      <img
-                        src={post.coverImage}
-                        alt={post.title}
-                        className="mb-4 h-48 w-full object-cover"
-                        style={{ borderRadius: "2px" }}
-                      />
+                      <div className="relative mb-4 h-48 w-full overflow-hidden" style={{ borderRadius: "2px" }}>
+                        <Image
+                          src={post.coverImage}
+                          alt={post.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 768px"
+                          className="object-cover"
+                        />
+                      </div>
                     )}
                     <h2 className="text-xl font-medium text-bone group-hover:text-conviction">
                       {post.title}

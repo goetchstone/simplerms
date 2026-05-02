@@ -119,3 +119,43 @@ export function serviceSchema(service: {
     description: service.description,
   };
 }
+
+export function articleSchema(post: {
+  title: string;
+  description: string | null;
+  slug: string;
+  publishedAt: Date | null;
+  updatedAt: Date;
+  coverImage?: string | null;
+}) {
+  const url = `https://akritos.com/blog/${post.slug}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description ?? undefined,
+    image: post.coverImage ?? "https://akritos.com/og-default.png",
+    datePublished: post.publishedAt?.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: { "@type": "Person", name: "Goetch Stone", url: "https://akritos.com/about" },
+    publisher: {
+      "@type": "Organization",
+      name: "Akritos Technology Partners LLC",
+      logo: { "@type": "ImageObject", url: "https://akritos.com/logo.png" },
+    },
+  };
+}
+
+export function breadcrumbSchema(items: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
