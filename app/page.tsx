@@ -94,15 +94,14 @@ export default async function HomePage() {
           Technology Partners
         </p>
         <h1 className="max-w-3xl text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl lg:text-[56px] lg:leading-tight">
-          You don&apos;t need to own your whole tech stack.
+          The keys to your business
           <br />
-          <span className="text-conviction">You need to own the keys to move.</span>
+          <span className="text-conviction">shouldn&apos;t be in someone else&apos;s pocket.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/60">
-          Most business owners don&apos;t realize they&apos;re missing the
-          keys — until the day they try to leave a vendor and can&apos;t.
-          We find what you&apos;re missing, help you take it back, and
-          document it so you can walk away from any vendor on your timeline.
+          Your domain. Your DNS. Your accounts. Your backups. We find what&apos;s
+          not in your name, help you take it back, and document the keys so
+          you can walk away from any vendor on your timeline.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link

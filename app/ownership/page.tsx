@@ -124,21 +124,18 @@ export default async function OwnershipPage() {
             Vendor Independence
           </p>
           <h1 className="text-4xl font-medium tracking-[0.01em] text-bone sm:text-5xl">
-            You don&apos;t need to own your whole tech stack.
+            The keys to your business
             <br />
             <span className="text-conviction">
-              You need to own the keys to move.
+              shouldn&apos;t be in someone else&apos;s pocket.
             </span>
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-bone/60">
-            Your domain. Your DNS. Your cloud account root credentials. Your
-            Google Workspace owner role. Your backups. Your data exports. Most
-            business owners don&apos;t realize they&apos;re missing those
-            keys — until the day they try to leave a vendor and can&apos;t.
-          </p>
-          <p className="mt-4 max-w-lg text-base leading-relaxed text-bone/60">
-            We find what you&apos;re missing, help you take it back, and
-            document it so you can walk away from any vendor on your timeline.
+            Your domain. Your DNS. Your cloud accounts. Your Workspace owner
+            role. Your backups. If your IT provider, web designer, or marketing
+            agency holds them, they hold your business. We find what&apos;s not
+            in your name, help you take it back, and document the keys so you
+            can walk away from any vendor on your timeline.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
