@@ -87,6 +87,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-04-23 — Triage before enforce (CI security scanners)
+
+**What happened:** Wired up Dependabot/CodeQL/Semgrep/gitleaks/npm audit and was about to enable required-status-checks. Ran `npm audit --audit-level=high --omit=dev` first — caught a high-severity Next.js DoS advisory (GHSA-q4gf-8mx6-v5v3). Bumped Next 16.2.1 → 16.2.4, audit cleared. Only then committed the workflows.
+
+**Lesson:** When adding a new gating scan, run it locally first and triage findings BEFORE pushing. Otherwise the first PR after enforcement is blocked and you lose the day to fixing pre-existing issues you should have known about.
+
+**Where it applies:** Every new scanner. Documented in `docs/SECURITY-CI.md` under "Branch protection on `main`."
+
+---
+
 ## 2026-04-23 — Build-time prisma noise from settings reads
 
 `next build` runs sitemap/layout/analytics at build time without DB access. Try/catch fallbacks work (empty arrays, no analytics tags) but Prisma logs `prisma:error` to stderr for each failed query. Build succeeds; logs are noisy. Acceptable for now. If it masks real errors later, gate DB calls on `process.env.NEXT_RUNTIME === "nodejs"` or skip during build via a custom env flag.
