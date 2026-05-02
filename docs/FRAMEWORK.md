@@ -6,6 +6,17 @@ The set of practices that make AI-assisted development not be prompt jockeying. 
 
 Success is mutual. The framework treats human, AI, and repo as interdependent — none of them succeeds without the other two improving. New things get tried freely; data decides what stays.
 
+## The four pillars (equal weight)
+
+Quality, security, maintainability, and usability all carry the same weight. The framework forces work in all four:
+
+- **Quality** — type-checked, tested where it earns its keep, code reviewed against KISS
+- **Security** — scanned (Dependabot, CodeQL, Semgrep, gitleaks, npm audit), gated as required checks, secrets never committed, tokens randomized, inputs validated at boundaries
+- **Maintainability** — append-only DECISIONS and LESSONS, terse comments and commits, small focused changes, no premature abstraction
+- **Usability** — accessible UI patterns, fast pages (Lighthouse ≥ 95), real content (no Lorem Ipsum), honest copy
+
+Trading one for another is the failure mode. A beautiful UI on insecure code fails. A secure system nobody can use fails. Clean code that's slow fails. The job is to hold all four.
+
 ## The three-party learning loop
 
 This framework only works if all three parties improve over time:

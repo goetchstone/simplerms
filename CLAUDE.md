@@ -6,6 +6,8 @@ KISS. Simplicity and elegance above all else.
 
 Do it right. No shortcuts, no hacks, no "we'll fix it later." Every commit is production-ready and deployable.
 
+**Quality, security, maintainability, and usability all carry the same weight.** A beautiful UI on insecure code is unacceptable. A secure system nobody can use is unacceptable. Clean code that breaks under load is unacceptable. The job is to hold all four — not trade one for another.
+
 ## Code Quality
 
 - Every file starts with its path as a comment on line 1
