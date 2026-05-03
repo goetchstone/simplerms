@@ -125,6 +125,18 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-05-02 — CSP blocks third-party scripts silently server-side
+
+**What happened:** Wired up GA4 via Settings → analytics provider/site ID. Script tag rendered in production HTML (verified via curl). User saw zero pageviews even after disabling Pi-hole + testing on cellular. Root cause: `next.config.ts` CSP had `script-src 'self' 'unsafe-inline'` and `connect-src 'self' https://js.stripe.com` — neither allowed `googletagmanager.com` or `google-analytics.com`. Server renders the tag fine; browser silently blocks it on the CSP enforcement step.
+
+**Lesson:** When adding ANY third-party script to a site with CSP, update `script-src` + `connect-src` (+ `img-src` for pixel beacons) in the same change. CSP violations don't show up in server logs — they only appear in the browser console. If you can't see the violation, you're not testing the same way the user is.
+
+**Trigger:** Any new external script tag (`next/script` with cross-origin src, `<iframe>` to a new domain, fetch to a new API). Update CSP in next.config.ts in the SAME commit.
+
+**Where it applies:** All future analytics, embeds, third-party widgets, payment SDKs, chat widgets, etc.
+
+---
+
 ## 2026-04-23 — Tool parameter mixing (Write vs Edit) — RECURRING
 
 **What happened (3 times today):** Tried to combine `Write` with `replace_all`/`old_string`/`new_string` in single calls. Worst case: I wrote a route handler's CONTENT to `proxy.ts` (overwriting it) because the Write was at proxy.ts's path with Edit-style intent. Restored from git.
