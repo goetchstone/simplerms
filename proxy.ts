@@ -19,6 +19,7 @@ const PUBLIC_PATHS = [
   "/apple-business",
   "/ai-risk",
   "/ownership",
+  "/recommended-vendors",
   "/portal",
   "/api/auth",
   "/api/trpc",
