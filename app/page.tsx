@@ -99,9 +99,12 @@ export default async function HomePage() {
           <span className="text-conviction">shouldn&apos;t be in someone else&apos;s pocket.</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-bone/60">
-          Your domain. Your DNS. Your accounts. Your backups. We find what&apos;s
-          not in your name, help you take it back, and document the keys so
-          you can walk away from any vendor on your timeline.
+          Most owners don&apos;t know what keys they&apos;re missing — or what
+          to call the ones they have. That&apos;s normal, not a failure. We
+          figure out what&apos;s yours, what isn&apos;t, and what&apos;s in
+          someone else&apos;s account. Then we get it all in your name and
+          translate the technical stuff so you actually understand what
+          you own.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
           <Link
