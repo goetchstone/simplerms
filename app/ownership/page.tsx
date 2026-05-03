@@ -131,11 +131,19 @@ export default async function OwnershipPage() {
             </span>
           </h1>
           <p className="mt-6 max-w-lg text-base leading-relaxed text-bone/60">
-            Your domain. Your DNS. Your cloud accounts. Your Workspace owner
-            role. Your backups. If your IT provider, web designer, or marketing
-            agency holds them, they hold your business. We find what&apos;s not
-            in your name, help you take it back, and document the keys so you
-            can walk away from any vendor on your timeline.
+            Most owners don&apos;t know what keys they&apos;re missing — or
+            what to call the ones they have. That&apos;s normal, not a
+            failure. We figure out what&apos;s yours, what isn&apos;t, and
+            what&apos;s in someone else&apos;s account. Then we get it all
+            in your name and translate the technical stuff so you actually
+            understand what you own.
+          </p>
+          <p className="mt-4 max-w-lg text-sm leading-relaxed text-bone/40">
+            For the technically inclined: we&apos;re talking about your
+            domain registration, DNS, cloud accounts, Workspace owner role,
+            backups, and the credentials behind every vendor relationship.
+            If those terms mean nothing to you, that&apos;s exactly why we
+            exist.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
