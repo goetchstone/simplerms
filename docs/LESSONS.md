@@ -129,9 +129,11 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 **What happened:** Wrote multiple references to the 2026 PSU MacAdmins AI material as "the workshop I teach." Wrong: 2025 PSU MacAdmins was the workshop ("Apple Device Administration Essentials" — 150-minute hands-on session). 2026 sessions are talks/speaking sessions (AI session + Imposter Syndrome session). User caught the conflation.
 
-**Lesson:** When citing speaker credentials at conferences, be explicit about which year and which format (workshop vs talk vs panel). Same conference, different years, different roles. Don't generalize "PSU MacAdmins workshop instructor" to cover speaking work — those are different credentials.
+**Lesson:** When citing conference credentials, be explicit about which year and which format (workshop vs talk vs panel). Same conference, different years, different roles. Don't generalize "workshop instructor" to cover speaking work — those are different credentials.
 
-**Where it applies:** Any speaker bio, About page, blog post bio block, or CTA that references the founder's conference history. Default to "PSU MacAdmins instructor (2025 workshop) and speaker (2026 sessions)" or similar specificity. CLAUDE.md project context already correctly notes 2025 workshop instructor; future content should specify 2026 speaker for the AI/imposter syndrome material.
+**Term to use: "presenter"** — covers both workshop (2025) and conference sessions (2026) accurately. Founder's preferred term. Don't use "instructor" (sounds like a teaching credential) or default to "speaker" alone (workshop wasn't a speaking role).
+
+**Where it applies:** Any presenter bio, About page, blog post bio block, or CTA that references the founder's conference history. Default to "PSU MacAdmins presenter" or "PSU MacAdmins presenter (2025 workshop, 2026 sessions)" when year specificity matters.
 
 ---
 
