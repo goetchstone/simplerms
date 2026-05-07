@@ -125,6 +125,24 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-05-06 — When given license to simplify, look for collapsible overlap
+
+**What happened:** User asked for an article on their 9-layer prompt framework. They explicitly said "if you think you can make something simpler and better, do it." Honest read of the framework showed several layers were genuinely overlapping (Layer 1 + 4 both about audience/tone; Layer 2 + 6 + 8 all about output form; Layer 9 was a follow-up not a layer). Collapsed to 5 parts (WHO/WHAT/DATA/SHAPE/ITERATE) for working memory. Each new part is genuinely distinct. Nothing lost — every original layer maps somewhere.
+
+**Lesson:** When given permission to simplify a framework, audit for redundancy first. Most multi-step frameworks have 2-3 steps that are really one step seen from different angles. Collapsing those gives you a more memorable framework without losing teaching content. Keep the longer version as the teaching/workshop format and lead with the shorter version for daily use.
+
+**Where it applies:** Any framework, checklist, or process the user asks to simplify. Look for overlap before reordering or removing.
+
+---
+
+## 2026-05-06 — Concrete running examples make abstract frameworks land
+
+**What happened:** Two AI-themed blog posts used the same PCI compliance scenario as a running example through their structure. Made the abstract steps land in a way that "in general, you should..." doesn't. The PCI scenario is also a connector between posts — readers who hit one post recognize the same case in another, which reinforces the brand voice and makes the cross-links feel earned.
+
+**Lesson:** When teaching a process or framework via writing, pick ONE concrete example and run it through every section. Abstract frameworks and abstract steps blur together; the same example threading through forces specificity at each step. Reuse the example across posts when relevant — it builds a shared vocabulary with the reader.
+
+---
+
 ## 2026-05-02 — CSP blocks third-party scripts silently server-side
 
 **What happened:** Wired up GA4 via Settings → analytics provider/site ID. Script tag rendered in production HTML (verified via curl). User saw zero pageviews even after disabling Pi-hole + testing on cellular. Root cause: `next.config.ts` CSP had `script-src 'self' 'unsafe-inline'` and `connect-src 'self' https://js.stripe.com` — neither allowed `googletagmanager.com` or `google-analytics.com`. Server renders the tag fine; browser silently blocks it on the CSP enforcement step.
