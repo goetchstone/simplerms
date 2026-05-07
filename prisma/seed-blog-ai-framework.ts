@@ -13,7 +13,7 @@ const content = [
   {
     type: "paragraph",
     content:
-      "This is the framework I use. It's also what I teach in the AI workshop at PSU MacAdmins. There's a longer 9-layer version that goes section by section in a workshop setting — useful for teaching the underlying ideas, less useful for daily work. What follows is the daily-use version: five parts to build the prompt, five checks to evaluate the output. Symmetric, memorable, useful Tuesday.",
+      "This is the framework I use. It's also what I'm presenting in the AI session at PSU MacAdmins 2026. There's a longer 9-layer version that walks through each piece in a session setting — useful when introducing the underlying ideas, less useful for daily work. What follows is the daily-use version: five parts to build the prompt, five checks to evaluate the output. Symmetric, memorable, useful Tuesday.",
   },
   {
     type: "heading",
@@ -306,7 +306,7 @@ const content = [
   {
     type: "cta",
     content:
-      "Want this framework as a printable PDF? The 9-layer workshop version of the framework plus the full Definition of Done checklist. Free, no strings, no drip sequence.",
+      "Want this framework as a printable PDF? The full 9-layer fillable version plus the Definition of Done checklist. Free, no strings, no drip sequence.",
     ctaText: "Get the framework PDF",
     ctaHref: "/resources/ai-framework",
   },
@@ -339,7 +339,7 @@ async function main() {
     update: {
       title: "AI Got Good. Now What? A Framework for Using It Without Getting Burned.",
       excerpt:
-        "Most AI output is mediocre because the prompts didn't give the AI enough to work with. Five parts to build the prompt, five checks to evaluate the output. Daily-use version of the workshop framework I teach at PSU MacAdmins.",
+        "Most AI output is mediocre because the prompts didn't give the AI enough to work with. Five parts to build the prompt, five checks to evaluate the output. Daily-use version of the framework I'm presenting at PSU MacAdmins 2026.",
       content: content as never,
       status: "PUBLISHED",
       publishedAt: new Date("2026-05-06T11:00:00-04:00"),
@@ -348,7 +348,7 @@ async function main() {
       title: "AI Got Good. Now What? A Framework for Using It Without Getting Burned.",
       slug: "ai-got-good-the-framework",
       excerpt:
-        "Most AI output is mediocre because the prompts didn't give the AI enough to work with. Five parts to build the prompt, five checks to evaluate the output. Daily-use version of the workshop framework I teach at PSU MacAdmins.",
+        "Most AI output is mediocre because the prompts didn't give the AI enough to work with. Five parts to build the prompt, five checks to evaluate the output. Daily-use version of the framework I'm presenting at PSU MacAdmins 2026.",
       content: content as never,
       status: "PUBLISHED",
       publishedAt: new Date("2026-05-06T11:00:00-04:00"),

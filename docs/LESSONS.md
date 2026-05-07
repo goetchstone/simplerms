@@ -125,6 +125,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-05-06 — Conference history: distinguish workshops from talks
+
+**What happened:** Wrote multiple references to the 2026 PSU MacAdmins AI material as "the workshop I teach." Wrong: 2025 PSU MacAdmins was the workshop ("Apple Device Administration Essentials" — 150-minute hands-on session). 2026 sessions are talks/speaking sessions (AI session + Imposter Syndrome session). User caught the conflation.
+
+**Lesson:** When citing speaker credentials at conferences, be explicit about which year and which format (workshop vs talk vs panel). Same conference, different years, different roles. Don't generalize "PSU MacAdmins workshop instructor" to cover speaking work — those are different credentials.
+
+**Where it applies:** Any speaker bio, About page, blog post bio block, or CTA that references the founder's conference history. Default to "PSU MacAdmins instructor (2025 workshop) and speaker (2026 sessions)" or similar specificity. CLAUDE.md project context already correctly notes 2025 workshop instructor; future content should specify 2026 speaker for the AI/imposter syndrome material.
+
+---
+
 ## 2026-05-06 — When given license to simplify, look for collapsible overlap
 
 **What happened:** User asked for an article on their 9-layer prompt framework. They explicitly said "if you think you can make something simpler and better, do it." Honest read of the framework showed several layers were genuinely overlapping (Layer 1 + 4 both about audience/tone; Layer 2 + 6 + 8 all about output form; Layer 9 was a follow-up not a layer). Collapsed to 5 parts (WHO/WHAT/DATA/SHAPE/ITERATE) for working memory. Each new part is genuinely distinct. Nothing lost — every original layer maps somewhere.
