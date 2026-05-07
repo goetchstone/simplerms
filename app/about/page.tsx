@@ -12,7 +12,7 @@ import { ArrowRight, CheckCircle, Mail } from "lucide-react";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Goetch Stone — 20+ years in IT, PSU MacAdmins workshop instructor. Started at an MSP, became Director of IT for a multi-location retailer. Founded Akritos to fix what's broken in the industry.",
+    "Goetch Stone — 20+ years in IT, PSU MacAdmins presenter. Started at an MSP, became Director of IT for a multi-location retailer. Founded Akritos to fix what's broken in the industry.",
   alternates: { canonical: "https://akritos.com/about" },
 };
 
@@ -106,7 +106,7 @@ export default async function AboutPage() {
                   rel="noopener noreferrer"
                   className="border-b border-bone/20 hover:border-conviction hover:text-conviction"
                 >
-                  PSU MacAdmins workshop instructor
+                  PSU MacAdmins presenter
                 </a>
                 <span className="text-bone/20">·</span>
                 <a

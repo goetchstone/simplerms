@@ -148,7 +148,7 @@ export default async function HomePage() {
           >
             PSU MacAdmins
           </a>
-          {" "}instructor &amp; speaker · Fully insured ·{" "}
+          {" "}presenter · Fully insured ·{" "}
           <Link href="/about" className="underline underline-offset-2 hover:text-bone/40">
             About us
           </Link>
