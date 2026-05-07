@@ -11,6 +11,27 @@ import { sendEmail } from "@/server/email";
 const SUBMIT_LIMIT = 3;
 const SUBMIT_WINDOW_MS = 60 * 60 * 1000;
 
+// Maps a lead source to the download path + email subject + a one-line description
+// of what the lead asked for. Adding a new lead magnet means adding an entry here
+// and a route under app/api/leads/[name]/route.ts. The submit handler stays generic.
+const LEAD_MAGNETS: Record<
+  string,
+  { path: string; subject: string; what: string }
+> = {
+  "ownership-page": {
+    path: "/api/leads/checklist",
+    subject: "Your Vendor Independence Checklist",
+    what: "the Vendor Independence Checklist",
+  },
+  "ai-framework-page": {
+    path: "/api/leads/prompt-framework",
+    subject: "The AI Prompt Framework + Definition of Done",
+    what: "the AI Prompt Framework + Definition of Done",
+  },
+};
+
+const DEFAULT_MAGNET = LEAD_MAGNETS["ownership-page"]!;
+
 const submitInput = z.object({
   email: z.string().email().max(254),
   name: z.string().min(1).max(80).optional(),
@@ -71,31 +92,29 @@ export const leadsRouter = createTRPCRouter({
       },
     });
 
+    const magnet = LEAD_MAGNETS[input.source] ?? DEFAULT_MAGNET;
     const token = leadDownloadToken(lead.id);
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://akritos.com";
-    const downloadUrl = `${baseUrl}/api/leads/checklist?id=${encodeURIComponent(lead.id)}&t=${token}`;
+    const downloadUrl = `${baseUrl}${magnet.path}?id=${encodeURIComponent(lead.id)}&t=${token}`;
 
     // Fire-and-forget email — never blocks the form submit
     void sendEmail({
       to: email,
-      subject: "Your Vendor Independence Checklist",
+      subject: magnet.subject,
       text: [
         input.name ? `Hi ${input.name.split(" ")[0]},` : "Hi,",
         "",
-        "Thanks for grabbing the checklist. Here's the download:",
+        `Thanks for grabbing ${magnet.what}. Here's the download:`,
         downloadUrl,
         "",
-        "Work through it at your own pace. Most owners can't answer everything off the top of their head — that's normal, and the questions point at who in your world would know.",
-        "",
-        "If you'd like a 30-minute walkthrough together, no pitch, no pressure, you can book one here: https://akritos.com/book",
+        "Work through it at your own pace. If you have questions or want a 30-minute walkthrough together — no pitch, no pressure — you can book one here: https://akritos.com/book",
         "",
         "— Akritos",
       ].join("\n"),
       html: `<p>${input.name ? `Hi ${input.name.split(" ")[0]},` : "Hi,"}</p>
-<p>Thanks for grabbing the checklist. Here's the download:</p>
+<p>Thanks for grabbing ${magnet.what}. Here's the download:</p>
 <p><a href="${downloadUrl}">${downloadUrl}</a></p>
-<p>Work through it at your own pace. Most owners can't answer everything off the top of their head — that's normal, and the questions point at who in your world would know.</p>
-<p>If you'd like a 30-minute walkthrough together, no pitch, no pressure, you can <a href="https://akritos.com/book">book one here</a>.</p>
+<p>Work through it at your own pace. If you have questions or want a 30-minute walkthrough together — no pitch, no pressure — you can <a href="https://akritos.com/book">book one here</a>.</p>
 <p>— Akritos</p>`,
     }).catch(() => {
       // Email failure is logged but doesn't break the user flow
