@@ -306,6 +306,13 @@ const content = [
   {
     type: "cta",
     content:
+      "Want this framework as a printable PDF? The 9-layer workshop version of the framework plus the full Definition of Done checklist. Free, no strings, no drip sequence.",
+    ctaText: "Get the framework PDF",
+    ctaHref: "/resources/ai-framework",
+  },
+  {
+    type: "cta",
+    content:
       "If you're rolling AI out across your business and want help putting guardrails in place — policy, workflow review, vendor evaluation, training — that's exactly what we do.",
     ctaText: "AI Risk & Guardrails",
     ctaHref: "/ai-risk",

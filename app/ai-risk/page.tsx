@@ -191,6 +191,32 @@ export default async function AIRiskPage() {
         </div>
       </section>
 
+      {/* The framework — free download */}
+      <section className="border-t border-bone/10 px-6 py-24">
+        <div className="mx-auto max-w-[800px]">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Free Download
+          </p>
+          <h2 className="mb-4 text-[28px] font-medium text-bone">
+            The framework we use, free for you to take home.
+          </h2>
+          <p className="mb-8 text-base leading-relaxed text-bone/60">
+            We don&apos;t hold the methodology hostage. The same 9-layer prompt
+            framework + Definition of Done checklist we use to evaluate AI
+            output for clients is published as a free PDF. Take it. Print it.
+            Use it without us. If you want help applying it to your business,
+            that&apos;s what the consultation is for.
+          </p>
+          <Link
+            href="/resources/ai-framework"
+            className="inline-flex items-center gap-2 border border-conviction/30 bg-conviction/10 px-5 py-3 text-sm font-medium text-conviction transition-colors hover:bg-conviction hover:text-midnight"
+            style={{ borderRadius: "2px" }}
+          >
+            Get the framework PDF <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-bone/10 px-6 py-24 text-center">
         <h2 className="text-2xl font-medium text-bone">
