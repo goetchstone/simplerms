@@ -105,7 +105,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 
 - **Niche:** Apple MDM & Mac management for SMBs with Windows-native IT teams
 - **Brand story:** "Akritos" = Ancient Greek ἄκριτος, meaning "unwatered" — full strength, undiluted wine. No watered-down IT.
-- **Founder:** Goetch Stone — 20+ years IT, Director of IT at multi-location retailer, PSU MacAdmins 2025 workshop instructor
+- **Founder:** Goetch Stone — 20+ years IT, Director of IT at multi-location retailer, PSU MacAdmins 2025 workshop instructor (Apple Device Administration Essentials), PSU MacAdmins 2026 conference speaker (AI session + Imposter Syndrome session)
 - **Business status:** LLC registered, EIN obtained, fully insured ($1M/$2M E&O+GL) — all as of April 2026
 - **Pre-revenue:** Zero clients. Site, brand, and platform are built. Next: bank account, Google Business Profile, first client outreach.
 

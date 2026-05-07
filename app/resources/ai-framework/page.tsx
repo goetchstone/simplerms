@@ -19,7 +19,7 @@ const SITE_URL = "https://akritos.com";
 const URL = `${SITE_URL}/resources/ai-framework`;
 const TITLE = "Free Download: The AI Prompt Framework + Definition of Done";
 const DESCRIPTION =
-  "A 9-layer framework for prompting AI without getting slop, plus a 5-section checklist for evaluating any AI output. Free PDF, free to share. Drawn from the workshop Goetch Stone teaches at PSU MacAdmins.";
+  "A 9-layer framework for prompting AI without getting slop, plus a 5-section checklist for evaluating any AI output. Free PDF, free to share. Drawn from the AI session Goetch Stone is presenting at PSU MacAdmins 2026.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -96,8 +96,8 @@ export default async function AIFrameworkResourcePage() {
                 to share, no strings.
               </p>
               <p className="mt-4 max-w-lg text-base leading-relaxed text-bone/60">
-                Drawn from the workshop Goetch Stone teaches at PSU MacAdmins.
-                Tested on real work. Three pages. Print it.
+                Drawn from the AI session Goetch Stone is presenting at
+                PSU MacAdmins 2026. Tested on real work. Three pages. Print it.
               </p>
 
               <ul className="mt-8 space-y-2 text-sm text-bone/60">
