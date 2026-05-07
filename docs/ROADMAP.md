@@ -142,4 +142,10 @@ These become important as client count grows.
 | Settings UI | Working | Company, SMTP, invoice defaults |
 | Background Jobs | Working | Email queue processor + reminders + overdue flagging |
 | Client Portal | Working | Token-based, invoices/tickets/appointments |
-| Public Pages | Working | Homepage, about, services, pricing, contact, careers, nonprofits, apple-business, privacy, terms, blog, book, support |
+| Public Pages | Working | Homepage, about, services, pricing, contact, careers, nonprofits, apple-business, ai-risk, ownership, privacy, terms, blog, book, support |
+| Lead Magnets | Working | Vendor Independence Checklist (PDF) + AI Prompt Framework (PDF). `Lead` model, `leads` tRPC router, token-gated downloads, admin view at /dashboard/cms/leads |
+| Resources Hub | Working | `/resources/ai-framework` live. Pattern documented in CLAUDE.md for future magnets |
+| Blog Posts | Live (4) | (1) iPad deployment story, (2) Two iPads / iMacs deployment, (3) Prompt Jockeys + PCI nightmare, (4) AI Multiplies Talent, (5) AI Got Good — the Framework |
+| AI Content Cluster | Live | 3 blog posts + 1 resources page + 1 service page + 1 PDF lead magnet, fully cross-linked |
+| Recommended Vendors Page | Staged (branch only) | `feat/recommended-vendors` ready to PR once founder sets up Mosyle Partner / Cloudflare / B&H accounts |
+| Branch Protection | Active | 5 required checks (lint+test, gitleaks, npm audit, CodeQL, Semgrep). Admin bypass enabled. |

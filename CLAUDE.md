@@ -129,6 +129,9 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **Auth:** NextAuth credentials provider, bcrypt hashed passwords, JWT sessions
 - **Stripe:** Payment Links per invoice, webhook at /api/webhooks/stripe
 - **Timezone:** scheduling stores availability in local timezone, converts to UTC for slot calculation
+- **Lead magnets:** five files per magnet — (1) `lib/{name}-content.ts` data, (2) `server/pdf/{name}.tsx` react-pdf component, (3) `app/api/leads/{name}/route.ts` token-gated GET, (4) `components/leads/{name}-form.tsx` capture form, (5) `app/resources/{name}/page.tsx` landing page. Add the new source to `LEAD_MAGNETS` map in `server/trpc/routers/leads.ts` (one entry: path/subject/what). All magnets share the `Lead` model + `leads` tRPC router + same `verifyLeadDownloadToken` HMAC pattern. Source is the segment for analytics.
+- **Content + SEO architecture:** three-tier — blog post (top-of-funnel, ranks for educational queries) → `/resources/{name}` landing page (mid-funnel, ranks for "free X download" queries) → PDF (value delivered). Blog posts cross-link to siblings; resources page cross-links to all related blog posts; `/ai-risk` and `/ownership` service pages get inline CTAs to their corresponding resources page. Don't make blog posts compete with resources pages on the same keywords — pick the audience for each.
+- **Resources hub:** `/resources/{name}` is the URL pattern for downloadable assets. `resources` is in the RESERVED set in `app/[slug]/page.tsx`. Add new resources by creating the directory, wiring proxy/sitemap/footer, and following the lead magnet pattern above.
 
 ### Brand Rules
 

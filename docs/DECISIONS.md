@@ -143,4 +143,30 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 
 **Update (same day):** First runs completed clean (after fixing 2 Semgrep findings — Dockerfile root user + json-ld nosemgrep with rationale). Added `Analyze (javascript-typescript)` (CodeQL) and `Scan` (Semgrep) to required checks. Now five required checks total. Admin bypass still allowed.
 
+---
+
+### 2026-05-06: Lead magnet architecture — five files, one Lead model
+
+**Decision:** Lead magnets follow a fixed five-file pattern: data (`lib/*-content.ts`), PDF generator (`server/pdf/*.tsx`), download route (`app/api/leads/*/route.ts`), capture form (`components/leads/*-form.tsx`), landing page (`app/resources/*/page.tsx`). All magnets share the `Lead` Prisma model, the `leads` tRPC router, and the `LEAD_MAGNETS` source-to-config map.
+
+**Why:** Two magnets shipped (Vendor Independence Checklist, AI Prompt Framework). The pattern is now genuinely reusable — adding a third magnet is one entry in the `LEAD_MAGNETS` map plus the five files. Source field on the `Lead` row segments analytics so we can see which magnet pulls which audience.
+
+**Trade-off:** Five files per magnet is more than a single dynamic route would be (e.g., `app/api/leads/[name]/route.ts` with a switch). The reason for separate files is that each PDF has substantially different content and layout — combining them would mean a giant switch statement and a lot of conditional layout. Worth the duplication for clarity.
+
+---
+
+### 2026-05-06: Three-tier content/SEO architecture — blog → resources → PDF
+
+**Decision:** For any substantive lead-magnet topic, build three layers: (1) educational blog post that ranks for content queries, (2) `/resources/{name}` landing page that ranks for "free X download" queries, (3) the PDF as the deliverable. Blog post never embeds the form directly; it CTAs to the resources page. Resources page never holds the educational content; it CTAs to the blog post.
+
+**Why:** Search intent is different. Someone searching "what is the prompt jockey problem" wants to read; someone searching "free AI framework PDF" wants to download. Same audience eventually, different entry intent. Separating the two surfaces lets each rank for its actual query and gives us conversion-segment data (form submits from blog post = source X, from resources page = source Y).
+
+**Trade-off:** More pages to maintain. Mitigated by the lead magnet pattern (above) — each magnet's five files is bounded scope.
+
+**First two implementations:**
+- `/ownership` (Vendor Independence theme) → `/resources` not yet (Vendor Checklist embedded directly in /ownership for now — will refactor when a third magnet justifies extracting)
+- `/blog/ai-got-good-the-framework` → `/resources/ai-framework` → `ai-prompt-framework.pdf`
+
+The AI framework is the cleaner reference implementation of the pattern.
+
 **Workflow change:** direct pushes to `main` will be blocked; future work uses PRs. Hotfixes can use admin-bypass when truly time-critical.
