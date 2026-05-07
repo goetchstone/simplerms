@@ -26,6 +26,8 @@ const PUBLIC_PATHS = [
   "/api/health",
   "/api/tickets/reply",
   "/api/leads/checklist",
+  "/api/leads/prompt-framework",
+  "/resources",
 ];
 
 export default auth((req: NextRequest & { auth: unknown }) => {

@@ -12,6 +12,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/ownership`, changeFrequency: "weekly", priority: 0.98 },
   { url: `${BASE}/apple-business`, changeFrequency: "weekly", priority: 0.9 },
   { url: `${BASE}/ai-risk`, changeFrequency: "weekly", priority: 0.85 },
+  { url: `${BASE}/resources/ai-framework`, changeFrequency: "monthly", priority: 0.9 },
   { url: `${BASE}/pricing`, changeFrequency: "monthly", priority: 0.9 },
   { url: `${BASE}/book`, changeFrequency: "weekly", priority: 0.8 },
   { url: `${BASE}/support`, changeFrequency: "monthly", priority: 0.5 },
