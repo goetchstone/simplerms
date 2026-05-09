@@ -125,7 +125,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **Settings:** stored in DB as key/value (Setting model), fetched via `db.setting.findUnique`
 - **CMS blocks:** JSON array of { type, content, level, src, alt, ctaText, ctaHref } objects
 - **BlockRenderer:** uses bone/conviction color palette (not zinc) — headings text-bone, paragraphs text-bone/80, dividers border-bone/10, CTA bg-slate-brand/20 with conviction gold button
-- **Email:** Nodemailer singleton transport, configured via Settings table
+- **Email:** Nodemailer transport reads SMTP credentials from the Settings table (smtp_host / smtp_port / smtp_user / smtp_pass / email_from), set via `/dashboard/settings`. Falls back to env vars (`SMTP_*`, `EMAIL_FROM`) for dev (Mailpit at localhost:1025) or DB-unreachable cases. Transport is cached for 60s; rebuilds when Settings change. `sendEmail()` logs failures to stderr even when callers swallow with `.catch(() => {})`. `verifySmtp()` exists for "Test SMTP" admin tooling.
 - **Auth:** NextAuth credentials provider, bcrypt hashed passwords, JWT sessions
 - **Stripe:** Payment Links per invoice, webhook at /api/webhooks/stripe
 - **Timezone:** scheduling stores availability in local timezone, converts to UTC for slot calculation
