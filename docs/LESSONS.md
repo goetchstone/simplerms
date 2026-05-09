@@ -125,6 +125,22 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-05-09 — Docs lying about behavior: email read env vars, not Settings
+
+**What happened:** User configured SMTP credentials in the dashboard Settings UI, tested the lead-magnet form, no email arrived. CLAUDE.md said "Email: Nodemailer singleton transport, configured via Settings table" but `server/email/index.ts` actually only read from `process.env.SMTP_*`. The Settings UI fields existed and saved to the DB, but the email module never queried them. Transport silently fell back to `localhost:1025` (Mailpit dev defaults) and emails went nowhere in production.
+
+**Compounding:** `sendEmail()` was called via `void sendEmail(...).catch(() => {})` for fire-and-forget. Errors were swallowed without logging. So the failure surface was: user submits form → success state shows → no email arrives → no logs anywhere. Worst kind of bug.
+
+**Lesson 1 — docs-vs-reality drift:** When CLAUDE.md asserts "X is configured via Y" and the code actually uses Z, future sessions will trust the doc and not the code. Either the doc is right and the code needs to be fixed, or the doc is wrong and needs updating. Don't let them diverge.
+
+**Lesson 2 — fire-and-forget needs logging:** `.catch(() => {})` is correct for not blocking the user, but every catch should still log. Silent failures in async flows are nearly impossible to diagnose because there's no signal to follow.
+
+**Lesson 3 — Settings-driven config means re-reading:** When a system claims to be Settings-driven, the implementation has to actually re-read the Settings table — not capture them once at module load. Caching with a TTL is fine; reading once at process start is a bug waiting to happen.
+
+**Where it applies:** Any "configured via Settings" claim in CLAUDE.md or feature docs. Verify the implementation before trusting the doc. When adding any settings UI field, check that the consuming code path actually reads from Settings, not just env vars.
+
+---
+
 ## 2026-05-06 — Conference history: distinguish workshops from talks
 
 **What happened:** Wrote multiple references to the 2026 PSU MacAdmins AI material as "the workshop I teach." Wrong: 2025 PSU MacAdmins was the workshop ("Apple Device Administration Essentials" — 150-minute hands-on session). 2026 sessions are talks/speaking sessions (AI session + Imposter Syndrome session). User caught the conflation.
