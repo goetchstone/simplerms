@@ -10,13 +10,28 @@ updates:
       time: "06:00"
     open-pull-requests-limit: 5
     groups:
+      # Weekly version updates (Monday 06:00 UTC, per schedule above).
       prod-deps:
+        applies-to: version-updates
         dependency-type: production
         # Pin nodemailer to its current major while next-auth's peer-dep catches up.
         # Re-evaluate when next-auth 5 stable lists nodemailer@^8 as supported.
         exclude-patterns:
           - "nodemailer"
       dev-deps:
+        applies-to: version-updates
+        dependency-type: development
+      # Security advisories — fold into grouped PRs instead of opening one
+      # individual PR per CVE. Without these groups, security alerts trigger
+      # out-of-band PRs that overlap with the next Monday's grouped batch
+      # and create stale-PR cruft (e.g., #27 hono superseded by #32 prod-deps).
+      prod-deps-security:
+        applies-to: security-updates
+        dependency-type: production
+        exclude-patterns:
+          - "nodemailer"
+      dev-deps-security:
+        applies-to: security-updates
         dependency-type: development
     ignore:
       - dependency-name: "nodemailer"
