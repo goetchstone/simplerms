@@ -1,4 +1,9 @@
 // app/sitemap.ts
+// Recomputed on each request so newly published blog posts and CMS pages
+// appear in the sitemap immediately after deploy — without this, Next.js
+// caches the build-time snapshot and posts seeded after build never show up.
+export const dynamic = "force-dynamic";
+
 import type { MetadataRoute } from "next";
 import { db } from "@/server/db";
 
