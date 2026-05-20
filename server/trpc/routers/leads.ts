@@ -28,6 +28,11 @@ const LEAD_MAGNETS: Record<
     subject: "The AI Prompt Framework + Definition of Done",
     what: "the AI Prompt Framework + Definition of Done",
   },
+  "tech-debt-page": {
+    path: "/api/leads/tech-debt",
+    subject: "Your Tech Debt Checklist",
+    what: "the Tech Debt Checklist",
+  },
 };
 
 const DEFAULT_MAGNET = LEAD_MAGNETS["ownership-page"]!;

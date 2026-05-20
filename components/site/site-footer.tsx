@@ -39,6 +39,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
               <li><Link href="/apple-business" className="hover:text-conviction">Apple Business setup</Link></li>
               <li><Link href="/ai-risk" className="hover:text-conviction">AI Risk &amp; Guardrails</Link></li>
               <li><Link href="/resources/ai-framework" className="hover:text-conviction">Free: AI Framework PDF</Link></li>
+              <li><Link href="/resources/tech-debt" className="hover:text-conviction">Free: Tech Debt Checklist PDF</Link></li>
               <li><Link href="/services" className="hover:text-conviction">All services</Link></li>
               <li><Link href="/pricing" className="hover:text-conviction">Pricing</Link></li>
               <li><Link href="/book" className="hover:text-conviction">Book a free consultation</Link></li>

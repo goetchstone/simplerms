@@ -27,6 +27,7 @@ const PUBLIC_PATHS = [
   "/api/tickets/reply",
   "/api/leads/checklist",
   "/api/leads/prompt-framework",
+  "/api/leads/tech-debt",
   "/resources",
 ];
 
