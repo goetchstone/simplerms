@@ -10,9 +10,9 @@ import { db } from "@/server/db";
 import { ArrowRight, Check, X } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Pricing — Akritos",
   description:
-    "Published rates, no surprises. Managed Apple device management at $35/user/month (Apple Business-native) or $50/user/month (with enterprise MDM). Setup and advisory at $225/hr. Typical setups: ~5 hours for small businesses, 20+ for enterprise migrations. Vendor costs pass through at cost — zero markup.",
+    "Published rates for senior IT partnership. Free 1-hour consultation. Project work from $1,500 flat. Partnership retainers from $750/month. Advisory at $250/hr. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },
 };
 
@@ -25,100 +25,102 @@ async function getCompanyName() {
   }
 }
 
-const tiers = [
+interface Tier {
+  name: string;
+  price: string;
+  unit: string;
+  description: string;
+  features: string[];
+  examples: { label: string; range: string }[] | null;
+  cta: string;
+  href: string;
+  featured: boolean;
+}
+
+const tiers: Tier[] = [
   {
-    name: "Get Set Up",
-    price: "$225",
-    unit: "/ hour",
+    name: "The Free Hour",
+    price: "$0",
+    unit: "",
     description:
-      "Apple Business setup, Google Workspace, optional enterprise MDM. Scoped during a free consultation and delivered as one flat number based on our hourly rate. You see the math before we start.",
+      "Your first conversation, free. 60 minutes walking your environment together. We bring the Tech Debt Checklist. You leave with it filled in — honest assessment, real numbers, written summary. Yours either way.",
     features: [
-      "Apple Business account setup and configuration",
-      "Built-in MDM deployment — no separate platform required",
-      "Enterprise MDM when needed (Mosyle, Jamf, Iru, Addigy)",
-      "MDM migration from Intune or other platforms",
-      "Google Workspace + domain + email + SSO",
-      "Identity federation (Apple Business ↔ Google/Microsoft 365)",
-      "Team training and documentation",
+      "Full 60-minute conversation",
+      "Tech Debt Checklist filled in with you",
+      "Honest assessment of what's working and what isn't",
+      "Real numbers on what fixes would cost",
+      "Written summary emailed afterward",
+      "No obligation, no follow-up sales sequence",
     ],
-    examples: [
-      { label: "Small team, Apple Business basics (~5 hrs)", range: "~$1,125" },
-      { label: "Apple Business + Google Workspace (~10 hrs)", range: "~$2,250" },
-      { label: "Enterprise MDM or Intune migration (20+ hrs)", range: "$4,500+" },
-    ],
-    cta: "Book a free consultation",
+    examples: null,
+    cta: "Book your free hour",
     href: "/book",
     featured: false,
   },
   {
-    name: "Apple Business Managed",
-    price: "$35",
-    unit: "/ user / month",
+    name: "Project Work",
+    price: "From $1,500",
+    unit: "flat",
     description:
-      "Ongoing management on Apple Business alone — no separate MDM, no extra tool sprawl. Device enrollment, app deployment, security policies, quarterly reviews. Your team handles day-to-day; we back them up. For small businesses where Apple Business is the right fit.",
+      "Specific, scoped work with a defined deliverable. Quoted as a flat number after the free hour — no hourly stretch, no surprise invoices. Most clients start here, then move into partnership if it makes sense.",
     features: [
-      "Device enrollment and offboarding",
-      "App deployment and updates",
-      "Security policy management via built-in MDM",
-      "Quarterly environment reviews",
-      "Escalation support for your team",
-      "Priority response for managed clients",
-      "No MDM licensing — Apple Business is free",
-      "Minimum 5 users",
-      "Month-to-month after 3-month onboarding",
+      "Scoped after the free hour",
+      "Flat fee, no hourly stretch",
+      "Defined deliverable and timeline",
+      "Documentation you own",
+      "Vendor costs pass through at cost",
+      "No retainer required",
     ],
     examples: [
-      { label: "10-person team", range: "$350 /month" },
-      { label: "25-person team", range: "$875 /month" },
-      { label: "50-person team", range: "$1,750 /month" },
+      { label: "Quick win — fix the most painful thing", range: "$1,500 – $3,500" },
+      { label: "Standard setup — build it right", range: "$3,000 – $5,500" },
+      { label: "Complex / multi-system migration", range: "$5,500 – $15,000+" },
     ],
-    cta: "Book a free consultation",
+    cta: "Book your free hour",
     href: "/book",
     featured: true,
   },
   {
-    name: "Enterprise MDM Managed",
-    price: "$50",
-    unit: "/ user / month",
+    name: "Partnership Retainer",
+    price: "From $750",
+    unit: "/ month",
     description:
-      "When Apple Business alone isn't enough — regulated industries, complex deployments, larger fleets. Full management on Mosyle, Jamf, Iru, or Addigy. Your team handles day-to-day; we back them up.",
+      "Ongoing technology partnership at the cadence your business needs. We're your senior IT thinking. Your team owns day-to-day; we own the bigger picture and back them up. Month-to-month after a 3-month onboarding.",
     features: [
-      "Everything in Apple Business Managed, plus:",
-      "Enterprise MDM operation (Mosyle, Jamf, Iru, Addigy)",
-      "Advanced scripting and configuration profiles",
-      "Compliance-oriented policy management",
-      "Multi-site and complex deployment support",
-      "MDM license billed separately at cost",
-      "Minimum 5 users",
-      "Month-to-month after 3-month onboarding",
+      "Senior IT thinking on retainer",
+      "Vendor management and strategic guidance",
+      "Quarterly environment reviews",
+      "Escalation backup for your team",
+      "Priority response",
+      "Month-to-month after onboarding",
+      "No exit fees, no penalties",
     ],
     examples: [
-      { label: "10-person team", range: "$500 /month" },
-      { label: "25-person team", range: "$1,250 /month" },
-      { label: "50-person team", range: "$2,500 /month" },
+      { label: "Light Touch — ~6 hrs/mo, monthly cadence", range: "$750 /mo" },
+      { label: "Standard — ~18 hrs/mo, weekly cadence", range: "$3,500 /mo" },
+      { label: "Deep Partnership — ~35 hrs/mo, embedded", range: "$7,500 /mo" },
     ],
-    cta: "Book a free consultation",
+    cta: "Book your free hour",
     href: "/book",
     featured: false,
   },
   {
-    name: "Advisory",
-    price: "$225",
+    name: "Advisory Hourly",
+    price: "$250",
     unit: "/ hour",
     description:
-      "Payment processing rate negotiation, PCI scope reduction, vendor audits, architecture planning, executive IT. Senior-level expertise when you need it, no retainer required.",
+      "Ad-hoc work outside a retainer. One-off questions, specific projects, things that don't justify ongoing partnership. Senior-level expertise when you need it, no commitment required.",
     features: [
       "No contract or minimum hours",
       "Payment processor rate negotiation",
       "PCI scope assessment and reduction",
-      "Vendor audit and cost analysis",
+      "Vendor audit and exit planning",
       "Contract review and negotiation",
       "Architecture and infrastructure planning",
-      "Executive IT support",
       "Remote delivery nationwide",
     ],
     examples: null,
-    cta: "Book a session",
+    cta: "Book your free hour",
     href: "/book",
     featured: false,
   },
@@ -126,52 +128,52 @@ const tiers = [
 
 const faqs = [
   {
+    q: "Why no per-user pricing?",
+    a: "Per-user pricing is the MSP model — it commoditizes the relationship and bundles your fee with vendor costs you can't see. We price for the work. Project work is flat-fee. Partnership is a retainer based on what your business actually needs, not how many seats you have. Vendor costs pass through at cost, on a separate line, so you always know what you're paying for.",
+  },
+  {
     q: "Do you mark up vendor costs?",
-    a: "No. Vendor costs are pass-through at cost. If Mosyle charges $4/device/month, you pay $4/device/month. If we negotiate a better rate with a vendor, the savings go to you. We show you the vendor invoice — you see exactly what you're paying for.",
+    a: "No. Vendor costs are pass-through at cost. If a vendor charges $4 per device, you pay $4 per device. If we negotiate a better rate with a vendor, the savings go to you. We show you the vendor invoice — you see exactly what you're paying for.",
   },
   {
     q: "Do you take vendor kickbacks?",
     a: "No. We never accept partnership revenue, referral fees, or volume incentives from vendors we recommend. Our recommendations are based on what's right for you, not what pays us the most.",
   },
   {
-    q: "What's the difference between Apple Business Managed and Enterprise MDM Managed?",
-    a: "Apple Business Managed ($35/user/month) uses the built-in MDM that comes free with Apple Business. No separate license, no extra tools. Right for most small businesses. Enterprise MDM Managed ($50/user/month) adds a dedicated MDM platform (Mosyle, Jamf, Iru, or Addigy) for environments that need advanced scripting, complex configurations, or compliance-specific policy management. We'll tell you which one fits — often it's the cheaper one.",
+    q: "What's the difference between project work and a partnership retainer?",
+    a: "Project work is a specific, scoped engagement with a defined deliverable — set up the environment, migrate off Intune, audit your vendors, build a custom tool. Flat fee, no recurring commitment. A partnership retainer is ongoing — we're your senior IT thinking month after month, helping you make strategic decisions, vetting new vendors, backing up your team when something complicated comes up. Most clients start with project work and add a retainer once they see the value.",
   },
   {
-    q: "What's the difference between managed and advisory?",
-    a: "Managed is ongoing Apple device management — we keep your devices enrolled, apps deployed, and policies current. Advisory is one-off consulting — you bring us in for a specific question, payment processor negotiation, or project. Many clients use both.",
+    q: "What does Light Touch retainer actually include?",
+    a: "About 6 hours per month of senior IT time, a monthly check-in, ad-hoc questions you can email or call about, and being on retainer so we know your environment when something does come up. For solo professionals and small businesses where you don't need constant attention but you want a real partner you can call. Overages are billed at the regular hourly rate so there are no surprises.",
+  },
+  {
+    q: "Do you require long-term contracts?",
+    a: "Partnership retainers are month-to-month after a 3-month onboarding. The onboarding minimum exists because it takes time to learn your environment well enough to be useful. After that, you stay because it's working, not because you're trapped.",
+  },
+  {
+    q: "What if my budget can't reach the lowest tier?",
+    a: "Tell us. If your work matters to your community — non-profits, mission-driven small businesses, community organizations — we'll find a number that works for both of us. We'd rather help a small business succeed than be the firm they couldn't afford. We won't work for free (our team earns living wages and that's non-negotiable), but we'll be reasonable.",
+  },
+  {
+    q: "What does a typical monthly invoice look like?",
+    a: "A 15-person company on the Standard retainer: $3,500 for partnership, plus any vendor costs pass-through (Google Workspace, Apple Business is free, MDM if applicable, etc.) listed line by line. If you used 5 advisory hours that month outside the retainer, that's $1,250 extra. Every line visible and verifiable.",
   },
   {
     q: "Why no RMM agents?",
-    a: "RMM (remote monitoring and management) tools are installed on every device and have deep system access — which makes them a prime target for attackers. We manage through MDM, which is already on Apple devices by design. One less agent, one less attack surface.",
+    a: "RMM (remote monitoring and management) tools are installed on every device and have deep system access — which makes them a prime target for attackers. We manage through MDM when devices are managed at all, which is already on Apple devices by design. One less agent, one less attack surface.",
   },
   {
     q: "What if I want to leave?",
     a: "You leave. There's no exit fee, no contract penalty, no hostage negotiation. You own everything we built for you. We'll even help with the transition to whoever comes next.",
   },
   {
-    q: "What does a typical monthly bill look like?",
-    a: "A 15-person company on Apple Business Managed: $525 for management (15 × $35), plus any advisory hours used. That's it — Apple Business is free. On Enterprise MDM Managed: $750 for management (15 × $50), plus ~$60 for MDM licensing at cost. Every line item is visible and verifiable.",
-  },
-  {
-    q: "Do you charge for initial consultations?",
-    a: "No. The first conversation is always free. We'll tell you what we see, what it would cost, and whether we're the right fit. If we're not, we'll tell you that too.",
-  },
-  {
     q: "Do you replace our IT team?",
-    a: "No. We train them. Most clients have competent teams that just lack Apple experience. We set up the infrastructure, train the team on Apple Business, and make sure they can run it independently within 60–90 days. After that, you can keep us on a managed plan for backup and escalation — or run it yourself. Either way, you own everything.",
+    a: "No. We work with them. Most of our clients have either no internal IT or a small team that lacks the senior thinking layer. We're the strategic / architectural / vendor-management partner — your team handles day-to-day operations. We make sure they have what they need to succeed.",
   },
   {
-    q: "We already use Intune. Do we have to get rid of it?",
-    a: "No — keep Intune for Windows, it's great at that. We deploy a purpose-built Apple MDM (or Apple Business's built-in MDM) alongside it for your Macs. Intune's Apple management is functional but limited — policy deployment can take 8–24 hours vs. near-instant, and its Apple Business integration is shallow. As the Mac fleet grows, the gap widens. Right tool for the right platform.",
-  },
-  {
-    q: "What does PCI scope reduction actually save?",
-    a: "Most businesses we audit are in SAQ C or D when they could be in SAQ A or A-EP. That's the difference between a full audit with quarterly scans and a simple self-assessment. Less scope means lower audit costs, fewer compliance requirements, and reduced breach liability. The rate negotiation usually pays for our time on its own.",
-  },
-  {
-    q: "Do you require long-term contracts?",
-    a: "Managed plans are month-to-month after a 3-month onboarding period. The onboarding minimum exists because it takes time to learn your environment and do this right. After that, you stay because it works, not because you're trapped.",
+    q: "We already use Microsoft 365 / Google Workspace. Do we need to change?",
+    a: "Probably not. We're vendor-agnostic. Tell us what you're already running and we'll work inside it. We're Google Workspace specialists but we work alongside Microsoft 365 environments routinely. Choosing the platform is part of the partnership conversation if you're starting fresh — but we don't migrate businesses just to migrate them.",
   },
 ];
 
@@ -192,10 +194,9 @@ export default async function PricingPage() {
           Published rates. No surprises.
         </h1>
         <p className="mx-auto mt-6 max-w-xl text-lg text-bone/60">
-          Managed services are per-user. Advisory is hourly. Setup is quoted
-          flat after a free consultation — because every environment is
-          different and fake ranges help no one. Vendor costs pass through at
-          cost — zero markup, ever.
+          Project work is flat-fee, scoped after the free hour. Partnerships
+          are retained at the cadence your business needs. Advisory is hourly,
+          no commitment. Vendor costs pass through at cost — zero markup, ever.
         </p>
         <div className="mt-8">
           <Link
@@ -203,13 +204,36 @@ export default async function PricingPage() {
             className="inline-flex items-center gap-2 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
             style={{ borderRadius: "2px" }}
           >
-            Book your free consultation <ArrowRight className="h-4 w-4" />
+            Book your free hour <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
 
+      {/* Accessibility philosophy */}
+      <section className="border-t border-bone/10 bg-slate-brand/20 px-6 py-20">
+        <div className="mx-auto max-w-[720px] text-center">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
+            Our Pricing Philosophy
+          </p>
+          <h2 className="text-[28px] font-medium text-bone">
+            Priced for accessibility.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-bone/60">
+            We&apos;re not the cheapest option. We&apos;re also not the most
+            expensive. We deliberately sit at the bottom of the market median
+            for senior IT partnership because we&apos;d rather help a small
+            business succeed than be the firm they couldn&apos;t afford.
+          </p>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-bone/60">
+            If our pricing is still a barrier and your work matters to your
+            community, tell us. We&apos;ll find a number that works for both of
+            us.
+          </p>
+        </div>
+      </section>
+
       {/* Tiers */}
-      <section className="px-6 pb-24">
+      <section className="border-t border-bone/10 px-6 py-24">
         <div className="mx-auto grid max-w-[1400px] gap-px bg-bone/5 md:grid-cols-2 xl:grid-cols-4">
           {tiers.map((tier) => (
             <div
@@ -222,7 +246,7 @@ export default async function PricingPage() {
             >
               {tier.featured && (
                 <p className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-                  Recurring revenue for us. Predictable cost for you.
+                  Where most engagements start
                 </p>
               )}
               <h2 className="text-xl font-medium text-bone">{tier.name}</h2>
@@ -244,7 +268,6 @@ export default async function PricingPage() {
                 ))}
               </ul>
 
-              {/* Example pricing */}
               {tier.examples && (
                 <div className="mt-8 space-y-2 border-t border-bone/10 pt-6">
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
@@ -286,53 +309,57 @@ export default async function PricingPage() {
               Your bill, line by line
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
-              Most MSPs bundle everything into one per-user fee so you can&apos;t
-              see the markup. We do the opposite. Our fee is our fee. Vendor
-              costs are vendor costs. You see both.
+              Most MSPs bundle everything into one per-user fee so you
+              can&apos;t see the markup. We do the opposite. Our fee is our
+              fee. Vendor costs are vendor costs. You see both.
             </p>
           </div>
           <div className="space-y-1 border border-bone/10 bg-midnight p-6" style={{ borderRadius: "2px" }}>
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-bone/30">
-              Sample monthly invoice — 15-person Apple Business Managed client
+              Sample monthly invoice — 15-person business on Standard retainer
             </p>
             <div className="space-y-2 text-base">
               <div className="flex justify-between text-bone/60">
-                <span>Apple Business Managed — 15 users × $35</span>
-                <span className="text-bone">$525.00</span>
+                <span>Standard Partnership Retainer</span>
+                <span className="text-bone">$3,500.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
                 <span>Apple Business license <span className="text-bone/30">(free from Apple)</span></span>
                 <span className="text-bone">$0.00</span>
               </div>
               <div className="flex justify-between text-bone/60">
-                <span>Advisory — payment processor rate negotiation, 2 hrs</span>
-                <span className="text-bone">$450.00</span>
+                <span>Google Workspace — 15 users × $14 <span className="text-bone/30">(at cost, billed directly to you)</span></span>
+                <span className="text-bone">$210.00</span>
+              </div>
+              <div className="flex justify-between text-bone/60">
+                <span>Advisory — overage hours outside retainer, 3 hrs × $250</span>
+                <span className="text-bone">$750.00</span>
               </div>
               <div className="mt-3 flex justify-between border-t border-bone/10 pt-3 font-medium">
-                <span className="text-bone/60">Total</span>
-                <span className="text-bone">$975.00</span>
+                <span className="text-bone/60">Total to Akritos</span>
+                <span className="text-bone">$4,250.00</span>
               </div>
               <div className="pt-2 text-bone/30 text-xs">
-                No MDM markup. No hidden vendor fees. Apple Business is free — that savings goes to you, not us.
+                Google Workspace ($210) bills directly from Google — never from us. Zero markup. You see every vendor invoice.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mid-page consult CTA — risk reversal, low commitment, promised takeaway */}
+      {/* Mid-page consult CTA */}
       <section className="border-t border-bone/10 px-6 py-20">
         <div className="mx-auto max-w-[720px] text-center">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-            Not Sure Which Tier Fits?
+            Not Sure Which Fits?
           </p>
           <h2 className="text-[28px] font-medium text-bone">
             Tell us about your setup.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base text-bone/60">
-            30 minutes, free, and you walk away with a real number — even if
-            you never hire us. We&apos;ll tell you which tier fits, what the
-            project would actually cost, and whether you need us at all.
+            One free hour, and you walk away with a real plan — even if you
+            never hire us. We&apos;ll tell you what we see, what the right
+            engagement would look like, and whether you need us at all.
           </p>
           <div className="mt-8">
             <Link
@@ -340,7 +367,7 @@ export default async function PricingPage() {
               className="inline-flex items-center gap-2 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
               style={{ borderRadius: "2px" }}
             >
-              Book your free consultation <ArrowRight className="h-4 w-4" />
+              Book your free hour <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -355,10 +382,10 @@ export default async function PricingPage() {
           <div className="grid gap-6 text-left sm:grid-cols-2">
             {[
               "Vendor markup — ever",
+              "Per-user fees bundling our work with vendor costs",
               "RMM agent fees or monitoring charges",
               "Hidden 'project management' charges",
               "Charges for problems we caused",
-              "Emergency surcharges for managed clients",
               "Exit fees or contract penalties",
             ].map((item) => (
               <div key={item} className="flex items-start gap-2 text-base text-bone/60">
@@ -382,7 +409,6 @@ export default async function PricingPage() {
             </h2>
           </div>
           <div className="grid gap-px bg-bone/5 md:grid-cols-3">
-            {/* Header row */}
             <div className="bg-midnight p-5" />
             <div className="bg-midnight p-5 text-center">
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-bone/40">
@@ -394,17 +420,21 @@ export default async function PricingPage() {
                 Akritos
               </p>
             </div>
-            {/* Rows */}
             {[
               {
                 label: "Pricing model",
                 them: "Bundled per-user fee hiding markup",
-                us: "Per-user management + vendor pass-through",
+                us: "Project flat-fee or retainer + vendor pass-through",
               },
               {
                 label: "Vendor markup",
                 them: "20-40% hidden markup",
                 us: "Zero. You see the vendor invoice.",
+              },
+              {
+                label: "Strategic thinking",
+                them: "Help desk model, ticket-driven",
+                us: "Senior IT partnership, proactive",
               },
               {
                 label: "Monitoring",
@@ -506,8 +536,9 @@ export default async function PricingPage() {
       <section className="border-t border-bone/10 px-6 py-24 text-center">
         <h2 className="text-2xl font-medium text-bone">No obligation. No sales pitch.</h2>
         <p className="mx-auto mt-4 max-w-lg text-bone/60">
-          Book a free consultation. We&apos;ll tell you what we see and what it
-          would cost. If we&apos;re not the right fit, we&apos;ll tell you that too.
+          Book your free hour. We&apos;ll tell you what we see and what it
+          would cost. If we&apos;re not the right fit, we&apos;ll tell you that
+          too.
         </p>
         <div className="mt-8">
           <Link
@@ -515,7 +546,7 @@ export default async function PricingPage() {
             className="inline-flex items-center gap-2 bg-conviction px-6 py-3 text-sm font-medium text-midnight transition-colors hover:bg-conviction/90"
             style={{ borderRadius: "2px" }}
           >
-            Book a free consultation <ArrowRight className="h-4 w-4" />
+            Book your free hour <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
