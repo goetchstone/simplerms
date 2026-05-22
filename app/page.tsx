@@ -248,6 +248,14 @@ export default async function HomePage() {
             &ldquo;We don&apos;t profit from your confusion.
             We profit when you choose to keep us.&rdquo;
           </p>
+          <p className="mt-6 text-sm text-bone/40">
+            <Link
+              href="/blog/the-600-bar-of-soap"
+              className="text-conviction underline underline-offset-2 hover:text-conviction/80"
+            >
+              Read why →
+            </Link>
+          </p>
         </blockquote>
       </section>
 

@@ -170,7 +170,7 @@ export default async function AboutPage() {
                 Community
               </p>
               <p className="mt-1 text-base font-medium text-bone">
-                Workshop Instructor &amp; Donor
+                Conference Presenter &amp; Donor
               </p>
             </div>
             <p className="text-base leading-relaxed text-bone/60">
@@ -244,38 +244,55 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Why Akritos */}
+      {/* Why Akritos — the bar of soap story */}
       <section className="border-t border-bone/10 px-6 py-24">
         <div className="mx-auto max-w-[720px] space-y-6">
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-conviction">
-            Why I Started This
+            Why I started this
           </p>
           <h2 className="text-[28px] font-medium text-bone">
-            The industry is broken. I got tired of watching.
+            The $600 bar of soap.
           </h2>
           <div className="space-y-4 text-base leading-relaxed text-bone/60">
             <p>
-              Most MSPs make money when you&apos;re confused. They bundle
-              services so you can&apos;t see the markup. They take vendor
-              kickbacks and call it &ldquo;partnership revenue.&rdquo; They lock
-              you into multi-year contracts because they know once you&apos;re
-              in, switching costs more than staying.
+              A plumber came to my house with a clogged toilet. Slow drain,
+              broken plunger, the usual escalation. I&apos;d spent a day trying
+              to fix it myself — scratched the bowl with the wrong-sized
+              auger — and finally called for help. He arrived in 30 minutes.
+              Polite. Professional. Diagnosed it in two minutes, fixed it in
+              ten, and handed me an invoice for $600.
             </p>
             <p>
-              I spent years on both sides of that table. As the MSP engineer, I
-              saw how the fees were structured. As the IT director, I saw how
-              they landed. The gap between what clients paid and what things
-              actually cost was enormous — and it was by design.
+              It was a bar of soap. My son had thrown a bar of soap in the
+              toilet. The fix was a $40 auger from the hardware store — a tool
+              the plumber knew I should have owned and didn&apos;t.
             </p>
             <p>
-              Akritos exists because I believe there&apos;s a better model.
-              Published rates. Zero vendor markup. No kickbacks. No lock-in. You
-              own everything we build for you, and you can walk away from any
-              vendor at any time — including us.
+              He did nothing wrong. The business model did.
             </p>
             <p>
-              That last part is the point. If I&apos;m good enough, you&apos;ll
-              stay because it works. Not because you&apos;re trapped.
+              The $100 &ldquo;to come out&rdquo; wasn&apos;t a real diagnostic
+              fee — it was a sunk cost that closed the door behind me. Once
+              he was on-site, my options collapsed to &ldquo;agree to whatever
+              he quotes, or stay clogged AND lose the $100.&rdquo; That&apos;s
+              not a choice. That&apos;s a corner. I handed over my credit card
+              thinking I could have done this for forty dollars, and felt
+              awful.
+            </p>
+            <p>
+              I never want any of my customers handing me their credit card
+              and feeling that. The Free Hour. The published rates. The
+              no-lock-in retainers. The willingness to tell you you don&apos;t
+              actually need us. All of it exists because of moments like the
+              one I had last week.
+            </p>
+            <p>
+              <Link
+                href="/blog/the-600-bar-of-soap"
+                className="text-conviction underline underline-offset-2 hover:text-conviction/80"
+              >
+                Read the full story →
+              </Link>
             </p>
           </div>
         </div>
