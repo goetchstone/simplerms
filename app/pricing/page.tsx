@@ -229,6 +229,14 @@ export default async function PricingPage() {
             community, tell us. We&apos;ll find a number that works for both of
             us.
           </p>
+          <p className="mx-auto mt-6 max-w-xl text-sm text-bone/40">
+            <Link
+              href="/blog/the-600-bar-of-soap"
+              className="text-conviction underline underline-offset-2 hover:text-conviction/80"
+            >
+              The story behind why we price this way →
+            </Link>
+          </p>
         </div>
       </section>
 
