@@ -204,6 +204,41 @@ const content = [
   {
     type: "heading",
     level: 2,
+    content: "Sometimes the answer is smaller, not bigger",
+  },
+  {
+    type: "paragraph",
+    content:
+      "Not every paper-to-digital fix is about making the big system better. Sometimes the big system is fine — it's just wrong for the moment when the staff needs it. The customer service program might be exactly right for the agent reviewing a case file in their office. It might also be entirely wrong for the receptionist taking an intake at the front desk while three other people are waiting. Different moment, different friction, different right tool.",
+  },
+  {
+    type: "paragraph",
+    content:
+      "When that's what's actually happening, the fix isn't retraining the receptionist on the customer service program. It's putting a simpler tool in front of her that handles that specific moment, and feeds the data into the big system automatically.",
+  },
+  {
+    type: "paragraph",
+    content:
+      "A Google Form with three fields and a phone number for follow-up. A one-page webapp with the four fields actually needed at intake — not the twelve the CRM demands. A QR code at the front desk that opens a phone-friendly form on the customer's own phone. A thin web layer skinned over the existing customer service software that exposes only what the front-desk person needs, hiding everything else.",
+  },
+  {
+    type: "paragraph",
+    content:
+      "These tools are fast to build. A Google Form is an afternoon. A custom webapp is a few days. An integration into an existing system is project work, scoped clearly. None of them require replacing what you have. None of them require everyone learning a new system. They sit between the user and the system, taking the friction away.",
+  },
+  {
+    type: "paragraph",
+    content:
+      "And critically: the data still ends up where it's supposed to. No double entry. No retyping later. The simple tool feeds the big system through the right plumbing, and the person at the front desk gets to do the only thing they actually wanted to do — collect the customer's information without fighting their tools.",
+  },
+  {
+    type: "paragraph",
+    content:
+      "When we ask the questions and find that the actual problem is \"the moment doesn't fit the system,\" that's usually the right answer. Build a small, focused tool. Connect it cleanly to what you already use. Train the team in ten minutes because there's nothing new to learn. The paper goes away because the new tool is faster than paper was.",
+  },
+  {
+    type: "heading",
+    level: 2,
     content: "When paper is actually the right answer",
   },
   {
