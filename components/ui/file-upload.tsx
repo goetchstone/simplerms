@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Upload, X, FileText, Download, Loader2 } from "lucide-react";
+import { Upload, FileText, Download, Loader2 } from "lucide-react";
 
 const ALLOWED_EXTENSIONS = new Set(["pdf", "png", "jpg", "jpeg", "gif", "webp", "txt", "csv", "xlsx", "docx"]);
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB

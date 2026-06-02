@@ -7,7 +7,7 @@ import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { JsonLd, localBusinessSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
-import { ArrowRight, CheckCircle, Mail } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "About",

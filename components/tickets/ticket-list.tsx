@@ -18,8 +18,6 @@ import type { RouterOutputs } from "@/lib/trpc/client";
 
 type TicketListOutput = RouterOutputs["tickets"]["list"];
 
-const PRIORITY_ORDER = { URGENT: 0, HIGH: 1, MEDIUM: 2, LOW: 3 };
-
 const priorityLabel: Record<string, string> = {
   URGENT: "Urgent",
   HIGH: "High",

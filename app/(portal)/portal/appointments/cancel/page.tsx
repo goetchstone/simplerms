@@ -1,7 +1,6 @@
 // app/(portal)/portal/appointments/cancel/page.tsx
 "use client";
 
-import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,6 @@ import { Suspense } from "react";
 function CancelContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
-  const [confirmed, setConfirmed] = useState(false);
 
   const cancel = trpc.scheduling.cancel.useMutation();
 
