@@ -2,14 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -46,7 +45,6 @@ interface Props {
 const STATUS_OPTIONS = ["PENDING", "CONFIRMED", "IN_PROGRESS", "FULFILLED", "CANCELLED"] as const;
 
 export function OrdersTable({ initialData, clients }: Props) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [clientId, setClientId] = useState("");
   const [notes, setNotes] = useState("");

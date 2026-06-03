@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import { LogOut, KeyRound, User } from "lucide-react";
+import { LogOut, KeyRound } from "lucide-react";
 
 function initials(name?: string | null, email?: string | null): string {
   if (name) {

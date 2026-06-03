@@ -3,7 +3,6 @@ import "server-only";
 
 import { createTRPCRouter, protectedProcedure, staffProcedure } from "@/server/trpc/trpc";
 import { z } from "zod";
-import { TRPCError } from "@trpc/server";
 
 const orderLineSchema = z.object({
   catalogItemId: z.string().cuid().optional().nullable(),

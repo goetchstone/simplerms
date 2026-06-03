@@ -170,6 +170,11 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **Rate limiting is in-memory:** `server/rate-limit.ts` uses a Map — resets on server restart, doesn't work across multiple instances. Acceptable for single-instance VPS deployment.
 - **No email queue retry backoff:** `app/api/cron/process-emails/route.ts` retries failed emails up to 3 times with no delay between attempts — should add exponential backoff if email failures become common
 - **Portal token is permanent:** Client portal tokens (cuid) never expire and can't be rotated without DB manual intervention — add rotation mechanism before handling sensitive client data
+- **Accepted-risk dependency vulns:** Three medium-severity Dependabot alerts remain open and are deliberately not patched:
+  - **nodemailer GHSA-c7w3-x93f-qmm8** (SMTP command injection via `envelope.size`) — we never set `envelope.size`; vulnerable code path not reached.
+  - **nodemailer GHSA-vvjj-xcjg-gr5g** (CRLF in transport `name` option for EHLO/HELO) — we never set transport `name`; nodemailer uses system hostname automatically. Vulnerable code path not reached.
+  - Both nodemailer alerts: a fix requires bumping past 7.x, but next-auth's `@auth/core` peer-dep pins us to nodemailer 7. Revisit when next-auth 5 stable supports nodemailer 8+.
+  - **postcss GHSA-qx2v-qp2m-jg93** (XSS in CSS stringify) — transitive via Next.js's bundled postcss. Direct fix requires downgrading Next to 9.x (years-old). Will resolve when Next.js bumps its bundled postcss. Not exploitable through our application surface (we don't pass untrusted input to postcss stringify).
 
 ### Testing & Deployment
 

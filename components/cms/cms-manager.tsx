@@ -47,15 +47,6 @@ function textToBlocks(text: string) {
     .map((p) => ({ type: "paragraph" as const, content: p.trim() }));
 }
 
-// Convert blocks back to plain text for editing.
-function blocksToText(blocks: unknown): string {
-  if (!Array.isArray(blocks)) return "";
-  return (blocks as { type: string; content?: string }[])
-    .filter((b) => b.type === "paragraph" && b.content)
-    .map((b) => b.content)
-    .join("\n\n");
-}
-
 const emptyPage = (): PageForm => ({ title: "", slug: "", metaTitle: "", metaDesc: "", status: "DRAFT", content: "" });
 const emptyPost = (): PostForm => ({ title: "", slug: "", excerpt: "", status: "DRAFT", content: "" });
 
