@@ -41,6 +41,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
               <li><Link href="/resources/ai-framework" className="hover:text-conviction">Free: AI Framework PDF</Link></li>
               <li><Link href="/resources/tech-debt" className="hover:text-conviction">Free: Tech Debt Checklist PDF</Link></li>
               <li><Link href="/tools/dmarc-check" className="hover:text-conviction">Free tool: DMARC / SPF / DKIM checker</Link></li>
+              <li><Link href="/tools/dmarc-report" className="hover:text-conviction">Free tool: DMARC report analyzer</Link></li>
               <li><Link href="/services" className="hover:text-conviction">All services</Link></li>
               <li><Link href="/pricing" className="hover:text-conviction">Pricing</Link></li>
               <li><Link href="/book" className="hover:text-conviction">Book a free consultation</Link></li>
