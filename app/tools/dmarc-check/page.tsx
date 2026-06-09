@@ -47,7 +47,7 @@ const whatItDoes = [
   {
     icon: ShieldCheck,
     title: "SPF / DKIM / DMARC Check",
-    body: "Pulls each record and parses it. SPF gets analyzed for the most common misconfigurations. DKIM probes thirteen common selectors. DMARC parses your policy and checks for a reporting address.",
+    body: "Pulls each record and parses it. SPF gets analyzed for the most common misconfigurations. DKIM probes the static selectors major providers use — Google, Microsoft 365, DreamHost, Mailchimp, SendGrid, Proton, and more. DMARC parses your policy and checks for a reporting address.",
   },
   {
     icon: MailWarning,

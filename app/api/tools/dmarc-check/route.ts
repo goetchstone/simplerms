@@ -8,22 +8,68 @@ import { promises as dns } from "node:dns";
 import { rateLimit } from "@/server/rate-limit";
 
 // Common DKIM selectors used by major mail providers. We probe these because
-// DKIM selector names aren't discoverable from the domain itself — you have
-// to know them. Covering Google, Microsoft 365, Mailgun, SendGrid, Postmark,
-// Amazon SES, and a few generic defaults catches most small businesses.
+// DKIM selector names aren't discoverable from the domain itself — DNS gives
+// no way to enumerate them, so we probe a curated list of the static selectors
+// the major providers actually use. (Selectors that are dynamic per-account
+// hashes — Amazon SES rotating keys, SparkPost scphNNNN, SendGrid sNNNNNN — are
+// unguessable and deliberately omitted; the report analyzer surfaces those.)
+// Selectors confirmed from real DMARC aggregate reports and live DNS are noted.
 const DKIM_SELECTORS = [
+  // Google Workspace
   "google",
+  // Microsoft 365 / Outlook
   "selector1",
   "selector2",
+  // DreamHost (confirmed: dreamhost._domainkey.akritos.com)
+  "dreamhost",
+  // Mailchimp (k1/k2/k3 seen in reports) + Mandrill transactional (mte1/mte2)
   "k1",
   "k2",
+  "k3",
+  "mte1",
+  "mte2",
+  // SendGrid
   "s1",
   "s2",
-  "mail",
-  "dkim",
-  "default",
-  "smtp",
+  "smtpapi",
+  // Amazon SES (static fallback selector)
+  "amazonses",
+  // Postmark
   "pm",
+  // Proton Mail
+  "protonmail",
+  "protonmail2",
+  "protonmail3",
+  // Zoho
+  "zoho",
+  "zmail",
+  // Fastmail
+  "fm1",
+  "fm2",
+  "fm3",
+  // Mailgun (customer-chosen, these are the common ones)
+  "mg",
+  "mx",
+  "pic",
+  // Mailjet
+  "mailjet",
+  // Klaviyo
+  "kl",
+  "kl2",
+  // Apple iCloud custom-domain
+  "sig1",
+  // Yahoo / AOL outbound
+  "s2048",
+  "s1024",
+  // Generic / OpenDKIM / cPanel / GoDaddy / common defaults
+  "default",
+  "dkim",
+  "mail",
+  "email",
+  "selector",
+  "key1",
+  "key2",
+  "smtp",
   "mxvault",
 ] as const;
 

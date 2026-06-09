@@ -223,7 +223,7 @@ export function DmarcCheckForm() {
             description={
               result.dkim.found.length > 0
                 ? "Cryptographically signs your outgoing mail so receivers can verify it wasn't tampered with."
-                : "We checked common DKIM selectors used by major providers. If you have DKIM with a non-standard selector name, this tool won't see it — and neither will many receivers without help."
+                : "We checked the selectors the major providers use. DKIM might still be set up correctly under a custom selector name we can't guess — DKIM selectors can't be looked up automatically. If your mail is sending fine and passing DMARC, you likely have it. A DMARC report (or your email provider) will tell you the exact selector."
             }
           >
             {result.dkim.found.length > 0 ? (
@@ -237,7 +237,7 @@ export function DmarcCheckForm() {
               </ul>
             ) : (
               <p className="text-sm text-bone/40">
-                Probed: {result.dkim.selectorsChecked} common selectors (Google, Microsoft 365, Mailgun, SendGrid, etc.)
+                Probed: {result.dkim.selectorsChecked} known provider selectors (Google, Microsoft 365, DreamHost, Mailchimp, SendGrid, Proton, Zoho, Fastmail, etc.)
               </p>
             )}
           </ResultSection>
