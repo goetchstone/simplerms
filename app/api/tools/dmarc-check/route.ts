@@ -253,7 +253,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const raw = (body.domain ?? "").trim().toLowerCase();
+  const rawInput = body.domain ?? "";
+  // Hard length cap BEFORE any regex work — prevents polynomial-ReDoS on
+  // pathological input. Real domains max out at 253 chars per RFC 1035;
+  // we accept a little slack for the http:// / www. prefixes a user might paste.
+  if (typeof rawInput !== "string" || rawInput.length > 270) {
+    return NextResponse.json(
+      { error: "That doesn't look like a valid domain. Enter something like 'yourbusiness.com'." },
+      { status: 400 }
+    );
+  }
+  const raw = rawInput.trim().toLowerCase();
   // Strip common prefixes a user might paste in.
   const domain = raw.replace(/^https?:\/\//, "").replace(/\/.*$/, "").replace(/^www\./, "");
 
