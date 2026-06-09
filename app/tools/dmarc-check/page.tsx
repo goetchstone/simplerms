@@ -133,7 +133,12 @@ export default async function DmarcCheckPage() {
               only, no enforcement). All three leave you spoofable.
             </p>
             <p>
-              This tool tells you which one you are.
+              This tool tells you which one you are. Already set up and getting
+              XML reports in your inbox? Read them with the{" "}
+              <Link href="/tools/dmarc-report" className="text-conviction underline underline-offset-2">
+                DMARC report analyzer
+              </Link>
+              .
             </p>
           </div>
         </div>
