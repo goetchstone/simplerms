@@ -26,6 +26,7 @@ import {
   ShieldCheck,
   ShieldAlert,
   Key,
+  Mail,
 } from "lucide-react";
 
 async function getCompanyName() {
@@ -155,6 +156,20 @@ const advisoryServices = [
       "Team training — spotting confidently-wrong output",
       "SME workflow design — keeping the human as decision-maker",
       "Linked: detailed page at /ai-risk",
+    ],
+  },
+  {
+    icon: Mail,
+    title: "Email Authentication (SPF, DKIM, DMARC)",
+    description: "Without SPF, DKIM, and DMARC set up correctly, anyone can send mail that looks like it came from your domain — and major providers de-prioritize your real mail. We set it up correctly for your provider, with a reporting address, a monitoring period, and a deliberate move to enforcement once everything aligns.",
+    details: [
+      "SPF record built for your actual mail providers (Google Workspace, Microsoft 365, marketing tools, etc.)",
+      "DKIM signing configured and verified per provider",
+      "DMARC published at p=none for monitoring, with reporting address",
+      "30-day monitoring period to catch legitimate senders we missed",
+      "Move to p=quarantine or p=reject once alignment is clean",
+      "Documentation you own — DNS records, provider settings, monitoring access",
+      "Linked: free checker tool at /tools/dmarc-check",
     ],
   },
 ];

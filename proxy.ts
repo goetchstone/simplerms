@@ -28,7 +28,9 @@ const PUBLIC_PATHS = [
   "/api/leads/checklist",
   "/api/leads/prompt-framework",
   "/api/leads/tech-debt",
+  "/api/tools/dmarc-check",
   "/resources",
+  "/tools",
 ];
 
 export default auth((req: NextRequest & { auth: unknown }) => {
