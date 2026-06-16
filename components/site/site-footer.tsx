@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/logo-mark";
 import { Phone, Mail } from "lucide-react";
+import { CookieSettingsLink } from "@/components/site/cookie-settings-link";
 
 export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }) {
   return (
@@ -88,6 +89,7 @@ export function SiteFooter({ companyName = "Akritos" }: { companyName?: string }
           <div className="flex gap-4 text-xs text-bone/20">
             <Link href="/privacy" className="hover:text-bone/40">Privacy</Link>
             <Link href="/terms" className="hover:text-bone/40">Terms</Link>
+            <CookieSettingsLink />
           </div>
         </div>
       </div>
