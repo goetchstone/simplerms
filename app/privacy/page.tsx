@@ -52,12 +52,26 @@ export default function PrivacyPage() {
             </ul>
           </Section>
 
-          <Section title="What we don't collect">
+          <Section title="Analytics &amp; cookies">
+            <p className="mb-3">
+              We use Google Analytics to understand which pages are useful — nothing
+              more. It loads <strong>only if you accept it</strong> in the cookie banner.
+              Decline and no analytics scripts run and no analytics cookies are set; the
+              site works exactly the same. You can change your choice anytime via
+              &ldquo;Cookie choices&rdquo; at the bottom of any page.
+            </p>
             <ul className="list-disc space-y-1 pl-5">
-              <li>No third-party analytics or tracking scripts</li>
-              <li>No advertising cookies</li>
-              <li>No selling or sharing of your data with third parties</li>
-              <li>No behavioral tracking or profiling</li>
+              <li>
+                <strong>Essential cookies</strong> (login/session) are always used —
+                they&apos;re required for the site to work and set no marketing data.
+              </li>
+              <li>
+                <strong>Analytics cookies</strong> (Google Analytics) are set only after
+                you opt in, and only measure aggregate page usage.
+              </li>
+              <li>No advertising or retargeting cookies</li>
+              <li>No selling of your data</li>
+              <li>No behavioral profiling for advertising</li>
             </ul>
           </Section>
 
