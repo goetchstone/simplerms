@@ -164,6 +164,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 
 ### Known Issues
 
+- **Repo is private on a free plan — CI scanning constraints:** GitHub code scanning (CodeQL + SARIF upload to the Security tab) requires paid GitHub Advanced Security on private repos, so it's unavailable. CodeQL was removed (`codeql.yml` deleted). Semgrep still runs and **gates merges via its exit code** (no SARIF upload). Classic branch protection / required status checks are also a Pro/public-only feature, so they're not API-enforceable here — rely on green CI + admin discipline when merging. Current free security gates: gitleaks (secrets), semgrep (SAST exit-code), npm audit (deps), tsc + vitest. Going public again would restore CodeQL + the Security-tab dashboards + enforceable branch protection at no cost.
 - **Testimonials placeholder:** Homepage has "We're new. Testimonials are earned, not invented." — remove once real testimonials exist, or remove entirely (identified as liability in competitive review)
 - **Admin password:** seed now generates a random 24-char password on first run, writes to `.first-admin-credentials` (0600). No more hardcoded `changeme123`. Founder rotated production password manually — confirm by reading the file or by attempting login with the old default (should fail)
 - **No CSRF on public API routes:** `/api/tickets/reply` and `/api/files/upload` use POST but no CSRF token — relies on SameSite cookies which is sufficient for browser clients but not for API-style access

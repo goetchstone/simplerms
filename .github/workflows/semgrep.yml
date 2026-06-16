@@ -1,6 +1,10 @@
 # .github/workflows/semgrep.yml
-# Semgrep — pattern-based SAST. Free community ruleset.
-# Complementary to CodeQL: catches framework misuse, OWASP patterns, dangerous APIs.
+# Semgrep — pattern-based SAST on the free community ruleset.
+# `semgrep ci` exits non-zero on findings, so this job GATES merges on its own.
+# We don't upload SARIF to the GitHub Security tab: code scanning requires
+# GitHub Advanced Security on private repos, which this repo doesn't have.
+# The exit-code gate is the security control; the Security-tab UI is just a
+# (paid) dashboard we forgo.
 name: Semgrep
 
 on:
@@ -24,7 +28,6 @@ jobs:
       image: semgrep/semgrep
     permissions:
       contents: read
-      security-events: write
 
     steps:
       - uses: actions/checkout@v6
@@ -37,12 +40,10 @@ jobs:
             --config p/nextjs \
             --config p/react \
             --config p/owasp-top-ten \
-            --config p/secrets \
-            --sarif \
-            --output=semgrep.sarif
+            --config p/secrets
         env:
-          # No SEMGREP_APP_TOKEN — runs on free community rulesets only.
-          # Findings appear in Security tab via SARIF upload below.
+          # No SEMGREP_APP_TOKEN — free community rulesets only. Findings fail
+          # the job (and print in the log); no Security-tab upload.
           SEMGREP_RULES: >-
             p/javascript
             p/typescript
@@ -50,9 +51,3 @@ jobs:
             p/react
             p/owasp-top-ten
             p/secrets
-
-      - name: Upload SARIF to GitHub Security
-        if: always()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: semgrep.sarif
