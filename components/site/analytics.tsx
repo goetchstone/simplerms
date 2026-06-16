@@ -5,6 +5,7 @@
 
 import Script from "next/script";
 import { db } from "@/server/db";
+import { ConsentAnalytics } from "@/components/site/consent-analytics";
 
 async function getAnalyticsConfig() {
   try {
@@ -27,20 +28,10 @@ export async function Analytics() {
   if (!provider || !siteId) return null;
 
   if (provider === "ga4") {
-    return (
-      <>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${siteId}`}
-          strategy="afterInteractive"
-        />
-        <Script id="ga4-init" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${siteId}');`}
-        </Script>
-      </>
-    );
+    // GA4 sets cookies, so it's consent-gated: the script loads only after the
+    // visitor opts in via the banner. Plausible/Umami below are cookieless and
+    // need no consent, so they load directly.
+    return <ConsentAnalytics measurementId={siteId} />;
   }
 
   if (provider === "plausible") {
