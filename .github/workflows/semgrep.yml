@@ -25,6 +25,9 @@ jobs:
     permissions:
       contents: read
       security-events: write
+      # upload-sarif reads the workflow run for context; without this the SARIF
+      # upload 403s with "Resource not accessible by integration".
+      actions: read
 
     steps:
       - uses: actions/checkout@v6

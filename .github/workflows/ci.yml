@@ -18,6 +18,8 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+      # gitleaks-action v3 lists PR commits via the API on pull_request events.
+      pull-requests: read
 
     steps:
       - uses: actions/checkout@v6
