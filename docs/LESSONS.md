@@ -226,6 +226,26 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-06-18 — File-based `opengraph-image` doesn't cover pages that export their own `openGraph`
+
+**What happened:** Added a root `app/opengraph-image.tsx` as a site-wide default card. Curling `/tools/dmarc-check` showed no `og:image` — a page that exports its own `metadata.openGraph` object does not inherit an ancestor segment's `opengraph-image` file; the file convention only fills routes that don't define `openGraph` themselves.
+
+**Lesson:** For any page with custom `openGraph`/`twitter` metadata, set `images` explicitly. We dropped the dynamic route for one static `public/og-default.png` referenced from the root layout (default) and from each overriding page. Verify `og:image` with a real request — never assume inheritance.
+
+**Where it applies:** Every public page with custom OG/Twitter metadata. Brand rasters are regenerated via `scripts/gen-brand-assets.mjs`.
+
+---
+
+## 2026-06-18 — DNS "no record" must be distinguished from a resolver failure
+
+**What happened:** The DMARC checker's `lookupTxt`/`lookupMx` swallowed every DNS error to `null`, so a transient SERVFAIL/timeout read identically to NXDOMAIN — telling a user on a flaky network they have no SPF/DMARC and tanking their score. Separately, any TXT at a probed `_domainkey` selector counted as a valid DKIM key (+20), even an unrelated record.
+
+**Lesson:** Classify DNS errors by code (`ENOTFOUND`/`ENODATA` = genuinely missing; anything else = transient → surface an error, don't assert "missing"). When probing for a record type, validate the content (a DKIM key declares `v=DKIM1` or `p=`) — presence at the name is not a match.
+
+**Where it applies:** `app/api/tools/dmarc-check/route.ts`, `lib/dmarc-dns.ts`. Any DNS-probe-based checker.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
