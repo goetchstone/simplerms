@@ -170,3 +170,13 @@ Append-only log. Each entry: date, decision, why, and what alternatives were con
 The AI framework is the cleaner reference implementation of the pattern.
 
 **Workflow change:** direct pushes to `main` will be blocked; future work uses PRs. Hotfixes can use admin-bypass when truly time-critical.
+
+---
+
+### 2026-06-19: npm-audit CI gate uses a per-advisory allowlist, not a lowered threshold
+
+**Decision:** The `Dependency audit (npm)` job runs `npm audit --json --omit=dev` through `scripts/audit-check.mjs`, which fails on any high/critical advisory EXCEPT a small allowlist of triaged, no-fix-available GHSAs (currently 6 nodemailer + 1 postcss).
+
+**Why:** A cluster of nodemailer advisories (one high) has no fix — next-auth's `@auth/core` peer-dep pins nodemailer to 7 — so `--audit-level=high` left the gate permanently red, blocking every PR. Each was triaged unreachable against the actual code (`server/email/index.ts` exposes only the `EmailPayload` allowlist; the transport sets no `envelope`/`name`/`raw`/`jsonTransport`/OAuth2). Allowlisting the specific GHSAs keeps the gate meaningful — a new, unrelated high/critical still fails the build.
+
+**Alternatives considered:** lower to `--audit-level=critical` (would silently ignore future *high* vulns — too loose); `|| true` on the step (disables the gate); add `audit-ci`/`better-npm-audit` (a new dependency for what ~40 lines of zero-dep JS does). The allowlist must shrink as fixes land — revisit when next-auth 5 supports nodemailer 8+.
