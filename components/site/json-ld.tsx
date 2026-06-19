@@ -176,3 +176,29 @@ export function breadcrumbSchema(items: { name: string; url: string }[]) {
     })),
   };
 }
+
+export function softwareApplicationSchema(app: {
+  name: string;
+  description: string;
+  url: string;
+  category?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: app.name,
+    description: app.description,
+    url: app.url,
+    applicationCategory: app.category ?? "SecurityApplication",
+    operatingSystem: "Web",
+    browserRequirements: "Requires JavaScript.",
+    // `offers` (free), not a fabricated aggregateRating, is what makes the tool
+    // eligible for the Software App rich result — honest, no invented reviews.
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    provider: {
+      "@type": "Organization",
+      name: "Akritos Technology Partners LLC",
+      url: "https://akritos.com",
+    },
+  };
+}

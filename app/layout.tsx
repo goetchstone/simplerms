@@ -40,8 +40,9 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Akritos",
       title: TITLE,
       description: DESCRIPTION,
+      images: ["/og-default.png"],
     },
-    twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+    twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og-default.png"] },
     robots: { index: true, follow: true },
     alternates: { canonical: "https://akritos.com" },
     verification: {

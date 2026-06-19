@@ -27,7 +27,16 @@ import {
   ShieldAlert,
   Key,
   Mail,
+  type LucideIcon,
 } from "lucide-react";
+
+type ServiceEntry = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  details: string[];
+  link?: { label: string; href: string };
+};
 
 async function getCompanyName() {
   try {
@@ -95,7 +104,7 @@ const coreServices = [
   },
 ];
 
-const advisoryServices = [
+const advisoryServices: ServiceEntry[] = [
   {
     icon: CreditCard,
     title: "Payment Processing & PCI Scope Reduction",
@@ -155,8 +164,8 @@ const advisoryServices = [
       "Vendor evaluation — data terms, audit trail, exit risk",
       "Team training — spotting confidently-wrong output",
       "SME workflow design — keeping the human as decision-maker",
-      "Linked: detailed page at /ai-risk",
     ],
+    link: { label: "Read the full AI risk & guardrails breakdown", href: "/ai-risk" },
   },
   {
     icon: Mail,
@@ -169,8 +178,8 @@ const advisoryServices = [
       "30-day monitoring period to catch legitimate senders we missed",
       "Move to p=quarantine or p=reject once alignment is clean",
       "Documentation you own — DNS records, provider settings, monitoring access",
-      "Linked: free checker tool at /tools/dmarc-check",
     ],
+    link: { label: "Check your domain with the free DMARC, SPF & DKIM checker", href: "/tools/dmarc-check" },
   },
 ];
 
@@ -364,6 +373,14 @@ export default async function ServicesPage() {
                     <p className="text-base leading-relaxed text-bone/60">
                       {s.description}
                     </p>
+                    {s.link && (
+                      <Link
+                        href={s.link.href}
+                        className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-conviction underline underline-offset-2 hover:text-conviction/80"
+                      >
+                        {s.link.label} <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    )}
                   </div>
                   <ul className="space-y-2">
                     {s.details.map((d) => (
