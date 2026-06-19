@@ -18,6 +18,9 @@
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
+  "overrides": {
+    "nodemailer": "$nodemailer"
+  },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
     "@base-ui/react": "^1.5.0",
@@ -36,7 +39,7 @@
     "lucide-react": "^1.18.0",
     "next": "^16.2.9",
     "next-auth": "^5.0.0-beta.31",
-    "nodemailer": "^7.0.13",
+    "nodemailer": "^9.0.1",
     "pino": "^10.3.1",
     "prisma": "^6.19.2",
     "react": "19.2.7",
@@ -53,7 +56,7 @@
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^25",
-    "@types/nodemailer": "^7.0.11",
+    "@types/nodemailer": "^8.0.1",
     "@types/pino": "^7.0.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
