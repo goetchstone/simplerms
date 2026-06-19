@@ -180,3 +180,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** A cluster of nodemailer advisories (one high) has no fix — next-auth's `@auth/core` peer-dep pins nodemailer to 7 — so `--audit-level=high` left the gate permanently red, blocking every PR. Each was triaged unreachable against the actual code (`server/email/index.ts` exposes only the `EmailPayload` allowlist; the transport sets no `envelope`/`name`/`raw`/`jsonTransport`/OAuth2). Allowlisting the specific GHSAs keeps the gate meaningful — a new, unrelated high/critical still fails the build.
 
 **Alternatives considered:** lower to `--audit-level=critical` (would silently ignore future *high* vulns — too loose); `|| true` on the step (disables the gate); add `audit-ci`/`better-npm-audit` (a new dependency for what ~40 lines of zero-dep JS does). The allowlist must shrink as fixes land — revisit when next-auth 5 supports nodemailer 8+.
+
+---
+
+### 2026-06-19: Force nodemailer 9 via `overrides` (next-auth's peer is optional)
+
+**Decision:** `package.json` `overrides` pins the whole tree to nodemailer 9 (matching our direct dep), overriding `@auth/core`'s `nodemailer@^7` peer.
+
+**Why:** Upgrading nodemailer 7→9 fixes the 6 advisories (one high) that had no other fix, so the allowlist shrinks to postcss only. `@auth/core`'s nodemailer peer is **optional** and used only by next-auth's Email provider — we use the **Credentials** provider only (`server/auth/index.ts`), so next-auth never loads nodemailer. The override is therefore runtime-safe and lets `npm ci` resolve without `--legacy-peer-deps` (which hides real breakage — see LESSONS).
+
+**Alternatives:** bump next-auth to a beta whose peer allows nodemailer 9 (rejected — bumping the auth library is riskier than a scoped override); `--legacy-peer-deps` in CI (rejected). Remove the override once next-auth's peer range includes nodemailer 9+.
