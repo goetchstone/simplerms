@@ -6,12 +6,14 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { DmarcCheckForm } from "@/components/tools/dmarc-check-form";
+import { JsonLd, softwareApplicationSchema, breadcrumbSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
 import { ArrowRight, Mail, ShieldCheck, MailWarning } from "lucide-react";
 
 const SITE_URL = "https://akritos.com";
 const URL = `${SITE_URL}/tools/dmarc-check`;
-const TITLE = "Free DMARC, SPF & DKIM Checker — Akritos";
+// No brand suffix here — the root layout's title template appends " | Akritos".
+const TITLE = "Free DMARC, SPF & DKIM Checker";
 const DESCRIPTION =
   "Free tool: enter your domain to instantly check SPF, DKIM, DMARC, and MX records. Plain-English explanations of what's wrong and how to fix it. No email required to use.";
 
@@ -25,8 +27,9 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     siteName: "Akritos",
+    images: [`${SITE_URL}/og-default.png`],
   },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [`${SITE_URL}/og-default.png`] },
 };
 
 async function getCompanyName() {
@@ -61,6 +64,13 @@ export default async function DmarcCheckPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
+      <JsonLd data={softwareApplicationSchema({ name: "DMARC, SPF & DKIM Checker", description: DESCRIPTION, url: URL })} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Akritos", url: SITE_URL },
+          { name: "DMARC, SPF & DKIM Checker", url: URL },
+        ])}
+      />
       <SiteNav companyName={companyName} />
 
       {/* Hero + form */}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { DmarcReportForm } from "@/components/tools/dmarc-report-form";
+import { JsonLd, softwareApplicationSchema, breadcrumbSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
 import { ArrowRight, FileSearch, ShieldCheck, Eye } from "lucide-react";
 
@@ -25,8 +26,9 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     siteName: "Akritos",
+    images: [`${SITE_URL}/og-default.png`],
   },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: [`${SITE_URL}/og-default.png`] },
 };
 
 async function getCompanyName() {
@@ -61,6 +63,13 @@ export default async function DmarcReportPage() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-midnight">
+      <JsonLd data={softwareApplicationSchema({ name: "DMARC Report Analyzer", description: DESCRIPTION, url: URL })} />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Akritos", url: SITE_URL },
+          { name: "DMARC Report Analyzer", url: URL },
+        ])}
+      />
       <SiteNav companyName={companyName} />
 
       {/* Hero + tool */}
