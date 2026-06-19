@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as dns } from "node:dns";
 import { rateLimit } from "@/server/rate-limit";
+import { classifyDnsError, isDkimKeyRecord } from "@/lib/dmarc-dns";
 
 // Common DKIM selectors used by major mail providers. We probe these because
 // DKIM selector names aren't discoverable from the domain itself — DNS gives
@@ -131,20 +132,37 @@ function isValidDomain(s: string): boolean {
   return re.test(s);
 }
 
+// Resolve a TXT lookup, distinguishing "no such record" (return null) from a
+// transient resolver failure (throw) so a SERVFAIL/timeout never masquerades as
+// a missing record and falsely tanks the score.
 async function lookupTxt(host: string): Promise<string[][] | null> {
   try {
     return await dns.resolveTxt(host);
-  } catch {
+  } catch (err) {
+    if (classifyDnsError(err) === "transient") throw err;
     return null;
   }
 }
 
 async function lookupMx(domain: string): Promise<{ exchange: string; priority: number }[] | null> {
   try {
-    const records = await dns.resolveMx(domain);
-    return records.sort((a, b) => a.priority - b.priority);
-  } catch {
+    return (await dns.resolveMx(domain)).sort((a, b) => a.priority - b.priority);
+  } catch (err) {
+    if (classifyDnsError(err) === "transient") throw err;
     return null;
+  }
+}
+
+// DKIM selector probe — best-effort. A non-existent selector (the common case)
+// or any resolver hiccup is simply "not found"; a present TXT counts only when
+// it's actually a DKIM key, not a stray record sitting at the probed name.
+async function probeDkim(selector: string, domain: string): Promise<DkimResult> {
+  try {
+    const txt = await dns.resolveTxt(`${selector}._domainkey.${domain}`);
+    const record = txt.map((parts) => parts.join("")).find(isDkimKeyRecord);
+    return { selector, found: !!record, record };
+  } catch {
+    return { selector, found: false };
   }
 }
 
@@ -320,19 +338,28 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Run all DNS lookups in parallel for speed.
-  const [rootTxt, dmarcTxt, mxRecords, ...dkimResults] = await Promise.all([
-    lookupTxt(domain),
-    lookupTxt(`_dmarc.${domain}`),
-    lookupMx(domain),
-    ...DKIM_SELECTORS.map((selector) =>
-      lookupTxt(`${selector}._domainkey.${domain}`).then((txt) => ({
-        selector,
-        found: !!txt && txt.length > 0,
-        record: txt?.[0]?.join("") ?? undefined,
-      }))
-    ),
-  ]);
+  // Core records first: a transient resolver failure here must surface as an
+  // error, not as a false "everything is missing" verdict.
+  let rootTxt: string[][] | null;
+  let dmarcTxt: string[][] | null;
+  let mxRecords: { exchange: string; priority: number }[] | null;
+  try {
+    [rootTxt, dmarcTxt, mxRecords] = await Promise.all([
+      lookupTxt(domain),
+      lookupTxt(`_dmarc.${domain}`),
+      lookupMx(domain),
+    ]);
+  } catch {
+    return NextResponse.json(
+      { error: "Couldn't complete the DNS lookup right now. Please try again in a moment." },
+      { status: 503 }
+    );
+  }
+
+  // DKIM selector probes are best-effort and never fail the whole request.
+  const dkimResults = await Promise.all(
+    DKIM_SELECTORS.map((selector) => probeDkim(selector, domain))
+  );
 
   const spfRecord = findSpf(rootTxt);
   const spf = { record: spfRecord, ...analyzeSpf(spfRecord) };
@@ -340,7 +367,7 @@ export async function POST(request: NextRequest) {
   const dmarcRecord = findDmarc(dmarcTxt);
   const dmarcAnalysis = analyzeDmarc(dmarcRecord);
 
-  const dkimFound = (dkimResults as DkimResult[]).filter((r) => r.found);
+  const dkimFound = dkimResults.filter((r) => r.found);
   const dkimStatus: "ok" | "warn" | "missing" =
     dkimFound.length >= 1 ? "ok" : "missing";
 
