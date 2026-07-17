@@ -8,14 +8,14 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { DmarcCheckForm } from "@/components/tools/dmarc-check-form";
 import { JsonLd, softwareApplicationSchema, breadcrumbSchema } from "@/components/site/json-ld";
 import { db } from "@/server/db";
-import { ArrowRight, Mail, ShieldCheck, MailWarning } from "lucide-react";
+import { ArrowRight, Mail, ShieldCheck, ClipboardCheck } from "lucide-react";
 
 const SITE_URL = "https://akritos.com";
 const URL = `${SITE_URL}/tools/dmarc-check`;
 // No brand suffix here — the root layout's title template appends " | Akritos".
-const TITLE = "Free DMARC, SPF & DKIM Checker";
+const TITLE = "Free DMARC, SPF, DKIM & MTA-STS Checker";
 const DESCRIPTION =
-  "Free tool: enter your domain to instantly check SPF, DKIM, DMARC, and MX records. Plain-English explanations of what's wrong and how to fix it. No email required to use.";
+  "Free tool: enter your domain to check SPF, DKIM, DMARC, MX, MTA-STS, TLS-RPT and BIMI. Catches the DMARC records that say 'reject' but enforce nothing, and hands you the exact DNS record to paste for every gap. No email required.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -49,13 +49,13 @@ const whatItDoes = [
   },
   {
     icon: ShieldCheck,
-    title: "SPF / DKIM / DMARC Check",
-    body: "Pulls each record and parses it. SPF gets analyzed for the most common misconfigurations. DKIM probes the static selectors major providers use — Google, Microsoft 365, DreamHost, Mailchimp, SendGrid, Proton, and more. DMARC parses your policy and checks for a reporting address.",
+    title: "Every record that matters",
+    body: "SPF checked for the common misconfigurations and the 10-lookup limit. DKIM probes the static selectors the major providers use. DMARC parsed in full — policy, pct, subdomain policy — so a record that claims 'reject' while enforcing nothing gets called out. Then MTA-STS, TLS-RPT and BIMI.",
   },
   {
-    icon: MailWarning,
-    title: "Plain-English Issues",
-    body: "Each problem we find gets an explanation in language a non-IT person can act on. No raw DNS jargon, no 'consult your administrator.'",
+    icon: ClipboardCheck,
+    title: "Fixes you can paste",
+    body: "Every gap comes with the DNS record that closes it — built for your domain and the provider we detected, explained in language a non-IT person can act on. Copy, paste, done. No translating advice into syntax.",
   },
 ];
 

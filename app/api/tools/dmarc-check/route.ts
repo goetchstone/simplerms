@@ -6,7 +6,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as dns } from "node:dns";
 import { rateLimit } from "@/server/rate-limit";
-import { classifyDnsError, isDkimKeyRecord } from "@/lib/dmarc-dns";
+import {
+  classifyDnsError,
+  isDkimKeyRecord,
+  findDmarcRecords,
+  analyzeDmarc,
+  analyzeMtaSts,
+  analyzeTlsRpt,
+  analyzeBimi,
+  suggestedRecords,
+  type SimpleRecordCheck,
+  type SuggestedRecord,
+  type Status,
+} from "@/lib/dmarc-dns";
 
 // Common DKIM selectors used by major mail providers. We probe these because
 // DKIM selector names aren't discoverable from the domain itself — DNS gives
@@ -79,6 +91,9 @@ const DKIM_SELECTORS = [
 // the raw MX values.
 const MX_PROVIDERS: { match: RegExp; name: string }[] = [
   { match: /google\.com$|googlemail\.com$/i, name: "Google Workspace" },
+  // Inbound relay fronting several shared hosts (DreamHost among them), so it
+  // identifies the MX but not the sending platform — no SPF include is implied.
+  { match: /mailchannels\.net$/i, name: "MailChannels" },
   { match: /outlook\.com$|protection\.outlook\.com$/i, name: "Microsoft 365" },
   { match: /mail\.protonmail\.ch$/i, name: "Proton Mail" },
   { match: /icloud\.com$|mail\.me\.com$/i, name: "iCloud Mail" },
@@ -106,21 +121,30 @@ interface CheckResult {
     found: boolean;
     record: string | null;
     issues: string[];
-    status: "ok" | "warn" | "fail" | "missing";
+    status: Status;
   };
   dkim: {
     selectorsChecked: number;
     found: DkimResult[];
-    status: "ok" | "warn" | "missing";
+    status: "ok" | "missing";
   };
   dmarc: {
     found: boolean;
     record: string | null;
     policy: string | null;
+    subdomainPolicy: string | null;
+    pct: number;
+    enforcing: boolean;
     hasReporting: boolean;
     issues: string[];
-    status: "ok" | "warn" | "fail" | "missing";
+    status: Status;
   };
+  // Optional hardening — reported for visibility, deliberately not scored: a
+  // domain without BIMI isn't insecure, it's just not decorated.
+  mtaSts: SimpleRecordCheck;
+  tlsRpt: SimpleRecordCheck;
+  bimi: SimpleRecordCheck;
+  fixes: SuggestedRecord[];
   summary: { score: number; verdict: string };
 }
 
@@ -212,54 +236,6 @@ function analyzeSpf(record: string | null): { issues: string[]; status: "ok" | "
   return { issues, status };
 }
 
-function findDmarc(txtRecords: string[][] | null): string | null {
-  if (!txtRecords) return null;
-  for (const parts of txtRecords) {
-    const joined = parts.join("");
-    if (/^v=DMARC1\b/i.test(joined)) return joined;
-  }
-  return null;
-}
-
-function analyzeDmarc(record: string | null): {
-  policy: string | null;
-  hasReporting: boolean;
-  issues: string[];
-  status: "ok" | "warn" | "fail" | "missing";
-} {
-  if (!record) {
-    return {
-      policy: null,
-      hasReporting: false,
-      issues: ["No DMARC record found. Even with SPF and DKIM in place, receivers don't know what to do when a message fails. Spoofing protection is incomplete without DMARC."],
-      status: "missing",
-    };
-  }
-  const issues: string[] = [];
-  let status: "ok" | "warn" | "fail" = "ok";
-
-  const policyMatch = record.match(/\bp\s*=\s*(none|quarantine|reject)/i);
-  const policy = policyMatch?.[1]?.toLowerCase() ?? null;
-
-  if (policy === "none") {
-    issues.push("Policy is 'p=none' — reports only, no enforcement. Receivers will not block spoofed mail. Good for initial monitoring; move to 'quarantine' or 'reject' once SPF/DKIM align cleanly.");
-    if (status === "ok") status = "warn";
-  } else if (!policy) {
-    issues.push("No policy ('p=') tag found. DMARC requires a policy.");
-    status = "fail";
-  }
-
-  const hasRua = /\brua\s*=\s*mailto:/i.test(record);
-  const hasRuf = /\bruf\s*=\s*mailto:/i.test(record);
-
-  if (!hasRua) {
-    issues.push("No 'rua' reporting address. You're flying blind on which senders are using your domain. Add 'rua=mailto:dmarc-reports@yourdomain.com' to receive aggregate reports.");
-    if (status === "ok") status = "warn";
-  }
-
-  return { policy, hasReporting: hasRua || hasRuf, issues, status };
-}
-
 function identifyProvider(mxRecords: { exchange: string }[]): string | null {
   for (const mx of mxRecords) {
     for (const p of MX_PROVIDERS) {
@@ -279,7 +255,6 @@ function computeSummary(result: Omit<CheckResult, "summary">): { score: number; 
   else if (result.spf.status === "fail") score += 5;
 
   if (result.dkim.status === "ok") score += 20;
-  else if (result.dkim.status === "warn") score += 10;
 
   if (result.dmarc.status === "ok") score += 50;
   else if (result.dmarc.status === "warn") score += 25;
@@ -343,11 +318,17 @@ export async function POST(request: NextRequest) {
   let rootTxt: string[][] | null;
   let dmarcTxt: string[][] | null;
   let mxRecords: { exchange: string; priority: number }[] | null;
+  let mtaStsTxt: string[][] | null;
+  let tlsRptTxt: string[][] | null;
+  let bimiTxt: string[][] | null;
   try {
-    [rootTxt, dmarcTxt, mxRecords] = await Promise.all([
+    [rootTxt, dmarcTxt, mxRecords, mtaStsTxt, tlsRptTxt, bimiTxt] = await Promise.all([
       lookupTxt(domain),
       lookupTxt(`_dmarc.${domain}`),
       lookupMx(domain),
+      lookupTxt(`_mta-sts.${domain}`),
+      lookupTxt(`_smtp._tls.${domain}`),
+      lookupTxt(`default._bimi.${domain}`),
     ]);
   } catch {
     return NextResponse.json(
@@ -364,19 +345,20 @@ export async function POST(request: NextRequest) {
   const spfRecord = findSpf(rootTxt);
   const spf = { record: spfRecord, ...analyzeSpf(spfRecord) };
 
-  const dmarcRecord = findDmarc(dmarcTxt);
-  const dmarcAnalysis = analyzeDmarc(dmarcRecord);
+  const dmarc = analyzeDmarc(findDmarcRecords(dmarcTxt));
+  const mtaSts = analyzeMtaSts(mtaStsTxt);
+  const tlsRpt = analyzeTlsRpt(tlsRptTxt);
+  const bimi = analyzeBimi(bimiTxt);
 
   const dkimFound = dkimResults.filter((r) => r.found);
-  const dkimStatus: "ok" | "warn" | "missing" =
-    dkimFound.length >= 1 ? "ok" : "missing";
+  const provider = mxRecords ? identifyProvider(mxRecords) : null;
 
   const result: Omit<CheckResult, "summary"> = {
     domain,
     mx: {
       found: !!mxRecords && mxRecords.length > 0,
       records: mxRecords ?? [],
-      provider: mxRecords ? identifyProvider(mxRecords) : null,
+      provider,
     },
     spf: {
       found: !!spfRecord,
@@ -387,16 +369,31 @@ export async function POST(request: NextRequest) {
     dkim: {
       selectorsChecked: DKIM_SELECTORS.length,
       found: dkimFound,
-      status: dkimStatus,
+      status: dkimFound.length >= 1 ? "ok" : "missing",
     },
     dmarc: {
-      found: !!dmarcRecord,
-      record: dmarcRecord,
-      policy: dmarcAnalysis.policy,
-      hasReporting: dmarcAnalysis.hasReporting,
-      issues: dmarcAnalysis.issues,
-      status: dmarcAnalysis.status,
+      found: !!dmarc.record,
+      record: dmarc.record,
+      policy: dmarc.policy,
+      subdomainPolicy: dmarc.subdomainPolicy,
+      pct: dmarc.pct,
+      enforcing: dmarc.enforcing,
+      hasReporting: dmarc.hasReporting,
+      issues: dmarc.issues,
+      status: dmarc.status,
     },
+    mtaSts,
+    tlsRpt,
+    bimi,
+    fixes: suggestedRecords({
+      domain,
+      provider,
+      spfRecord,
+      spfStatus: spf.status,
+      dmarc,
+      mtaSts,
+      tlsRpt,
+    }),
   };
 
   const summary = computeSummary(result);
