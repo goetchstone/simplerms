@@ -3,6 +3,7 @@ export const dynamic = "force-dynamic";
 
 import { createCachedCaller } from "@/lib/trpc/server";
 import { AppointmentList } from "@/components/scheduling/appointment-list";
+import { AvailabilityEditor } from "@/components/scheduling/availability-editor";
 
 export default async function SchedulingPage() {
   const caller = await createCachedCaller();
@@ -16,6 +17,7 @@ export default async function SchedulingPage() {
           Upcoming and recent appointments.
         </p>
       </div>
+      <AvailabilityEditor />
       <AppointmentList initialData={result} />
     </div>
   );
