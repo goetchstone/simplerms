@@ -8,6 +8,7 @@ import { appointmentConfirmationHtml, appointmentConfirmationText, appointmentCa
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { addMinutes, startOfDay, endOfDay } from "date-fns";
+import { weekdayInTz } from "@/lib/tz";
 
 const appointmentStatusEnum = z.enum(["PENDING", "CONFIRMED", "CANCELLED", "NO_SHOW", "COMPLETED"]);
 
@@ -229,6 +230,34 @@ export const schedulingRouter = createTRPCRouter({
       });
 
       const endsAt = addMinutes(input.startsAt, service.duration);
+
+      // The public slot picker only offers valid times, but this endpoint is
+      // public — so enforce the same rules here. Otherwise it can be used to
+      // create past, off-hours, or arbitrary-day appointments (or pin them to a
+      // staff id) that the UI would never let a real visitor pick.
+      if (input.startsAt.getTime() <= Date.now()) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "That time is in the past." });
+      }
+      // Evaluate weekday AND window in each row's own timezone — availability is
+      // stored in local time and evening slots cross UTC midnight, so filtering
+      // by input.startsAt.getDay() (server/UTC weekday) would reject valid times.
+      const availabilityRows = await ctx.db.staffAvailability.findMany({
+        where: {
+          ...(input.staffId ? { userId: input.staffId } : {}),
+          OR: [{ serviceId: input.serviceId }, { serviceId: null }],
+        },
+      });
+      const withinWindow = availabilityRows.some((a) => {
+        const tz = a.timezone || "America/New_York";
+        return (
+          a.dayOfWeek === weekdayInTz(input.startsAt, tz) &&
+          input.startsAt >= toUTCDate(input.startsAt, a.startTime, tz) &&
+          endsAt <= toUTCDate(input.startsAt, a.endTime, tz)
+        );
+      });
+      if (!withinWindow) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "That time isn't available for booking." });
+      }
 
       // Conflict check — run inside transaction to prevent double-booking.
       const appointment = await ctx.db.$transaction(async (tx) => {
