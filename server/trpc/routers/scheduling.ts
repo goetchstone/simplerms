@@ -88,6 +88,17 @@ export const schedulingRouter = createTRPCRouter({
 
   // ── Availability ─────────────────────────────────────────────────────────
 
+  getAvailability: staffProcedure
+    .input(z.object({ serviceId: z.string().cuid().optional() }))
+    .query(({ ctx, input }) =>
+      ctx.db.staffAvailability.findMany({
+        // Scope must mirror setAvailability's replace-scope exactly, or the
+        // editor would show one set of hours and overwrite a different one.
+        where: { userId: ctx.session.user.id, serviceId: input.serviceId ?? null },
+        orderBy: { dayOfWeek: "asc" },
+      })
+    ),
+
   setAvailability: staffProcedure
     .input(
       z.object({

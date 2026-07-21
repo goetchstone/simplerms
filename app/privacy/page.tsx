@@ -90,9 +90,8 @@ export default function PrivacyPage() {
           </Section>
 
           <Section title="How we protect your information">
-            All data is transmitted over HTTPS. Application data is stored in
-            encrypted databases. API keys and credentials are encrypted at rest
-            using AES-256-GCM. Access to client data is restricted to
+            All data is transmitted over HTTPS. Our database is not exposed to
+            the public internet, and access to client data is restricted to
             authorized team members only.
           </Section>
 

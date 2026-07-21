@@ -1,5 +1,6 @@
 // server/email/templates/appointment-reminder.ts
 import { formatDate } from "@/lib/utils";
+import { escapeHtml } from "@/server/email/escape";
 
 export interface AppointmentReminderData {
   serviceName: string;
@@ -19,7 +20,10 @@ function formatTime(date: Date, tz: string): string {
 }
 
 export function appointmentReminderHtml(data: AppointmentReminderData): string {
-  const { serviceName, bookerName, startsAt, timezone, cancelUrl, companyName } = data;
+  const { startsAt, timezone, cancelUrl } = data;
+  const serviceName = escapeHtml(data.serviceName);
+  const bookerName = escapeHtml(data.bookerName);
+  const companyName = escapeHtml(data.companyName);
 
   return `<!DOCTYPE html>
 <html>
