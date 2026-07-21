@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { promises as dns } from "node:dns";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import {
   classifyDnsError,
   isDkimKeyRecord,
@@ -273,10 +273,7 @@ export async function POST(request: NextRequest) {
   // Rate-limit per IP — DNS lookups are cheap but we don't want to be used
   // as a free DNS-probing service. 20 checks per 10 minutes per IP is plenty
   // for a real user and curbs casual abuse.
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    request.headers.get("x-real-ip") ??
-    "unknown";
+  const ip = getClientIp(request.headers);
   const limit = rateLimit(`dmarc-check:${ip}`, 20, 10 * 60 * 1000);
   if (!limit.allowed) {
     return NextResponse.json(

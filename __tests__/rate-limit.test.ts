@@ -1,6 +1,31 @@
 // __tests__/rate-limit.test.ts
 import { describe, it, expect } from "vitest";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
+
+const headers = (h: Record<string, string>) => new Headers(h);
+
+describe("getClientIp", () => {
+  it("prefers X-Real-IP (set by our nginx, not spoofable)", () => {
+    expect(getClientIp(headers({ "x-real-ip": "203.0.113.5", "x-forwarded-for": "evil, 203.0.113.5" }))).toBe("203.0.113.5");
+  });
+
+  it("uses the RIGHTMOST X-Forwarded-For entry (the one our proxy appended)", () => {
+    // Client spoofs the left; nginx appends the true IP on the right.
+    expect(getClientIp(headers({ "x-forwarded-for": "1.1.1.1, 2.2.2.2, 203.0.113.9" }))).toBe("203.0.113.9");
+  });
+
+  it("does not key on the spoofable leftmost value", () => {
+    const a = getClientIp(headers({ "x-forwarded-for": "9.9.9.9, 203.0.113.9" }));
+    const b = getClientIp(headers({ "x-forwarded-for": "8.8.8.8, 203.0.113.9" }));
+    // Same real client → same key despite different spoofed leftmost values.
+    expect(a).toBe(b);
+    expect(a).toBe("203.0.113.9");
+  });
+
+  it("falls back to 'unknown' when no headers are present", () => {
+    expect(getClientIp(headers({}))).toBe("unknown");
+  });
+});
 
 const WINDOW_MS = 60_000;
 

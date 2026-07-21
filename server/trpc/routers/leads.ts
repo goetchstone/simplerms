@@ -5,7 +5,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { createHmac } from "crypto";
 import { createTRPCRouter, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { escapeHtml } from "@/server/email/escape";
 
@@ -58,10 +58,7 @@ function leadDownloadToken(leadId: string): string {
 export const leadsRouter = createTRPCRouter({
   // Public: capture email and trigger PDF delivery.
   submit: publicProcedure.input(submitInput).mutation(async ({ ctx, input }) => {
-    const ip =
-      ctx.headers.get("x-forwarded-for") ??
-      ctx.headers.get("x-real-ip") ??
-      "unknown";
+    const ip = getClientIp(ctx.headers);
 
     if (input.website.length > 0) {
       // Honeypot — silently succeed so spammers can't tell

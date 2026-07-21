@@ -2,7 +2,7 @@
 import "server-only";
 
 import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure } from "@/server/trpc/trpc";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { ticketConfirmationHtml, ticketConfirmationText, ticketReplyHtml, ticketReplyText } from "@/server/email/templates/ticket";
 import { z } from "zod";
@@ -25,7 +25,7 @@ export const ticketsRouter = createTRPCRouter({
     .input(createTicketSchema)
     .mutation(async ({ ctx, input }) => {
       // Rate limit: 5 tickets per IP per 15 minutes.
-      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const ip = getClientIp(ctx.headers);
       const { allowed } = rateLimit(`ticket:${ip}`, 5, 900000);
       if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many submissions. Please try again later." });
 

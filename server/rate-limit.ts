@@ -2,6 +2,29 @@
 // In-memory sliding window rate limiter. No external dependencies.
 // Suitable for single-instance deployments. For multi-instance, swap to Redis.
 
+/**
+ * Trusted client IP for rate-limiting and audit logging.
+ *
+ * The app is only reachable through our nginx reverse proxy, which sets
+ * `X-Real-IP` to `$remote_addr` (the immediate client) — overwriting any
+ * client-supplied value — and *appends* the real IP to `X-Forwarded-For` via
+ * `$proxy_add_x_forwarded_for`. So the trustworthy value is `X-Real-IP`, or
+ * failing that the **rightmost** XFF entry. Never the leftmost / whole header:
+ * those are attacker-controlled, and keying a rate limiter on them lets a
+ * client rotate the header to get a fresh bucket per request (limiter bypass).
+ */
+export function getClientIp(headers: Headers): string {
+  const realIp = headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+
+  const xff = headers.get("x-forwarded-for");
+  if (xff) {
+    const parts = xff.split(",").map((p) => p.trim()).filter(Boolean);
+    if (parts.length > 0) return parts[parts.length - 1]!;
+  }
+  return "unknown";
+}
+
 const windows = new Map<string, number[]>();
 
 // Evict expired entries every 5 minutes to prevent memory growth.

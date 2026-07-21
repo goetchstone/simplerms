@@ -2,7 +2,7 @@
 import "server-only";
 
 import { createTRPCRouter, adminProcedure, protectedProcedure, publicProcedure } from "@/server/trpc/trpc";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { passwordResetHtml, passwordResetText } from "@/server/email/templates/password-reset";
 import { z } from "zod";
@@ -172,7 +172,7 @@ export const usersRouter = createTRPCRouter({
   requestPasswordReset: publicProcedure
     .input(z.object({ email: z.string().email() }))
     .mutation(async ({ ctx, input }) => {
-      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const ip = getClientIp(ctx.headers);
       const { allowed } = rateLimit(`pw-reset:${ip}`, 5, 900000);
       if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please try again later." });
 

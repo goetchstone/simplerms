@@ -2,7 +2,7 @@
 import "server-only";
 
 import { createTRPCRouter, publicProcedure } from "@/server/trpc/trpc";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
@@ -11,7 +11,7 @@ export const portalRouter = createTRPCRouter({
   validate: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-      const ip = ctx.headers.get("x-forwarded-for") ?? ctx.headers.get("x-real-ip") ?? "unknown";
+      const ip = getClientIp(ctx.headers);
       const { allowed } = rateLimit(`portal:${ip}`, 30, 60000);
       if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
 
