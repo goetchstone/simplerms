@@ -2,6 +2,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { randomInt } from "crypto";
+import { writeFileSync } from "node:fs";
 
 const db = new PrismaClient();
 
@@ -36,15 +37,16 @@ async function main() {
     });
 
     if (!explicitPassword) {
-      // Generated password — print on stdout with parseable markers so deploy.sh
-      // can extract and write to a host-side credentials file (the migrator container
-      // is ephemeral, so the file would be lost if written inside).
-      console.log("AKRITOS_FIRST_ADMIN_BEGIN");
-      console.log(`email=${adminEmail}`);
-      console.log(`password=${password}`);
-      console.log("AKRITOS_FIRST_ADMIN_END");
+      // Never print the generated password to stdout — the seed runs in a
+      // container during deploy, and stdout lands in the deploy log. Write it to
+      // a 0600 file instead (a host-mounted path in deploy via SEED_ADMIN_CRED_FILE;
+      // cwd locally) and print only a non-secret pointer.
+      const credFile = process.env.SEED_ADMIN_CRED_FILE ?? ".first-admin-credentials";
+      writeFileSync(credFile, `email=${adminEmail}\npassword=${password}\n`, { mode: 0o600 });
+      console.log(`First admin created. Credentials written to ${credFile} (mode 0600).`);
+      console.log("Read it once, sign in, change the password in Settings, then delete the file.");
     } else {
-      console.log(`Admin created with explicit SEED_ADMIN_PASSWORD: ${adminEmail}`);
+      console.log(`Admin created with SEED_ADMIN_PASSWORD: ${adminEmail}`);
     }
   } else {
     console.log(`Admin exists, skipping: ${existing.email}`);

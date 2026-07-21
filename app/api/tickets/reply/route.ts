@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/server/db";
 import { rateLimit } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
+import { escapeHtml } from "@/server/email/escape";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") ?? "unknown";
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
     sendEmail({
       to: ticket.assignedTo.email,
       subject: `[${ticket.ticketNumber}] Client replied: ${ticket.subject}`,
-      html: `<p>${textBody.replace(/\n/g, "<br />")}</p>`,
+      html: `<p>${escapeHtml(textBody).replace(/\n/g, "<br />")}</p>`,
       text: textBody,
     }).catch(() => {});
   }
