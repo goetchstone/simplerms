@@ -2,12 +2,12 @@
 // Public endpoint for ticket submitters to reply via the tracking page.
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/server/db";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { escapeHtml } from "@/server/email/escape";
 
 export async function POST(request: NextRequest) {
-  const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+  const ip = getClientIp(request.headers);
   const { allowed } = rateLimit(`ticket-reply:${ip}`, 10, 60_000);
   if (!allowed) {
     return NextResponse.json({ error: "Too many requests" }, { status: 429 });

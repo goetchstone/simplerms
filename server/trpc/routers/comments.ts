@@ -4,7 +4,7 @@ import "server-only";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
-import { rateLimit } from "@/server/rate-limit";
+import { rateLimit, getClientIp } from "@/server/rate-limit";
 
 // Public submission limits — tuned for honest commenters, hostile to spam farms.
 const SUBMIT_LIMIT = 3;
@@ -40,10 +40,7 @@ export const commentsRouter = createTRPCRouter({
   // Public submission. Returns ok regardless of honeypot trip so spammers can't
   // distinguish "blocked" from "accepted" — they get the same success response.
   submit: publicProcedure.input(submitInput).mutation(async ({ ctx, input }) => {
-    const ip =
-      ctx.headers.get("x-forwarded-for") ??
-      ctx.headers.get("x-real-ip") ??
-      "unknown";
+    const ip = getClientIp(ctx.headers);
 
     if (input.website.length > 0) {
       // Honeypot tripped. Silently drop.

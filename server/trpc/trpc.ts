@@ -4,6 +4,7 @@ import "server-only";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
+import { getClientIp } from "@/server/rate-limit";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -46,10 +47,7 @@ const withAudit = t.middleware(async ({ ctx, next, path }) => {
 
   if (data?._audit) {
     const { action, entityType, entityId, before, after } = data._audit;
-    const ip =
-      ctx.headers.get("x-forwarded-for") ??
-      ctx.headers.get("x-real-ip") ??
-      undefined;
+    const ip = getClientIp(ctx.headers);
 
     await ctx.db.auditLog.create({
       data: {
