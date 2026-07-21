@@ -1,5 +1,6 @@
 // server/email/templates/invoice.ts
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { escapeHtml } from "@/server/email/escape";
 
 export interface InvoiceEmailData {
   invoiceNumber: string;
@@ -14,7 +15,10 @@ export interface InvoiceEmailData {
 }
 
 export function invoiceEmailHtml(data: InvoiceEmailData): string {
-  const { invoiceNumber, clientName, issueDate, dueDate, total, currency, paymentLink, portalUrl, companyName } = data;
+  const { issueDate, dueDate, total, currency, paymentLink, portalUrl } = data;
+  const invoiceNumber = escapeHtml(data.invoiceNumber);
+  const clientName = escapeHtml(data.clientName);
+  const companyName = escapeHtml(data.companyName);
 
   return `<!DOCTYPE html>
 <html>
