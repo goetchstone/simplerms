@@ -1,4 +1,5 @@
 // server/email/templates/ticket.ts
+import { escapeHtml } from "@/server/email/escape";
 
 export interface TicketConfirmationData {
   ticketNumber: string;
@@ -9,7 +10,11 @@ export interface TicketConfirmationData {
 }
 
 export function ticketConfirmationHtml(data: TicketConfirmationData): string {
-  const { ticketNumber, subject, submitterName, trackUrl, companyName } = data;
+  const { trackUrl } = data;
+  const ticketNumber = escapeHtml(data.ticketNumber);
+  const subject = escapeHtml(data.subject);
+  const submitterName = escapeHtml(data.submitterName);
+  const companyName = escapeHtml(data.companyName);
 
   return `<!DOCTYPE html>
 <html>
@@ -92,9 +97,13 @@ export interface TicketReplyData {
 }
 
 export function ticketReplyHtml(data: TicketReplyData): string {
-  const { ticketNumber, subject, submitterName, replyBody, replierName, trackUrl, companyName } = data;
-  // Escape HTML in the reply body to prevent injection.
-  const safeBody = replyBody.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br />");
+  const { trackUrl } = data;
+  const ticketNumber = escapeHtml(data.ticketNumber);
+  const subject = escapeHtml(data.subject);
+  const submitterName = escapeHtml(data.submitterName);
+  const replierName = escapeHtml(data.replierName);
+  const companyName = escapeHtml(data.companyName);
+  const safeBody = escapeHtml(data.replyBody).replace(/\n/g, "<br />");
 
   return `<!DOCTYPE html>
 <html>

@@ -7,6 +7,7 @@ import { createHmac } from "crypto";
 import { createTRPCRouter, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
 import { rateLimit } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
+import { escapeHtml } from "@/server/email/escape";
 
 const SUBMIT_LIMIT = 3;
 const SUBMIT_WINDOW_MS = 60 * 60 * 1000;
@@ -116,8 +117,8 @@ export const leadsRouter = createTRPCRouter({
         "",
         "— Akritos",
       ].join("\n"),
-      html: `<p>${input.name ? `Hi ${input.name.split(" ")[0]},` : "Hi,"}</p>
-<p>Thanks for grabbing ${magnet.what}. Here's the download:</p>
+      html: `<p>${input.name ? `Hi ${escapeHtml(input.name.split(" ")[0]!)},` : "Hi,"}</p>
+<p>Thanks for grabbing ${escapeHtml(magnet.what)}. Here's the download:</p>
 <p><a href="${downloadUrl}">${downloadUrl}</a></p>
 <p>Work through it at your own pace. If you have questions or want a 30-minute walkthrough together — no pitch, no pressure — you can <a href="https://akritos.com/book">book one here</a>.</p>
 <p>— Akritos</p>`,

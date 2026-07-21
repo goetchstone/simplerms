@@ -12,7 +12,15 @@ import { Label } from "@/components/ui/label";
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+  // Only allow same-origin relative paths — a full/protocol-relative URL here
+  // would be an open redirect (a user who just authenticated on the real page
+  // gets bounced to an attacker's site). `//evil.com` is protocol-relative, so
+  // reject anything that doesn't start with a single "/".
+  const rawCallback = searchParams.get("callbackUrl");
+  const callbackUrl =
+    rawCallback && rawCallback.startsWith("/") && !rawCallback.startsWith("//")
+      ? rawCallback
+      : "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
