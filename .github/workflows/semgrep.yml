@@ -36,6 +36,12 @@ jobs:
 
       - name: Run Semgrep
         run: |
+          # Excluded rules are CI-config best-practices, not application security,
+          # and they fail the whole-repo main scan on accepted tradeoffs (PR diff
+          # scans don't hit them). Same posture as the npm-audit allowlist.
+          #   - mutable-action-tag: we use `@vN` action tags, not SHA pins
+          #     (Dependabot keeps them current); revisit if we adopt SHA pinning.
+          #   - dependabot-missing-cooldown: no cooldown configured by choice.
           semgrep ci \
             --config p/javascript \
             --config p/typescript \
@@ -43,6 +49,8 @@ jobs:
             --config p/react \
             --config p/owasp-top-ten \
             --config p/secrets \
+            --exclude-rule yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag \
+            --exclude-rule package_managers.dependabot.dependabot-missing-cooldown.dependabot-missing-cooldown \
             --sarif \
             --output=semgrep.sarif
         env:
