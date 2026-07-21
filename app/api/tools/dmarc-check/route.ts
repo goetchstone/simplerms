@@ -335,9 +335,14 @@ export async function POST(request: NextRequest) {
   }
 
   // DKIM selector probes are best-effort and never fail the whole request.
-  const dkimResults = await Promise.all(
-    DKIM_SELECTORS.map((selector) => probeDkim(selector, domain))
-  );
+  // Bounded concurrency so one HTTP request can't fan out into ~45 simultaneous
+  // DNS queries — amplification against the probed domain and pressure on our
+  // own resolver / file descriptors.
+  const dkimResults: DkimResult[] = [];
+  for (let i = 0; i < DKIM_SELECTORS.length; i += 8) {
+    const batch = DKIM_SELECTORS.slice(i, i + 8);
+    dkimResults.push(...(await Promise.all(batch.map((s) => probeDkim(s, domain)))));
+  }
 
   const spfRecord = findSpf(rootTxt);
   const spf = { record: spfRecord, ...analyzeSpf(spfRecord) };
