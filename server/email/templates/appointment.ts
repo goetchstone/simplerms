@@ -1,5 +1,6 @@
 // server/email/templates/appointment.ts
 import { formatDate } from "@/lib/utils";
+import { escapeHtml } from "@/server/email/escape";
 
 export interface AppointmentConfirmationData {
   serviceName: string;
@@ -21,7 +22,10 @@ function formatTime(date: Date, tz: string): string {
 }
 
 export function appointmentConfirmationHtml(data: AppointmentConfirmationData): string {
-  const { serviceName, bookerName, startsAt, duration, timezone, cancelUrl, companyName, notes } = data;
+  const { startsAt, duration, timezone, cancelUrl, notes } = data;
+  const serviceName = escapeHtml(data.serviceName);
+  const bookerName = escapeHtml(data.bookerName);
+  const companyName = escapeHtml(data.companyName);
 
   return `<!DOCTYPE html>
 <html>
@@ -82,7 +86,7 @@ export function appointmentConfirmationHtml(data: AppointmentConfirmationData): 
                 </tr>
               </table>
 
-              ${notes ? `<p style="margin:0 0 32px;font-size:13px;color:#6b7280;padding:12px;background:#f3f4f6;border-radius:6px;">Note: ${notes.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</p>` : ""}
+              ${notes ? `<p style="margin:0 0 32px;font-size:13px;color:#6b7280;padding:12px;background:#f3f4f6;border-radius:6px;">Note: ${escapeHtml(notes)}</p>` : ""}
 
               <p style="margin:0;font-size:13px;color:#9ca3af;text-align:center;">
                 Need to cancel? <a href="${cancelUrl}" style="color:#6b7280;">Cancel this appointment</a>
@@ -132,7 +136,10 @@ export interface AppointmentCancellationData {
 }
 
 export function appointmentCancellationHtml(data: AppointmentCancellationData): string {
-  const { serviceName, bookerName, startsAt, timezone, bookUrl, companyName } = data;
+  const { startsAt, timezone, bookUrl } = data;
+  const serviceName = escapeHtml(data.serviceName);
+  const bookerName = escapeHtml(data.bookerName);
+  const companyName = escapeHtml(data.companyName);
 
   return `<!DOCTYPE html>
 <html>

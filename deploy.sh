@@ -70,7 +70,13 @@ SERVICE_COUNT=$($COMPOSE exec -T db \
   psql -U simplerms -d simplerms -tAc "SELECT COUNT(*) FROM \"Service\";" 2>/dev/null || echo "0")
 if [ "${USER_COUNT// /}" = "0" ] || [ "${SERVICE_COUNT// /}" = "0" ]; then
   echo "==> Seeding database (users: ${USER_COUNT// /}, services: ${SERVICE_COUNT// /})"
-  $COMPOSE run --rm migrator npx prisma db seed
+  # Mount the repo dir so the seed's first-admin credentials file (written 0600)
+  # lands on the host instead of vanishing with the ephemeral container — and so
+  # the generated password never has to be echoed to the deploy log.
+  rm -f "$REPO_DIR/.first-admin-credentials"
+  $COMPOSE run --rm -T -v "$REPO_DIR:/host-out" \
+    -e SEED_ADMIN_CRED_FILE=/host-out/.first-admin-credentials \
+    migrator npx prisma db seed
 else
   echo "    Database already seeded (${USER_COUNT// /} users, ${SERVICE_COUNT// /} services)"
 fi
@@ -219,19 +225,17 @@ PUBLIC_URL=$(grep -E '^NEXT_PUBLIC_APP_URL=' .env.local 2>/dev/null | cut -d= -f
 echo " ${PUBLIC_URL:-http://$(curl -sf ifconfig.me 2>/dev/null || echo 'YOUR_IP')}"
 echo ""
 
-# If the seed generated a fresh admin password, surface the credentials file path.
-# The file lives inside the migrator container; copy it to the host for the operator.
+# The seed writes fresh first-run admin credentials to this host-mounted 0600
+# file (see the seed step above). Surface only the path — never the password.
 CRED_HOST_PATH="$REPO_DIR/.first-admin-credentials"
-if $COMPOSE --profile tools run --rm -T migrator test -f /app/.first-admin-credentials 2>/dev/null; then
-  $COMPOSE --profile tools run --rm -T migrator cat /app/.first-admin-credentials > "$CRED_HOST_PATH" 2>/dev/null
-  chmod 600 "$CRED_HOST_PATH"
+if [ -f "$CRED_HOST_PATH" ]; then
+  chmod 600 "$CRED_HOST_PATH" 2>/dev/null || true
   echo " FIRST-RUN ADMIN CREDENTIALS:"
   echo "   $CRED_HOST_PATH"
-  echo "   (mode 0600 — read once, change password, then delete)"
+  echo "   (mode 0600 — read once, change the password in Settings, then delete)"
   echo ""
   echo "   cat $CRED_HOST_PATH"
 else
-  echo " Admin already exists. To reset password:"
-  echo "   docker compose --profile tools run --rm migrator npx tsx scripts/reset-admin-password.ts"
+  echo " No new admin credentials generated this deploy (admin already exists)."
 fi
 echo "============================================"

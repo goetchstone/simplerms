@@ -34,6 +34,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# First-run admin credentials written by the seed (0600). Never commit.
+.first-admin-credentials
+
 # vercel
 .vercel
 
