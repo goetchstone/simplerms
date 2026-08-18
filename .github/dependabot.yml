@@ -9,6 +9,12 @@ updates:
       day: monday
       time: "06:00"
     open-pull-requests-limit: 5
+    # Wait before adopting a just-published release — the window when a
+    # compromised/backdoored version is live before it's caught and yanked.
+    # Patches move faster (usually the security fixes we want promptly).
+    cooldown:
+      default-days: 7
+      semver-patch-days: 2
     groups:
       # Weekly version updates (Monday 06:00 UTC, per schedule above).
       prod-deps:
@@ -53,6 +59,10 @@ updates:
       day: monday
       time: "06:00"
     open-pull-requests-limit: 3
+    # Same rationale as the npm cooldown above — don't adopt a just-published
+    # (possibly compromised) action release immediately.
+    cooldown:
+      default-days: 7
     labels:
       - dependencies
       - github-actions
