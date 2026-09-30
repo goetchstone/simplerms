@@ -148,7 +148,7 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 
 ### Database
 
-- PostgreSQL 16 in Docker, not exposed to host in production
+- PostgreSQL 16 in Docker, published on host loopback only (`127.0.0.1:5432`) — never the public interface
 - 22 Prisma models — see schema.prisma
 - Migrations via `prisma db push` (no migration files, push-based)
 - Seed scripts in prisma/ directory
@@ -170,9 +170,8 @@ This is a combined RMS (Resource Management System) backend + marketing site for
 - **Rate limiting is in-memory:** `server/rate-limit.ts` uses a Map — resets on server restart, doesn't work across multiple instances. Acceptable for single-instance VPS deployment.
 - **No email queue retry backoff:** `app/api/cron/process-emails/route.ts` retries failed emails up to 3 times with no delay between attempts — should add exponential backoff if email failures become common
 - **Portal token is permanent:** Client portal tokens (cuid) never expire and can't be rotated without DB manual intervention — add rotation mechanism before handling sensitive client data
-- **Accepted-risk dependency vulns (CI-allowlisted):** One transitive advisory is open with **no fix available** and is deliberately allowlisted in `scripts/audit-check.mjs` — the `npm audit` CI gate still fails on any *new* high/critical advisory, just not this one.
-  - **postcss GHSA-qx2v-qp2m-jg93** (moderate, XSS in CSS stringify) — transitive via Next.js's bundled postcss; not exploitable through our surface (no untrusted input to postcss stringify). Resolves when Next bumps its bundled postcss.
-- **nodemailer forced to 9 via `overrides`:** the 6 nodemailer advisories (incl. one high) were *resolved* by upgrading to nodemailer 9. next-auth's `@auth/core` declares an **optional** `nodemailer@^7` peer (only for its Email provider, which we don't use — auth is Credentials-only in `server/auth/index.ts`), so `package.json` `overrides` forces the whole tree to 9 — runtime-safe, no `--legacy-peer-deps`. Drop the override when next-auth's peer range includes nodemailer 9+.
+- **Prod DB password is the public dev default:** `docker-compose.yml` hardcodes `simplerms_dev` for dev *and* prod, and this repo is public. Mitigated by loopback-only port binding plus the cloud security group (only 22/80/443 reachable). Rotate it (move `DATABASE_URL` into the server's `.env.local`) if this box outlives the Holt migration.
+- **nodemailer forced via `overrides`:** `"nodemailer": "$nodemailer"` forces the whole tree to our direct nodemailer (now 10). next-auth's `@auth/core` declares an **optional** `nodemailer@^7` peer used only by its Email provider, which we don't use (Credentials-only in `server/auth/index.ts`) — runtime-safe, no `--legacy-peer-deps`. Side effect: `npm audit fix` and `npm update` crash on the `$` reference — raise the override floors in `package.json` by hand instead.
 
 ### Testing & Deployment
 

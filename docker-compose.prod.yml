@@ -13,4 +13,3 @@ services:
 
   db:
     restart: always
-    ports: []
