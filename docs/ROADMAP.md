@@ -56,10 +56,10 @@ These make the system usable day-to-day without workarounds.
 - ✅ Appointment list with cancel links
 - ✅ Portal tRPC router with rate-limited token validation
 
-### 2.2 Appointment Reminders ✅
+### 2.2 Appointment Reminders
 - **File:** `docs/features/scheduling.md`
-- ✅ Email reminder 24h before appointment
-- ✅ Cron API route at /api/cron/reminders (CRON_SECRET protected)
+- ✅ Email reminder 24h before appointment (route logic)
+- Cron API route at /api/cron/reminders exists but has never been scheduled — see CLAUDE.md Known Issues
 - ✅ Uses reminderSentAt field to prevent duplicates
 
 ---
@@ -68,11 +68,12 @@ These make the system usable day-to-day without workarounds.
 
 These become important as client count grows.
 
-### 3.1 Background Job Processor ✅
+### 3.1 Background Job Processor
 - **File:** `docs/features/background-jobs.md`
-- ✅ Process EmailQueue table (cron route at /api/cron/process-emails)
-- ✅ Appointment reminders (cron route at /api/cron/reminders)
-- ✅ Overdue invoice flagging (cron route at /api/cron/overdue)
+- Routes exist but have never been scheduled — see CLAUDE.md Known Issues
+- Process EmailQueue table (/api/cron/process-emails) — nothing writes to EmailQueue yet
+- Appointment reminders (/api/cron/reminders)
+- Overdue invoice flagging (/api/cron/overdue)
 - Simple cron-based, no Redis/Bull dependency
 
 ### 3.2 Invoice Recurring/Templates
@@ -140,7 +141,7 @@ These become important as client count grows.
 | File Uploads | Working | Local storage, upload/download routes, drag-and-drop UI |
 | PDF Generation | Working | API route, react-pdf template |
 | Settings UI | Working | Company, SMTP, invoice defaults |
-| Background Jobs | Working | Email queue processor + reminders + overdue flagging |
+| Background Jobs | Not scheduled | Routes exist; never run in production (see CLAUDE.md Known Issues) |
 | Client Portal | Working | Token-based, invoices/tickets/appointments |
 | Public Pages | Working | Homepage, about, services, pricing, contact, careers, nonprofits, apple-business, ai-risk, ownership, privacy, terms, blog, book, support |
 | Lead Magnets | Working | Vendor Independence Checklist (PDF) + AI Prompt Framework (PDF). `Lead` model, `leads` tRPC router, token-gated downloads, admin view at /dashboard/cms/leads |
