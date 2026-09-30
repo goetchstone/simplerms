@@ -103,12 +103,17 @@ export interface EmailPayload {
   html: string;
   text?: string;
   replyTo?: string;
+  // Server-built iCalendar body (lib/ics.ts); nodemailer sends it as a
+  // text/calendar part so mail clients offer or auto-add the event.
+  icalEvent?: { method: "PUBLISH" | "CANCEL"; content: string };
 }
 
 export async function sendEmail(payload: EmailPayload): Promise<void> {
   const { transport, from } = await getTransport();
   try {
-    await transport.sendMail({ from, ...payload });
+    // Subjects carry visitor input (names, ticket subjects); a line break there
+    // must never become a new header, and other controls render as garbage.
+    await transport.sendMail({ from, ...payload, subject: payload.subject.replace(/[\x00-\x1f\x7f]+/g, " ") });
   } catch (err) {
     // Email failures upstream are usually swallowed by callers (.catch(()=>{})
     // for fire-and-forget). Log here so the failure shows up in container logs

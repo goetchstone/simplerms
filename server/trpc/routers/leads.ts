@@ -8,6 +8,9 @@ import { createTRPCRouter, publicProcedure, adminProcedure } from "@/server/trpc
 import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { escapeHtml } from "@/server/email/escape";
+import { lineText } from "@/lib/validations/text";
+import { notifyOwner } from "@/server/email/notify-owner";
+import { ownerNotificationHtml, ownerNotificationText } from "@/server/email/templates/owner-notification";
 
 const SUBMIT_LIMIT = 3;
 const SUBMIT_WINDOW_MS = 60 * 60 * 1000;
@@ -40,8 +43,8 @@ const DEFAULT_MAGNET = LEAD_MAGNETS["ownership-page"]!;
 
 const submitInput = z.object({
   email: z.string().email().max(254),
-  name: z.string().min(1).max(80).optional(),
-  company: z.string().max(120).optional(),
+  name: lineText(80, 1).optional(),
+  company: lineText(120).optional(),
   source: z.string().min(1).max(80),
   // Honeypot — bots fill this, real users leave it blank
   website: z.string().max(0).optional().default(""),
@@ -77,15 +80,17 @@ export const leadsRouter = createTRPCRouter({
 
     // Upsert by email — same person can request the checklist multiple times,
     // we just want to know they came back. Don't dupe DB rows.
+    const leadId = `${input.source}:${email}`.slice(0, 191);
+    const returning = (await ctx.db.lead.count({ where: { id: leadId } })) > 0;
     const lead = await ctx.db.lead.upsert({
-      where: { id: `${input.source}:${email}`.slice(0, 191) },
+      where: { id: leadId },
       update: {
         name: input.name?.trim(),
         company: input.company?.trim(),
         userAgent: ctx.headers.get("user-agent") ?? null,
       },
       create: {
-        id: `${input.source}:${email}`.slice(0, 191),
+        id: leadId,
         email,
         name: input.name?.trim(),
         company: input.company?.trim(),
@@ -122,6 +127,24 @@ export const leadsRouter = createTRPCRouter({
     }).catch(() => {
       // Email failure is logged but doesn't break the user flow
     });
+
+    const notice = {
+      heading: returning ? "Returning lead" : "New lead",
+      rows: [
+        ["Email", email],
+        ["Name", input.name?.trim()],
+        ["Company", input.company?.trim()],
+        ["Downloaded", magnet.what],
+        ["Source", input.source],
+      ] as Array<[string, string | undefined]>,
+      link: { href: `${baseUrl}/dashboard/cms/leads`, label: "Open leads" },
+    };
+    void notifyOwner({
+      subject: `${returning ? "Returning lead" : "New lead"}: ${email} — ${magnet.what}`,
+      replyTo: email,
+      html: ownerNotificationHtml(notice),
+      text: ownerNotificationText(notice),
+    }).catch((err) => console.error(`[lead] owner notification failed for ${lead.id}:`, err));
 
     return { ok: true, downloadUrl };
   }),

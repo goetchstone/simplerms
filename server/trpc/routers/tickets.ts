@@ -5,14 +5,17 @@ import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure }
 import { rateLimit, getClientIp } from "@/server/rate-limit";
 import { sendEmail } from "@/server/email";
 import { ticketConfirmationHtml, ticketConfirmationText, ticketReplyHtml, ticketReplyText } from "@/server/email/templates/ticket";
+import { notifyOwner } from "@/server/email/notify-owner";
+import { lineText, multilineText } from "@/lib/validations/text";
+import { ownerNotificationHtml, ownerNotificationText } from "@/server/email/templates/owner-notification";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 
 const createTicketSchema = z.object({
-  submitterName: z.string().min(1).max(255),
+  submitterName: lineText(255, 1),
   submitterEmail: z.string().email(),
-  subject: z.string().min(1).max(500),
-  body: z.string().min(1).max(10000),
+  subject: lineText(500, 1),
+  body: multilineText(10000, 1),
   clientId: z.string().cuid().optional(),
 });
 
@@ -63,6 +66,21 @@ export const ticketsRouter = createTRPCRouter({
         html: ticketConfirmationHtml({ ticketNumber: ticket.ticketNumber, subject: input.subject, submitterName: input.submitterName, trackUrl, companyName }),
         text: ticketConfirmationText({ ticketNumber: ticket.ticketNumber, subject: input.subject, submitterName: input.submitterName, trackUrl, companyName }),
       }).catch(() => {});
+
+      const notice = {
+        heading: `New support ticket ${ticket.ticketNumber}`,
+        rows: [
+          ["Subject", input.subject],
+          ["From", `${input.submitterName} <${input.submitterEmail}>`],
+          ["Message", input.body],
+        ] as Array<[string, string]>,
+        link: { href: `${baseUrl}/dashboard/tickets/${ticket.id}`, label: "Open ticket" },
+      };
+      void notifyOwner({
+        subject: `[${ticket.ticketNumber}] New ticket: ${input.subject}`,
+        html: ownerNotificationHtml(notice),
+        text: ownerNotificationText(notice),
+      }).catch((err) => console.error(`[ticket] owner notification failed for ${ticket.ticketNumber}:`, err));
 
       return { ticketNumber: ticket.ticketNumber, publicToken: ticket.publicToken };
     }),

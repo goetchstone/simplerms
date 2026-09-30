@@ -1,6 +1,6 @@
 // server/email/templates/appointment.ts
-import { formatDate } from "@/lib/utils";
 import { escapeHtml } from "@/server/email/escape";
+import { formatDayInTz as formatDay, formatTimeInTz as formatTime } from "@/lib/tz";
 
 export interface AppointmentConfirmationData {
   serviceName: string;
@@ -11,14 +11,6 @@ export interface AppointmentConfirmationData {
   cancelUrl: string;
   companyName: string;
   notes?: string | null;
-}
-
-function formatTime(date: Date, tz: string): string {
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: tz,
-  });
 }
 
 export function appointmentConfirmationHtml(data: AppointmentConfirmationData): string {
@@ -65,7 +57,7 @@ export function appointmentConfirmationHtml(data: AppointmentConfirmationData): 
                     <span style="font-size:13px;color:#6b7280;">Date</span>
                   </td>
                   <td align="right" style="padding:12px 0;border-bottom:1px solid #f3f4f6;">
-                    <span style="font-size:13px;color:#111827;">${formatDate(startsAt)}</span>
+                    <span style="font-size:13px;color:#111827;">${formatDay(startsAt, timezone)}</span>
                   </td>
                 </tr>
                 <tr>
@@ -118,7 +110,7 @@ export function appointmentConfirmationText(data: AppointmentConfirmationData): 
     `Your appointment has been confirmed.`,
     "",
     `Service: ${serviceName}`,
-    `Date: ${formatDate(startsAt)}`,
+    `Date: ${formatDay(startsAt, timezone)}`,
     `Time: ${formatTime(startsAt, timezone)}`,
     `Duration: ${duration} minutes`,
     "",
@@ -162,7 +154,7 @@ export function appointmentCancellationHtml(data: AppointmentCancellationData): 
             <td style="padding:32px 40px;">
               <p style="margin:0 0 8px;font-size:14px;color:#6b7280;">Hi ${bookerName},</p>
               <p style="margin:0 0 24px;font-size:14px;color:#6b7280;">
-                Your appointment for <strong>${serviceName}</strong> on ${formatDate(startsAt)} at ${formatTime(startsAt, timezone)} has been cancelled.
+                Your appointment for <strong>${serviceName}</strong> on ${formatDay(startsAt, timezone)} at ${formatTime(startsAt, timezone)} has been cancelled.
               </p>
 
               <table width="100%" cellpadding="0" cellspacing="0">
@@ -199,7 +191,7 @@ export function appointmentCancellationText(data: AppointmentCancellationData): 
     "",
     `Hi ${bookerName},`,
     "",
-    `Your appointment for ${serviceName} on ${formatDate(startsAt)} at ${formatTime(startsAt, timezone)} has been cancelled.`,
+    `Your appointment for ${serviceName} on ${formatDay(startsAt, timezone)} at ${formatTime(startsAt, timezone)} has been cancelled.`,
     "",
     `Book a new appointment: ${bookUrl}`,
   ].join("\n");
