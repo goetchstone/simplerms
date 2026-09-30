@@ -8,19 +8,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  // Only allow same-origin relative paths — a full/protocol-relative URL here
-  // would be an open redirect (a user who just authenticated on the real page
-  // gets bounced to an attacker's site). `//evil.com` is protocol-relative, so
-  // reject anything that doesn't start with a single "/".
-  const rawCallback = searchParams.get("callbackUrl");
-  const callbackUrl =
-    rawCallback && rawCallback.startsWith("/") && !rawCallback.startsWith("//")
-      ? rawCallback
-      : "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,7 +37,9 @@ export function LoginForm() {
       return;
     }
 
-    router.push(callbackUrl);
+    // A just-authenticated user bounced off-site is a phishing setup, so the
+    // callback must resolve to this origin.
+    router.push(safeRedirectPath(searchParams.get("callbackUrl"), window.location.origin));
     router.refresh();
   }
 
