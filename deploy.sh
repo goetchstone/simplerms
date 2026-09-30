@@ -5,6 +5,26 @@ set -e
 COMPOSE="docker compose -f docker-compose.yml -f docker-compose.prod.yml"
 REPO_DIR="/opt/simplerms"
 
+# Without the newline guard, a key appended to a file that lacks a trailing
+# newline fuses onto the previous line and corrupts that value.
+append_env() {
+  if [ -s .env.local ] && [ -n "$(tail -c1 .env.local)" ]; then echo >> .env.local; fi
+  echo "$1" >> .env.local
+}
+
+# Replaces every KEY= line with a single KEY=value line.
+set_env() {
+  sed -i "/^$1=/d" .env.local
+  append_env "$1=$2"
+}
+
+# Absent, empty, or still the .env.example placeholder. A bare presence check
+# keeps the placeholder AUTH_SECRET — public in this repo — so anyone could
+# forge a session.
+env_missing() {
+  ! grep -qE "^$1=[\"']?[^\"'[:space:]]" .env.local || grep -qE "^$1=.*replace-with" .env.local
+}
+
 echo "==> Changing to repo directory"
 cd "$REPO_DIR"
 
@@ -14,20 +34,39 @@ if [ ! -f .env.local ]; then
   echo "    Created .env.local from .env.example"
 fi
 
-if ! grep -q "^AUTH_SECRET=" .env.local 2>/dev/null; then
-  echo "AUTH_SECRET=$(openssl rand -base64 32)" >> .env.local
+if env_missing AUTH_SECRET; then
+  set_env AUTH_SECRET "$(openssl rand -base64 32)"
   echo "    Generated AUTH_SECRET"
 fi
 
-if ! grep -q "^APP_ENCRYPTION_KEY=" .env.local 2>/dev/null || grep -q "replace-with" .env.local 2>/dev/null; then
-  sed -i "s|APP_ENCRYPTION_KEY=.*|APP_ENCRYPTION_KEY=$(openssl rand -hex 32)|" .env.local
+if env_missing APP_ENCRYPTION_KEY; then
+  set_env APP_ENCRYPTION_KEY "$(openssl rand -hex 32)"
   echo "    Generated APP_ENCRYPTION_KEY"
 fi
 
-if ! grep -q "^AUTH_TRUST_HOST=" .env.local 2>/dev/null; then
-  echo "AUTH_TRUST_HOST=true" >> .env.local
+if ! grep -q "^AUTH_TRUST_HOST=" .env.local; then
+  append_env "AUTH_TRUST_HOST=true"
   echo "    Set AUTH_TRUST_HOST=true (required behind reverse proxy)"
 fi
+
+# Without AUTH_URL, Auth.js builds redirect URLs from the container hostname,
+# so sign-out lands on https://<container-id>:3000. Re-synced every deploy to
+# follow NEXT_PUBLIC_APP_URL, and reduced to an origin because Auth.js treats
+# any path in it as its basePath.
+APP_ORIGIN=$(grep -E '^NEXT_PUBLIC_APP_URL=' .env.local | tail -1 | cut -d= -f2- \
+  | sed 's/[[:space:]]#.*$//' | tr -d "\"' \r" \
+  | sed -nE 's#^(https?://[A-Za-z0-9.-]+(:[0-9]+)?)([/?#].*)?$#\1#p')
+case "$APP_ORIGIN" in
+  "" | *://localhost | *://localhost:* | *://127.0.0.1 | *://127.0.0.1:*)
+    echo "    WARNING: NEXT_PUBLIC_APP_URL is unset, invalid, or local — AUTH_URL not set"
+    ;;
+  *)
+    if ! grep -qxF "AUTH_URL=$APP_ORIGIN" .env.local; then
+      set_env AUTH_URL "$APP_ORIGIN"
+      echo "    Set AUTH_URL=$APP_ORIGIN"
+    fi
+    ;;
+esac
 
 echo "==> Ensuring swap space (prevents OOM during build)"
 if [ ! -f /swapfile ]; then
