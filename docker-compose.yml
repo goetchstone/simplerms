@@ -10,8 +10,10 @@ services:
       POSTGRES_DB: simplerms
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Loopback only: Docker-published ports bypass host firewalls (UFW), and
+    # override files can't clear a base port list — `ports: []` merges, not replaces.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U simplerms"]
       interval: 5s
@@ -51,9 +53,10 @@ services:
   mailpit:
     image: axllent/mailpit:latest
     restart: unless-stopped
+    # Loopback only: the 8025 UI serves every captured email without auth.
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
 
 volumes:
   postgres_data:

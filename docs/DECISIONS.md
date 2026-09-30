@@ -190,3 +190,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** Upgrading nodemailer 7→9 fixes the 6 advisories (one high) that had no other fix, so the allowlist shrinks to postcss only. `@auth/core`'s nodemailer peer is **optional** and used only by next-auth's Email provider — we use the **Credentials** provider only (`server/auth/index.ts`), so next-auth never loads nodemailer. The override is therefore runtime-safe and lets `npm ci` resolve without `--legacy-peer-deps` (which hides real breakage — see LESSONS).
 
 **Alternatives:** bump next-auth to a beta whose peer allows nodemailer 9 (rejected — bumping the auth library is riskier than a scoped override); `--legacy-peer-deps` in CI (rejected). Remove the override once next-auth's peer range includes nodemailer 9+.
+
+---
+
+### 2026-09-30: nodemailer 10; `shadcn` moves to devDependencies
+
+**Decision:** Upgrade nodemailer 9 → 10 (the existing `$nodemailer` override carries it through the tree) and drop the Dependabot rules that held nodemailer to one major. Move `shadcn` from `dependencies` to `devDependencies`.
+
+**Why:** The 9.x line has no fix for a high addressparser ReDoS (GHSA-v53p-9fqp-m79j, fixed in 10.0.6); the major-version pin is how nodemailer fell a full major behind a security fix. `shadcn` is a component CLI plus one build-time CSS import (`@import "shadcn/tailwind.css"`); the Docker builder stage installs dev deps and production ships only `.next/standalone`, so nothing from it runs on the server. Listing it as a runtime dep pulled its MCP SDK tree (hono, express, ip-address) into the production audit for code we never deploy.
+
+**Alternatives:** keep nodemailer 9 and allowlist the ReDoS (rejected — a fix exists); keep `shadcn` in `dependencies` and chase its transitive advisories with more overrides (rejected — misclassifies build tooling as runtime).

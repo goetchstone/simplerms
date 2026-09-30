@@ -246,6 +246,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-09-30 — `ports: []` in a Compose override does not unpublish a port
+
+**What happened:** `docker-compose.prod.yml` set `db.ports: []` to keep Postgres off the host, and the docs said it was "not exposed". `docker compose config` showed `5432` still published on every interface — Compose *merges* `ports` lists across files, so an empty list adds nothing and removes nothing. Docker's iptables rules also bypass UFW. Only the cloud security group kept Postgres (with the public-repo dev password) off the internet.
+
+**Lesson:** Verify exposure with `docker compose -f … -f … config` and an external port probe, never by reading an override. Bind in the base file (`127.0.0.1:5432:5432`); `!reset []` also works but needs Compose ≥ 2.24 on the server.
+
+**Where it applies:** `docker-compose*.yml`, any service with `ports:`.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
