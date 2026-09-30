@@ -1,7 +1,7 @@
 // components/auth/reset-password-form.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,15 @@ import Link from "next/link";
 
 export function ResetPasswordForm() {
   const searchParams = useSearchParams();
-  const token = searchParams.get("token") ?? "";
+  // Captured once: the effect below strips it from the URL, and Next syncs
+  // replaceState into useSearchParams.
+  const [token] = useState(() => searchParams.get("token") ?? "");
+
+  // The token is a password-reset credential; keep it out of browser history
+  // and the Referer of every later request from this page.
+  useEffect(() => {
+    if (token) window.history.replaceState(null, "", window.location.pathname);
+  }, [token]);
 
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");

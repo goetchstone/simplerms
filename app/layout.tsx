@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { TRPCProvider } from "@/lib/trpc/provider";
 import { Analytics } from "@/components/site/analytics";
+import { PublicOnly } from "@/components/site/public-only";
 import { db } from "@/server/db";
 import "./globals.css";
 
@@ -62,7 +63,9 @@ export default function RootLayout({
       <body className="h-full bg-background font-sans text-foreground">
         <TRPCProvider>{children}</TRPCProvider>
         {/* Analytics is provider-agnostic and noop when settings are unset */}
-        <Analytics />
+        <PublicOnly>
+          <Analytics />
+        </PublicOnly>
       </body>
     </html>
   );
