@@ -10,7 +10,7 @@ import { db } from "@/server/db";
 import { ArrowRight, Check, X } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Pricing — Akritos",
+  title: "Pricing",
   description:
     "Published rates for senior IT partnership. Free 1-hour consultation. Project work from $1,500 flat. Partnership retainers from $750/month. Advisory at $250/hr. Vendor costs pass through at cost — zero markup.",
   alternates: { canonical: "https://akritos.com/pricing" },

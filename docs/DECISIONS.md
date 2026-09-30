@@ -200,3 +200,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** The 9.x line has no fix for a high addressparser ReDoS (GHSA-v53p-9fqp-m79j, fixed in 10.0.6); the major-version pin is how nodemailer fell a full major behind a security fix. `shadcn` is a component CLI plus one build-time CSS import (`@import "shadcn/tailwind.css"`); the Docker builder stage installs dev deps and production ships only `.next/standalone`, so nothing from it runs on the server. Listing it as a runtime dep pulled its MCP SDK tree (hono, express, ip-address) into the production audit for code we never deploy.
 
 **Alternatives:** keep nodemailer 9 and allowlist the ReDoS (rejected — a fix exists); keep `shadcn` in `dependencies` and chase its transitive advisories with more overrides (rejected — misclassifies build tooling as runtime).
+
+---
+
+### 2026-09-30: Disable the Next.js image optimizer
+
+**Decision:** `images: { unoptimized: true }` in `next.config.ts`; the unused `images.unsplash.com` remote pattern is gone.
+
+**Why:** No live page renders an optimized image (a post-deploy sweep found zero `/_next/image` references across all 29 sitemap URLs). The optimizer was the component behind GHSA-2xp9-vwfh-vxw4 (unauthenticated RCE), decodes attacker-influenced image formats through sharp/libheif, and — with its cache dir unwritable — re-processed every request, a free CPU-amplification endpoint. With `unoptimized`, Next answers `/_next/image` with a 404 before touching the pipeline, and `next/image` renders a plain `<img>`.
+
+**Alternatives:** keep it and only fix the cache permissions (rejected — keeps unused, historically exploitable surface). Revisit if the blog starts using large cover images.

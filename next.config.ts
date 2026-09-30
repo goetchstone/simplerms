@@ -26,12 +26,11 @@ const ANALYTICS_IMG = [
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  poweredByHeader: false,
 
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-    ],
-  },
+  // Disables /_next/image entirely: no page needs resizing, and the optimizer
+  // is the component behind GHSA-2xp9-vwfh-vxw4 (unauthenticated RCE).
+  images: { unoptimized: true },
 
   headers: async () => [
     {

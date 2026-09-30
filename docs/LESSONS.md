@@ -256,6 +256,26 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-09-30 — `USER node` without `chown` left uploads and the image cache unwritable
+
+**What happened:** The production stage copied everything as root, then switched to `USER node`. The `uploads_data` volume's mount point was created root-owned, so file uploads could never succeed, and the image optimizer's cache couldn't be written, so it re-processed every request. Both failed silently for months — nothing exercised them after deploy.
+
+**Lesson:** Before `USER`, create and `chown` every directory the runtime user writes (and nothing else — code stays root-owned). An empty named volume takes the image directory's owner on its next mount, so the fix also repairs an existing, never-written volume. Verify with `docker exec <app> touch <dir>/x` as the runtime user.
+
+**Where it applies:** `Dockerfile` production stage; any new writable path or volume.
+
+---
+
+## 2026-09-30 — `tsc` passed while a metadata image route 500'd
+
+**What happened:** `app/blog/[slug]/opengraph-image.tsx` typed `params` as `{ slug: string }` and read it synchronously. In Next 16 `params` is a Promise, so the slug was `undefined`, Prisma threw, and every blog post's social-preview image returned 500. Type-check and build were clean: Next doesn't check metadata-route props the way it checks `page.tsx`.
+
+**Lesson:** In Next 16, always `await params` — in metadata routes (`opengraph-image`, `twitter-image`, `icon`) too. After any Next upgrade, fetch each metadata route with a real request; a clean build proves nothing about them.
+
+**Where it applies:** `app/**/opengraph-image.tsx` and other file-convention metadata routes.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.

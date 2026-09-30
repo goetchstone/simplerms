@@ -7,9 +7,10 @@ export const alt = "Akritos blog post";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function OG({ params }: { params: { slug: string } }) {
+export default async function OG({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const post = await db.cmsPost.findUnique({
-    where: { slug: params.slug, status: "PUBLISHED" },
+    where: { slug, status: "PUBLISHED" },
     select: { title: true, excerpt: true },
   });
 

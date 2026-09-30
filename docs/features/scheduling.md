@@ -109,6 +109,6 @@ In scheduling dashboard:
 
 ## Timezone Handling
 
-The availability system stores times in the staff member's local timezone and converts to UTC for slot calculation. This is the most complex part of the scheduling system. The conversion logic is in the router and handles DST correctly.
+The availability system stores times in the staff member's local timezone and converts to UTC for slot calculation. This is the most complex part of the scheduling system. The conversion logic is in the router and handles DST correctly for US visitors; `availableSlots` derives the day from the browser's local-midnight instant, so visitors east of America/New_York get the wrong day's slots (see CLAUDE.md Known Issues).
 
 Key: all appointments store startsAt/endsAt in UTC. Display converts to the viewer's timezone.

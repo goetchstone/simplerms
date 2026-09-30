@@ -28,6 +28,11 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
+# Code stays root-owned (read-only to the app); only the dirs it writes are
+# node's. An empty named volume takes this dir's owner whenever a container
+# is created with it.
+RUN mkdir -p uploads .next/cache && chown node:node uploads .next/cache
+
 # Run as non-root for defense in depth.
 USER node
 EXPOSE 3000

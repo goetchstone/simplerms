@@ -209,6 +209,9 @@ export const usersRouter = createTRPCRouter({
   resetPassword: publicProcedure
     .input(z.object({ token: z.string().min(1), newPassword: z.string().min(8).max(128) }))
     .mutation(async ({ ctx, input }) => {
+      const { allowed } = rateLimit(`pw-reset-confirm:${getClientIp(ctx.headers)}`, 10, 900000);
+      if (!allowed) throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many requests. Please try again later." });
+
       const record = await ctx.db.verificationToken.findUnique({ where: { token: input.token } });
       if (!record || record.expires < new Date()) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid or expired reset link. Please request a new one." });

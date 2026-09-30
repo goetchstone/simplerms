@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { saveFile } from "@/server/storage/local";
+import { rateLimit } from "@/server/rate-limit";
 
 const MAX_SIZE = 10 * 1024 * 1024; // 10 MB
 
@@ -21,6 +22,13 @@ const ALLOWED_TYPES = new Set([
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // Matches staffProcedure: READONLY accounts can't mutate anything.
+  if (session.user.role === "READONLY") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+
+  // Checked before the body is parsed; bounds how fast one account can fill
+  // the disk that Postgres shares.
+  const { allowed } = rateLimit(`upload:${session.user.id}`, 30, 60 * 60 * 1000);
+  if (!allowed) return NextResponse.json({ error: "Too many uploads. Try again later." }, { status: 429 });
 
   const formData = await request.formData();
   const file = formData.get("file") as File | null;

@@ -4,7 +4,8 @@
 
 - EmailQueue model exists (PENDING/SENT/FAILED, attempts, scheduledAt)
 - Appointment.reminderSentAt field exists
-- No job processor, no cron, no queue consumer
+- Cron routes exist (`/api/cron/process-emails`, `/api/cron/reminders`, `/api/cron/overdue`) but have never run in production: `proxy.ts` redirects them to `/login`, `CRON_SECRET` is unset, and no scheduler is installed
+- Nothing writes to `EmailQueue`, so the queue processor has no input
 
 ## Approach
 
