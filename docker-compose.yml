@@ -25,8 +25,10 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
+    # Loopback only: nginx proxies to 127.0.0.1:3000, and a directly reachable
+    # app would let clients forge the X-Real-IP that rate limiting trusts.
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     env_file:
       - .env.local
     environment:
