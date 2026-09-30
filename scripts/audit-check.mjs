@@ -3,8 +3,7 @@
 // advisory EXCEPT a small allowlist of triaged, no-fix-available advisories
 // (documented in CLAUDE.md "Known Issues"). This keeps the gate meaningful — a
 // new, unrelated high/critical vuln still fails the build — without it being
-// permanently red over a transitive advisory we cannot patch without
-// downgrading a framework (currently only postcss, bundled by Next.js).
+// permanently red over a transitive advisory we cannot patch.
 //
 // Usage (see .github/workflows/ci.yml):
 //   npm audit --json --omit=dev > npm-audit.json || true
@@ -12,12 +11,9 @@
 
 import { readFileSync } from "node:fs";
 
-// Each entry must be a triaged, no-fix-available advisory that is unreachable
-// through our application surface. Shrink as fixes land. (The nodemailer cluster
-// was removed once nodemailer 9 patched it — see package.json `overrides`.)
-const ALLOW = new Map([
-  ["GHSA-qx2v-qp2m-jg93", "postcss stringify XSS — transitive via Next; no untrusted input"],
-]);
+// Each entry: [GHSA id, why it's unreachable through our surface]. Only for
+// triaged advisories with no fix available — empty is the goal.
+const ALLOW = new Map([]);
 
 const BLOCK = new Set(["high", "critical"]);
 

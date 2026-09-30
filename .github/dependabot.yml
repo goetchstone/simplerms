@@ -20,10 +20,6 @@ updates:
       prod-deps:
         applies-to: version-updates
         dependency-type: production
-        # Pin nodemailer to its current major while next-auth's peer-dep catches up.
-        # Re-evaluate when next-auth 5 stable lists nodemailer@^8 as supported.
-        exclude-patterns:
-          - "nodemailer"
       dev-deps:
         applies-to: version-updates
         dependency-type: development
@@ -34,14 +30,10 @@ updates:
       prod-deps-security:
         applies-to: security-updates
         dependency-type: production
-        exclude-patterns:
-          - "nodemailer"
       dev-deps-security:
         applies-to: security-updates
         dependency-type: development
     ignore:
-      - dependency-name: "nodemailer"
-        update-types: ["version-update:semver-major"]
       # Prisma 7 moves datasource URL out of schema.prisma into prisma.config.ts.
       # Migration is non-trivial; pin until we explicitly do it.
       - dependency-name: "prisma"
