@@ -8,15 +8,19 @@
 - `scheduling.createService` (admin) — new bookable service
 - `scheduling.setAvailability` (staff) — per service, per day, with timezone
 - `scheduling.availableSlots` (public) — calculates free slots considering duration, existing appointments, calendar blocks
-- `scheduling.book` (public, rate-limited 10/hr) — creates appointment with conflict detection
-- `scheduling.cancel` (public) — cancel via token
+- `scheduling.book` (public, rate-limited 10/hr) — creates appointment with conflict detection; rejects invalid IANA timezones before saving
+- `scheduling.cancel` (public) — cancel via token (link in the confirmation email: `/portal/appointments/cancel?token=`)
 - `scheduling.listAppointments` (protected) — filter by date/staff/status
 - Public booking page at /book
+- Booking emails (`server/scheduling/booking-emails.ts`), fire-and-forget and isolated so a mail failure never fails a saved booking:
+  - Booker: confirmation with date/time in their own zone, labeled ("6:00 AM PDT"), plus an add-to-calendar event (METHOD:PUBLISH) when `company_email` is set
+  - Owner (`notifyOwner` → Settings `company_email`, else active admins): "New booking" email, Reply-To the booker, plus a calendar event (METHOD:PUBLISH)
+  - Client cancellation: both sides get a cancellation email with METHOD:CANCEL for the same UID
+  - The 24h reminder (never scheduled yet) shares the cancel-link builder and zone-labeled formatting
 
 ### Missing
-- Confirmation email on booking
-- Cancellation email
-- Reminder email (24h before)
+- Reminder email (24h before) — route exists but the cron has never been scheduled (see CLAUDE.md Known Issues)
+- Emails when staff cancel or change an appointment from the dashboard
 - Reschedule (cancel + rebook)
 - Staff calendar view
 - Calendar block management UI

@@ -210,3 +210,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** No live page renders an optimized image (a post-deploy sweep found zero `/_next/image` references across all 29 sitemap URLs). The optimizer was the component behind GHSA-2xp9-vwfh-vxw4 (unauthenticated RCE), decodes attacker-influenced image formats through sharp/libheif, and — with its cache dir unwritable — re-processed every request, a free CPU-amplification endpoint. With `unoptimized`, Next answers `/_next/image` with a 404 before touching the pipeline, and `next/image` renders a plain `<img>`.
 
 **Alternatives:** keep it and only fix the cache permissions (rejected — keeps unused, historically exploitable surface). Revisit if the blog starts using large cover images.
+
+---
+
+### 2026-09-30: Owner notifications go to `company_email`, bookings carry iCalendar events
+
+**Decision:** `notifyOwner()` emails the business on every booking, client cancellation, lead, and ticket — to Settings `company_email`, falling back to every active ADMIN (with a logged warning). Bookings attach iCalendar METHOD:PUBLISH events to both sides and METHOD:CANCEL on client cancellation, sharing one UID per appointment. Events carry an ORGANIZER but no ATTENDEE, and a booker only ever sees `company_email` as organizer.
+
+**Why:** Until now only the visitor was emailed; bookings, leads, and tickets landed silently in the dashboard and the founder missed a consult. `company_email` already exists in Settings as the business contact, so no new configuration surface is needed, and the admin fallback means a fresh install still notifies someone. PUBLISH over REQUEST: Gmail and Outlook show Decline on any REQUEST, and a booker who declines believes they cancelled while the slot stays booked — PUBLISH is a plain "add to calendar" and the emailed cancel link stays the one way to cancel. No ATTENDEE because RFC 5546 forbids it on PUBLISH and a CalDAV calendar (iCloud, Fastmail) would treat the owner as organizer inviting the booker and send them a second invite. Admin login addresses are never exposed to bookers as organizer.
+
+**Alternatives:** REQUEST invites (rejected — decline-isn't-cancel, above); a new `notification_email` setting (rejected — duplicates `company_email`); Google/Microsoft calendar API sync (rejected — OAuth, tokens, and a dependency for what an .ics does); a daily digest (rejected — a consult can be booked for the same day).
