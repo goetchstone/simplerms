@@ -3,12 +3,12 @@ import "server-only";
 
 import { createTRPCRouter, protectedProcedure, staffProcedure, publicProcedure, adminProcedure } from "@/server/trpc/trpc";
 import { rateLimit, getClientIp } from "@/server/rate-limit";
-import { sendEmail } from "@/server/email";
-import { appointmentConfirmationHtml, appointmentConfirmationText, appointmentCancellationHtml, appointmentCancellationText } from "@/server/email/templates/appointment";
+import { sendBookingEmails, sendCancellationEmails } from "@/server/scheduling/booking-emails";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { addMinutes, startOfDay, endOfDay } from "date-fns";
-import { weekdayInTz } from "@/lib/tz";
+import { isValidTimeZone, weekdayInTz } from "@/lib/tz";
+import { lineText, multilineText } from "@/lib/validations/text";
 
 const appointmentStatusEnum = z.enum(["PENDING", "CONFIRMED", "CANCELLED", "NO_SHOW", "COMPLETED"]);
 
@@ -212,11 +212,11 @@ export const schedulingRouter = createTRPCRouter({
         serviceId: z.string().cuid(),
         staffId: z.string().cuid().optional(),
         startsAt: z.coerce.date(),
-        bookerName: z.string().min(1).max(255),
+        bookerName: lineText(255, 1),
         bookerEmail: z.string().email(),
-        bookerPhone: z.string().max(50).optional().nullable(),
-        notes: z.string().max(2000).optional().nullable(),
-        timezone: z.string(),
+        bookerPhone: lineText(50).optional().nullable(),
+        notes: multilineText(2000).optional().nullable(),
+        timezone: z.string().max(64).refine(isValidTimeZone, "Invalid timezone"),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -289,17 +289,10 @@ export const schedulingRouter = createTRPCRouter({
         });
       });
 
-      // Send confirmation email.
-      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-      const cancelUrl = `${baseUrl}/book/cancel?token=${appointment.cancelToken}`;
-
-      sendEmail({
-        to: input.bookerEmail,
-        subject: `Appointment confirmed — ${service.name}`,
-        html: appointmentConfirmationHtml({ serviceName: service.name, bookerName: input.bookerName, startsAt: appointment.startsAt, duration: service.duration, timezone: input.timezone, cancelUrl, companyName, notes: input.notes }),
-        text: appointmentConfirmationText({ serviceName: service.name, bookerName: input.bookerName, startsAt: appointment.startsAt, duration: service.duration, timezone: input.timezone, cancelUrl, companyName }),
-      }).catch(() => {});
+      // The booking is saved; email trouble must never surface as a failed booking.
+      void sendBookingEmails(appointment, service).catch((err) =>
+        console.error(`[booking] emails failed for appointment ${appointment.id}:`, err)
+      );
 
       return {
         publicToken: appointment.publicToken,
@@ -328,17 +321,9 @@ export const schedulingRouter = createTRPCRouter({
         data: { status: "CANCELLED" },
       });
 
-      // Notify the booker of cancellation.
-      const companyName = (await ctx.db.setting.findUnique({ where: { key: "company_name" } }))?.value ?? "Akritos";
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-      const bookUrl = `${baseUrl}/book`;
-
-      sendEmail({
-        to: appointment.bookerEmail,
-        subject: `Appointment cancelled — ${service.name}`,
-        html: appointmentCancellationHtml({ serviceName: service.name, bookerName: appointment.bookerName, startsAt: appointment.startsAt, timezone: appointment.timezone, bookUrl, companyName }),
-        text: appointmentCancellationText({ serviceName: service.name, bookerName: appointment.bookerName, startsAt: appointment.startsAt, timezone: appointment.timezone, bookUrl, companyName }),
-      }).catch(() => {});
+      void sendCancellationEmails(appointment, service).catch((err) =>
+        console.error(`[booking] cancellation emails failed for appointment ${appointment.id}:`, err)
+      );
 
       return { ok: true };
     }),

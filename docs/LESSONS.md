@@ -276,6 +276,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-09-30 — Every public form worked, and nobody was ever told
+
+**What happened:** The founder missed a booked consult. Booking, lead capture, and support tickets all "worked" — rows saved, visitors got confirmations — but no code path emailed the business. Each feature was built and tested from the visitor's side only. The booker's cancel link also pointed at a route that didn't exist (`/book/cancel` → 404).
+
+**Lesson:** A public intake feature isn't done until the owner learns about the submission. Test it as both parties: submit as a visitor, then check the owner's inbox (locally: Mailpit's API at `:8025/api/v1/messages`) and follow every link in every email.
+
+**Where it applies:** Any public form or booking flow — call `notifyOwner()` (see CLAUDE.md Key Patterns).
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.

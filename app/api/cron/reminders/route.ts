@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/server/db";
 import { sendEmail } from "@/server/email";
+import { appointmentCancelUrl } from "@/server/scheduling/booking-emails";
 import {
   appointmentReminderHtml,
   appointmentReminderText,
@@ -37,12 +38,11 @@ export async function GET(request: NextRequest) {
   const companyName =
     (await db.setting.findUnique({ where: { key: "company_name" } }))?.value ??
     "Akritos";
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
   let sent = 0;
 
   for (const appt of appointments) {
-    const cancelUrl = `${baseUrl}/book/cancel?token=${appt.cancelToken}`;
+    const cancelUrl = appointmentCancelUrl(appt.cancelToken);
 
     try {
       await sendEmail({

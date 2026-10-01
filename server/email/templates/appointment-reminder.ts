@@ -1,6 +1,6 @@
 // server/email/templates/appointment-reminder.ts
-import { formatDate } from "@/lib/utils";
 import { escapeHtml } from "@/server/email/escape";
+import { formatDayInTz as formatDay, formatTimeInTz as formatTime } from "@/lib/tz";
 
 export interface AppointmentReminderData {
   serviceName: string;
@@ -9,14 +9,6 @@ export interface AppointmentReminderData {
   timezone: string;
   cancelUrl: string;
   companyName: string;
-}
-
-function formatTime(date: Date, tz: string): string {
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: tz,
-  });
 }
 
 export function appointmentReminderHtml(data: AppointmentReminderData): string {
@@ -55,7 +47,7 @@ export function appointmentReminderHtml(data: AppointmentReminderData): string {
                     <span style="font-size:13px;color:#6b7280;">Date</span>
                   </td>
                   <td align="right" style="padding:12px 0;border-bottom:1px solid #f3f4f6;">
-                    <span style="font-size:13px;color:#111827;">${formatDate(startsAt)}</span>
+                    <span style="font-size:13px;color:#111827;">${formatDay(startsAt, timezone)}</span>
                   </td>
                 </tr>
                 <tr>
@@ -97,7 +89,7 @@ export function appointmentReminderText(data: AppointmentReminderData): string {
     "",
     `Reminder: your appointment for ${serviceName} is coming up tomorrow.`,
     "",
-    `Date: ${formatDate(startsAt)}`,
+    `Date: ${formatDay(startsAt, timezone)}`,
     `Time: ${formatTime(startsAt, timezone)}`,
     "",
     `Need to cancel? ${cancelUrl}`,
