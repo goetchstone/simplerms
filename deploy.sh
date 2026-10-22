@@ -97,7 +97,9 @@ echo "==> Building new image (old app keeps serving traffic)"
 # silently missing new prisma/seed-blog-*.ts files from every deploy after it
 # was first built. Learned that the hard way: prompt-jockeys seed couldn't find
 # its own file because the migrator image was two commits out of date.
-$COMPOSE --profile tools build --no-cache
+# --pull because --no-cache doesn't re-fetch a base image already on the host,
+# so a rebuilt tag's Node and Alpine patches would never arrive.
+$COMPOSE --profile tools build --no-cache --pull
 
 echo "==> Pushing schema to database"
 $COMPOSE run --rm migrator npx prisma db push --skip-generate

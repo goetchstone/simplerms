@@ -286,6 +286,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-10-22 — The runtime went end-of-life and nothing noticed
+
+**What happened:** Node 20 reached end-of-life on 2026-04-30, and the app kept running `node:20-alpine` through three Node security releases it never received. Dependabot's npm ecosystem and `npm audit` watch packages, not the runtime. And `deploy.sh`'s `build --no-cache` never re-pulls a base image the host already has, so the server may be on an even older Node 20 than CI was.
+
+**Lesson:** Pin the runtime image to an exact version, let Dependabot's `docker` ecosystem watch it, and build with `--pull`. When a runtime security release lands, check the line's EOL date, not just the patch number.
+
+**Where it applies:** `Dockerfile` `FROM` lines, `.github/dependabot.yml`, `deploy.sh`, CI `node-version`.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
