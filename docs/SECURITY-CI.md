@@ -6,7 +6,7 @@ What scans run, what they catch, how to enable gating, and how to triage finding
 
 | Scanner | What it catches | Cost | Where findings appear |
 |---------|-----------------|------|----------------------|
-| **Dependabot** | CVEs in npm + GitHub Actions deps | Free | Pull Requests (auto-opened) |
+| **Dependabot** | CVEs in npm + GitHub Actions deps; new Node runtime image releases | Free | Pull Requests (auto-opened) |
 | **CodeQL** | Dataflow taint (SQL injection, XSS, prototype pollution) | Free for public repos | Security tab → Code scanning |
 | **Semgrep** | Pattern-based rules (OWASP Top 10, framework misuse, dangerous APIs) | Free community ruleset | Security tab → Code scanning (via SARIF) |
 | **gitleaks** | Committed secrets (API keys, tokens, private keys) | Free OSS | CI workflow output + PR check |

@@ -220,3 +220,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** Until now only the visitor was emailed; bookings, leads, and tickets landed silently in the dashboard and the founder missed a consult. `company_email` already exists in Settings as the business contact, so no new configuration surface is needed, and the admin fallback means a fresh install still notifies someone. PUBLISH over REQUEST: Gmail and Outlook show Decline on any REQUEST, and a booker who declines believes they cancelled while the slot stays booked — PUBLISH is a plain "add to calendar" and the emailed cancel link stays the one way to cancel. No ATTENDEE because RFC 5546 forbids it on PUBLISH and a CalDAV calendar (iCloud, Fastmail) would treat the owner as organizer inviting the booker and send them a second invite. Admin login addresses are never exposed to bookers as organizer.
 
 **Alternatives:** REQUEST invites (rejected — decline-isn't-cancel, above); a new `notification_email` setting (rejected — duplicates `company_email`); Google/Microsoft calendar API sync (rejected — OAuth, tokens, and a dependency for what an .ics does); a daily digest (rejected — a consult can be booked for the same day).
+
+---
+
+### 2026-10-22: Node 24 LTS, pinned to an exact image tag
+
+**Decision:** The runtime and CI move from Node 20 to Node 24 (`node:24.22.1-alpine`, the 2026-10-21 security release). The Dockerfile pins the exact tag. Dependabot's `docker` ecosystem proposes patch and minor updates, with majors ignored. `deploy.sh` builds with `--pull`.
+
+**Why:** Node 20 has been end-of-life since 2026-04-30 and missed the June, July, and October 2026 security releases. October alone had four highs, including a Brotli decoder out-of-bounds write and two TLS hostname-verification bypasses. Node 24 is supported until 2028-04-30, past any plausible Holt cutover. An exact tag makes the deployed version readable from the repo and gives Dependabot something to bump. A floating `24-alpine` drifts unseen, and without `--pull` it never moves on the server at all.
+
+**Alternatives:** Node 22 (rejected: EOL 2027-04-30, so another migration soon). Node 26 (rejected: newest line, least ecosystem mileage, and nothing here needs it). Floating `24-alpine` plus `--pull` only (rejected: no PR and no record of which Node is live). Digest pinning (rejected: churn without a matching threat; the exact tag plus `--pull` already picks up rebuilt Alpine layers).

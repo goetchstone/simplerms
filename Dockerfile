@@ -1,6 +1,8 @@
 # Dockerfile
 
-FROM node:20-alpine AS base
+# Exact version, not a floating major: Dependabot opens a PR for each Node
+# release, and the deployed runtime is readable from the repo.
+FROM node:24.22.1-alpine AS base
 WORKDIR /app
 COPY package.json package-lock.json ./
 
@@ -21,7 +23,7 @@ RUN npm run build
 FROM builder AS migrator
 
 # Lean runtime — only the standalone Next.js server
-FROM node:20-alpine AS production
+FROM node:24.22.1-alpine AS production
 WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=builder /app/.next/standalone ./
