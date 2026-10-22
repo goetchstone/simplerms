@@ -296,6 +296,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-10-22 — A bare `npm install` after raising a floor takes the newest minor
+
+**What happened:** Raised `next` from `^16.3.7` to `^16.3.8` for a security patch, then ran `npm install`. npm re-resolved the caret to 16.4.2, a minor bump nobody had reviewed, while `eslint-config-next` stayed on 16.3.8.
+
+**Lesson:** Install the exact fixed version (`npm install next@16.3.8`), then check that the lockfile diff touches only the intended packages. `npm update` and `npm audit fix` aren't an option here; they crash on the `$nodemailer` override.
+
+**Where it applies:** Any hand-raised version floor in `package.json` (dependencies or `overrides`).
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
