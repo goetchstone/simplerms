@@ -70,6 +70,12 @@ updates:
     # (possibly compromised) action release immediately.
     cooldown:
       default-days: 7
+    groups:
+      # Every codeql-action step must run the same version; bumped one at a
+      # time, Analyze fails on the mismatch.
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"
     labels:
       - dependencies
       - github-actions
