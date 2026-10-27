@@ -20,6 +20,10 @@ updates:
       prod-deps:
         applies-to: version-updates
         dependency-type: production
+        # Every Stripe minor retypes the pinned apiVersion, so a grouped bump
+        # fails type-check and holds back every other production update.
+        exclude-patterns:
+          - "stripe"
       dev-deps:
         applies-to: version-updates
         dependency-type: development
@@ -39,6 +43,17 @@ updates:
       - dependency-name: "prisma"
         update-types: ["version-update:semver-major"]
       - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+      # A Stripe SDK major moves to a new named API release, which carries
+      # breaking changes for payment links and webhooks.
+      - dependency-name: "stripe"
+        update-types: ["version-update:semver-major"]
+      # typescript-eslint (via eslint-config-next) doesn't support TS 7.0;
+      # support is tracked for 7.1.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # Node types must match the runtime major in the Dockerfile.
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
     labels:
       - dependencies

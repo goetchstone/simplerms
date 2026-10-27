@@ -230,3 +230,13 @@ The AI framework is the cleaner reference implementation of the pattern.
 **Why:** Node 20 has been end-of-life since 2026-04-30 and missed the June, July, and October 2026 security releases. October alone had four highs, including a Brotli decoder out-of-bounds write and two TLS hostname-verification bypasses. Node 24 is supported until 2028-04-30, past any plausible Holt cutover. An exact tag makes the deployed version readable from the repo and gives Dependabot something to bump. A floating `24-alpine` drifts unseen, and without `--pull` it never moves on the server at all.
 
 **Alternatives:** Node 22 (rejected: EOL 2027-04-30, so another migration soon). Node 26 (rejected: newest line, least ecosystem mileage, and nothing here needs it). Floating `24-alpine` plus `--pull` only (rejected: no PR and no record of which Node is live). Digest pinning (rejected: churn without a matching threat; the exact tag plus `--pull` already picks up rebuilt Alpine layers).
+
+---
+
+### 2026-10-27: Stripe keeps an explicit `apiVersion` and gets its own Dependabot PRs
+
+**Decision:** `server/stripe/index.ts` and the webhook route keep passing an explicit `apiVersion`, now `2026-08-26.dahlia` on SDK 22.6.2. Stripe is excluded from the `prod-deps` group, and SDK majors are ignored.
+
+**Why:** The SDK types `apiVersion` as its own latest version, so a major SDK bump that moves to a new named API release (22 → 23 is `dahlia` → `endive`, the only kind of release with breaking changes) fails type-check instead of silently changing payment-link and webhook behavior. The cost is that every monthly minor needs the string bumped. Grouped, that one failure held back 16 other updates, so Stripe now fails on its own PR.
+
+**Alternatives:** Drop `apiVersion` and use the SDK default (rejected: a major bump, including a security update, would switch API releases with no compile error). Ignore Stripe minors too (rejected: freezes the SDK and its fixes). Adopt SDK 23 now (rejected: API migration on the money path, with no security reason and Holt pending).
