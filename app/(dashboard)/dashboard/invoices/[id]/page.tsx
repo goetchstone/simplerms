@@ -13,10 +13,6 @@ export default async function InvoiceDetailPage({ params }: Props) {
   const { id } = await params;
   const caller = await createCachedCaller();
 
-  try {
-    const invoice = await caller.invoices.byId(id);
-    return <InvoiceDetail initialData={invoice} />;
-  } catch {
-    notFound();
-  }
+  const invoice = await caller.invoices.byId(id).catch(() => notFound());
+  return <InvoiceDetail initialData={invoice} />;
 }
