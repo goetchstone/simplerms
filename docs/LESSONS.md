@@ -306,6 +306,26 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-10-27 — One package that needs a code change held a whole Dependabot group
+
+**What happened:** The weekly prod-deps group bundled Stripe's next SDK, whose typed `apiVersion` no longer matched our pinned string. Type-check failed, so the other 16 updates sat unmerged for two weeks, a zod security fix among them. Meanwhile `main` itself went red when new Next advisories landed.
+
+**Lesson:** Keep any package whose bump needs a paired code change (a pinned API version, a schema move) out of version-update groups so it fails alone. Triage Dependabot PRs weekly, because a red group hides the security fixes inside it.
+
+**Where it applies:** `.github/dependabot.yml` groups. Stripe is excluded from `prod-deps`.
+
+---
+
+## 2026-10-27 — A linter that crashes reports nothing
+
+**What happened:** `npm run lint` had been crashing on `main` (`eslint-plugin-react` against ESLint 10: `getFilename is not a function`). Lint isn't in CI, so nobody noticed. Once the ESLint stack was upgraded, it ran and found 20 errors.
+
+**Lesson:** A check that isn't gated rots silently. Either gate it in CI or delete it, and treat a crash the same as a failure.
+
+**Where it applies:** `npm run lint`; any script in `package.json` that CI doesn't run.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
