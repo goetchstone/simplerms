@@ -336,6 +336,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-10-27 — An unsupported Dependabot key made the config invalid for days
+
+**What happened:** The `docker` entry added on 2026-10-22 copied the npm entry's `cooldown.semver-patch-days`, which Dependabot doesn't support for Docker. No CI check failed, and GitHub's `.github/dependabot.yml` check run only surfaced it on a later PR. So the Node image updates the entry existed for never ran.
+
+**Lesson:** After any `dependabot.yml` change, open the PR's `.github/dependabot.yml` check run (or Insights → Dependency graph → Dependabot) and confirm it parsed. Options differ per ecosystem, so don't copy blocks between ecosystems.
+
+**Where it applies:** `.github/dependabot.yml`.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.

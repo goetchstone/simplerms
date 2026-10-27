@@ -70,6 +70,12 @@ updates:
     # (possibly compromised) action release immediately.
     cooldown:
       default-days: 7
+    groups:
+      # Every codeql-action step must run the same version; bumped one at a
+      # time, Analyze fails on the mismatch.
+      codeql-action:
+        patterns:
+          - "github/codeql-action*"
     labels:
       - dependencies
       - github-actions
@@ -83,9 +89,10 @@ updates:
       day: monday
       time: "06:00"
     open-pull-requests-limit: 2
+    # Docker accepts no semver-* cooldown keys (one made this file invalid), so
+    # Node patches wait the full 7 days; apply urgent security releases by hand.
     cooldown:
       default-days: 7
-      semver-patch-days: 2
     ignore:
       # Moving to a new Node major is a deliberate LTS choice; Dependabot would
       # also offer odd-numbered Current lines that never get LTS support.
