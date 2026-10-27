@@ -19,8 +19,7 @@ function safeName(name: string): string {
 
 export async function saveFile(
   buffer: Buffer,
-  originalName: string,
-  _mimeType: string
+  originalName: string
 ): Promise<{ filename: string; storagePath: string; sizeBytes: number }> {
   const filename = `${randomBytes(12).toString("hex")}-${safeName(originalName)}`;
   const storagePath = join(monthPrefix(), filename);

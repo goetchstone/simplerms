@@ -1,6 +1,7 @@
 // app/support/track/page.tsx
 export const dynamic = "force-dynamic";
 
+import Link from "next/link";
 import { db } from "@/server/db";
 import { notFound } from "next/navigation";
 import { SiteNav } from "@/components/site/site-nav";
@@ -117,9 +118,9 @@ export default async function TrackPage({ searchParams }: Props) {
             >
               <p className="text-sm text-bone/40">
                 This ticket has been {ticket.status.toLowerCase()}. Need more help?{" "}
-                <a href="/support" className="text-conviction underline">
+                <Link href="/support" className="text-conviction underline">
                   Submit a new ticket
-                </a>
+                </Link>
                 .
               </p>
             </div>

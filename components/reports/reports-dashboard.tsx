@@ -115,7 +115,7 @@ export function ReportsDashboard({ revenue, aging, topClients, ticketStats }: Pr
             <p className="text-sm text-muted-foreground">No paid invoices yet.</p>
           ) : (
             <div className="space-y-3">
-              {topClients.map((tc, i) => {
+              {topClients.map((tc) => {
                 const pct = topClients[0].revenue > 0 ? (tc.revenue / topClients[0].revenue) * 100 : 0;
                 return (
                   <div key={tc.client.id} className="space-y-1">

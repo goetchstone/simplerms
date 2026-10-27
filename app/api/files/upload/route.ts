@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  const { filename, storagePath, sizeBytes } = await saveFile(buffer, file.name, file.type);
+  const { filename, storagePath, sizeBytes } = await saveFile(buffer, file.name);
 
   // Optional entity associations from query params.
   const clientId = request.nextUrl.searchParams.get("clientId");

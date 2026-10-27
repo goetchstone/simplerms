@@ -2,6 +2,7 @@
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SupportForm } from "@/components/site/support-form";
@@ -114,12 +115,12 @@ export default async function ContactPage() {
                   Not sure what you need? Book a free 30-minute call. I&apos;ll
                   tell you what I see, what it would cost, and whether
                   I&apos;m the right fit.{" "}
-                  <a
+                  <Link
                     href="/book"
                     className="text-conviction underline underline-offset-2"
                   >
                     Book now →
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>
