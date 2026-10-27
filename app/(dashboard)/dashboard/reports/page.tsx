@@ -27,6 +27,7 @@ export default async function ReportsPage() {
         <div className="flex items-center gap-2">
           <a
             href="/api/reports/export?type=invoices"
+            download
             className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
           >
             <Download className="h-3.5 w-3.5" />
@@ -34,6 +35,7 @@ export default async function ReportsPage() {
           </a>
           <a
             href="/api/reports/export?type=clients"
+            download
             className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
           >
             <Download className="h-3.5 w-3.5" />
@@ -41,6 +43,7 @@ export default async function ReportsPage() {
           </a>
           <a
             href="/api/reports/export?type=time"
+            download
             className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
           >
             <Download className="h-3.5 w-3.5" />

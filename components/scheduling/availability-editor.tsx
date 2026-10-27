@@ -1,7 +1,7 @@
 // components/scheduling/availability-editor.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { trpc } from "@/lib/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,35 +20,40 @@ interface DayRow {
 
 const CLOSED: DayRow = { enabled: false, startTime: "09:00", endTime: "17:00" };
 
+type SavedWindow = { dayOfWeek: number; startTime: string; endTime: string };
+
+function toRows(saved: SavedWindow[] | undefined): DayRow[] {
+  const rows = DAYS.map(() => ({ ...CLOSED }));
+  for (const a of saved ?? []) {
+    if (a.dayOfWeek >= 0 && a.dayOfWeek <= 6) {
+      rows[a.dayOfWeek] = { enabled: true, startTime: a.startTime, endTime: a.endTime };
+    }
+  }
+  return rows;
+}
+
 export function AvailabilityEditor() {
   const services = trpc.scheduling.listServices.useQuery({ publicOnly: false });
-  const [serviceId, setServiceId] = useState("");
+  const [pickedServiceId, setPickedServiceId] = useState("");
 
   // Availability is per-service, and availableSlots unions service-scoped rows
   // with global ones — so the editor always targets one explicit service rather
   // than writing "global" hours that would silently add slots on top.
-  useEffect(() => {
-    const first = services.data?.[0];
-    if (!serviceId && first) setServiceId(first.id);
-  }, [services.data, serviceId]);
+  const serviceId = pickedServiceId || services.data?.[0]?.id || "";
 
   const availability = trpc.scheduling.getAvailability.useQuery(
     { serviceId: serviceId || undefined },
     { enabled: serviceId.length > 0 }
   );
 
-  const [rows, setRows] = useState<DayRow[]>(() => DAYS.map(() => ({ ...CLOSED })));
-
-  useEffect(() => {
-    if (!availability.data) return;
-    const next = DAYS.map(() => ({ ...CLOSED }));
-    for (const a of availability.data) {
-      if (a.dayOfWeek >= 0 && a.dayOfWeek <= 6) {
-        next[a.dayOfWeek] = { enabled: true, startTime: a.startTime, endTime: a.endTime };
-      }
-    }
-    setRows(next);
-  }, [availability.data]);
+  // A draft remembers which fetch it was edited from, so a refetch (after
+  // saving or switching service) shows the server's hours again.
+  const [draft, setDraft] = useState<{
+    source: SavedWindow[] | undefined;
+    rows: DayRow[];
+  } | null>(null);
+  const rows =
+    draft && draft.source === availability.data ? draft.rows : toRows(availability.data);
 
   const utils = trpc.useUtils();
   const save = trpc.scheduling.setAvailability.useMutation({
@@ -56,7 +61,10 @@ export function AvailabilityEditor() {
   });
 
   function update(index: number, patch: Partial<DayRow>) {
-    setRows((rs) => rs.map((r, i) => (i === index ? { ...r, ...patch } : r)));
+    setDraft({
+      source: availability.data,
+      rows: rows.map((r, i) => (i === index ? { ...r, ...patch } : r)),
+    });
   }
 
   // Lexical compare is safe on zero-padded HH:MM and catches the end-before-start
@@ -81,7 +89,7 @@ export function AvailabilityEditor() {
           <select
             aria-label="Service"
             value={serviceId}
-            onChange={(e) => setServiceId(e.target.value)}
+            onChange={(e) => setPickedServiceId(e.target.value)}
             className="rounded-md border bg-background px-2 py-1 text-sm"
           >
             {services.data.map((s) => (

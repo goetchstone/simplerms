@@ -13,13 +13,9 @@ export default async function TicketDetailPage({ params }: Props) {
   const { id } = await params;
   const caller = await createCachedCaller();
 
-  try {
-    const [ticket, users] = await Promise.all([
-      caller.tickets.byId(id),
-      caller.users.list(),
-    ]);
-    return <TicketDetail initialData={ticket} staffUsers={users} />;
-  } catch {
-    notFound();
-  }
+  const [ticket, users] = await Promise.all([
+    caller.tickets.byId(id),
+    caller.users.list(),
+  ]).catch(() => notFound());
+  return <TicketDetail initialData={ticket} staffUsers={users} />;
 }

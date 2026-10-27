@@ -1,5 +1,6 @@
 // app/terms/page.tsx
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteNav } from "@/components/site/site-nav";
 import { SiteFooter } from "@/components/site/site-footer";
 
@@ -65,12 +66,12 @@ export default function TermsPage() {
 
           <Section title="Your data">
             See our{" "}
-            <a
+            <Link
               href="/privacy"
               className="text-conviction underline underline-offset-2"
             >
               Privacy Policy
-            </a>{" "}
+            </Link>{" "}
             for how we handle your information.
           </Section>
 

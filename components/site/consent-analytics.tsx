@@ -8,6 +8,7 @@
 // dispatches `akritos:open-consent`. After any decision we emit
 // `akritos:consent-changed` so that link can reveal itself without a reload.
 
+import Link from "next/link";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 
@@ -88,9 +89,9 @@ function ConsentBanner({ onAccept, onDecline }: { onAccept: () => void; onDeclin
           We&apos;d like to use Google Analytics to see which pages are useful. It sets
           cookies. You can decline — the site works exactly the same, and we won&apos;t
           load anything until you choose. See our{" "}
-          <a href="/privacy" className="text-conviction underline underline-offset-2">
+          <Link href="/privacy" className="text-conviction underline underline-offset-2">
             privacy policy
-          </a>
+          </Link>
           .
         </p>
         {/* Equal-weight choices — no dark pattern. */}

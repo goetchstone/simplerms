@@ -140,6 +140,7 @@ Middleware regex blocked all CUID tokens; tokens are CUIDs, not UUIDs.
 
 - [ ] **Tests:** if this commit touches money/security/data/public-API/math — is there a test that fails when the code is wrong?
 - [ ] **Type-check:** `npx tsc --noEmit` passes locally
+- [ ] **Lint:** `npm run lint` passes locally (zero warnings)
 - [ ] **Tests pass:** `npx vitest run` passes locally
 - [ ] **Build:** if this changes Next.js routing, layouts, or server components — `npm run build` succeeds locally
 - [ ] **Comment audit:** are any comments restating what the code does? Delete them.

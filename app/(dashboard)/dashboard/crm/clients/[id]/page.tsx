@@ -13,10 +13,6 @@ export default async function ClientDetailPage({ params }: Props) {
   const { id } = await params;
   const caller = await createCachedCaller();
 
-  try {
-    const client = await caller.crm.clientById(id);
-    return <ClientDetail initialData={client} />;
-  } catch {
-    notFound();
-  }
+  const client = await caller.crm.clientById(id).catch(() => notFound());
+  return <ClientDetail initialData={client} />;
 }

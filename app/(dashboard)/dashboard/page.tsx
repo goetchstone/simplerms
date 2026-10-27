@@ -221,7 +221,7 @@ export default async function DashboardPage() {
         {stats.todayAppointments.length > 0 && (
           <div className="rounded-xl border">
             <div className="flex items-center justify-between border-b px-5 py-3">
-              <h2 className="text-sm font-semibold">Today's appointments</h2>
+              <h2 className="text-sm font-semibold">Today&apos;s appointments</h2>
               <Link href="/dashboard/scheduling" className="text-xs text-muted-foreground hover:text-foreground">View all</Link>
             </div>
             <ul className="divide-y">

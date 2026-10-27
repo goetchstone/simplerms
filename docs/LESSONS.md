@@ -326,6 +326,16 @@ Read at session start (loaded by `/boot`). Add to it whenever:
 
 ---
 
+## 2026-10-27 — `redirect()` inside try/catch became a 404
+
+**What happened:** The invoice edit page called `redirect()` inside a `try` whose `catch` called `notFound()`. Next's `redirect()` and `notFound()` work by throwing, so opening the edit page for a non-draft invoice showed a 404 instead of the invoice. Fixing the lint rule against JSX inside try/catch exposed it.
+
+**Lesson:** Keep `redirect()`/`notFound()` out of `try` blocks. Catch only the fetch (`await call().catch(() => notFound())`), then branch and render outside.
+
+**Where it applies:** Server components and route handlers under `app/`.
+
+---
+
 ## How to add to this file
 
 When you finish a task and a real lesson emerged, add an entry. Keep it terse. The point is to avoid repeating the mistake — not to write an essay. If the lesson is big enough to drive an architectural change, it goes in `docs/DECISIONS.md` instead. If it's about how the codebase works, update `CLAUDE.md`. If it's about how *we* work — it lives here.
