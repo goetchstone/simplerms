@@ -28,6 +28,7 @@ There is no cost to re-running this. The cost of acting on stale disciplines is 
 ## Step 3: Health check
 
 - Run `npx tsc --noEmit` — if types fail, note errors.
+- Run `npm run lint` — if lint fails, note errors.
 - Run `npx vitest run` — if tests fail, note failures.
 - Report any issues to the user before proceeding.
 
@@ -61,6 +62,7 @@ These are the checks the framework expects to run automatically. If you skip the
 **Before every commit (the pre-commit checklist from FRAMEWORK.md):**
 - Tests written for money/security/data/public-API/math?
 - `tsc --noEmit` passes
+- `npm run lint` passes
 - `vitest run` passes
 - `npm run build` passes (if Next.js routing/layout/server components changed)
 - Comments audited — none restating the obvious
